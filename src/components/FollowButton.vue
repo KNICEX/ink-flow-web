@@ -1,0 +1,50 @@
+<script setup lang="ts">
+import { ref } from 'vue'
+
+defineProps({
+  uid: {
+    type: Number,
+    required: true
+  },
+  size: {
+    type: String,
+    default: 'default'
+  },
+  followed: {
+    type: Boolean,
+    default: false
+  }
+})
+
+const followTip = ref('正在关注')
+const followedColor = ref('')
+const handleMouseover = () => {
+  followTip.value = '取消关注'
+  followedColor.value = 'red'
+}
+const handleMouseLeave = () => {
+  followTip.value = '正在关注'
+  followedColor.value = ''
+}
+
+const handleFollow = () => {
+
+}
+const handleCancelFollow = () => {
+
+}
+</script>
+
+<template>
+  <el-button v-if="followed" :color="followedColor" @click="handleCancelFollow"
+             @mouseover="handleMouseover" @mouseleave="handleMouseLeave" :size="size" plain round>
+    {{ followTip }}
+  </el-button>
+  <el-button v-else color="black" round @click="handleFollow">
+    关注
+  </el-button>
+</template>
+
+<style scoped lang="scss">
+
+</style>

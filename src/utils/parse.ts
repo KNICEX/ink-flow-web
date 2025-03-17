@@ -1,0 +1,41 @@
+export const parseRouteParam = (param: string | string[] | undefined) => {
+  if (param == undefined) {
+    return ''
+  }
+  if (typeof param === 'string') {
+    return param
+  } else if (param.length === 0) {
+    return ''
+  }
+  return param[0]
+}
+
+export const parseRouteParamToInt = (param: string | string[] | undefined) => {
+  if (param == undefined) {
+    return 0
+  }
+  if (typeof param === 'string') {
+    return parseInt(param == '' ? '0' : param)
+  } else if (param.length === 0) {
+    return 0
+  }
+  return parseInt(param[0] == '' ? '0' : param[0])
+}
+
+export const parseResponseDate = (data: any) => {
+  if (!data) {
+    return
+  }
+  if (Array.isArray(data)) {
+    for (const item of data) {
+      parseResponseDate(item)
+    }
+  } else if (typeof data == 'object') {
+    if (data.createdAt) {
+      data.createdAt = new Date(data.createdAt)
+    }
+    if (data.updatedAt) {
+      data.updatedAt = new Date(data.updatedAt)
+    }
+  }
+}
