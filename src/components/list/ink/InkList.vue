@@ -11,7 +11,7 @@
 </template>
 <script setup lang="ts">
 import clsx from 'clsx'
-import InkItem from '@/components/list/ImageInk.vue'
+import InkItem from '@/components/list/ink/ImageInk.vue'
 import { computed, ref } from 'vue'
 import type { Ink } from '@/types/ink.ts'
 import { demoInks } from '@/mock/demo_data.ts'

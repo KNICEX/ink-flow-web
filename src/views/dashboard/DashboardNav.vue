@@ -41,7 +41,7 @@ onMounted(() => {
           <span class="material-symbols-outlined"> edit_note </span>
           <span class="ml-3">新建</span>
         </InkNavItem>
-        <InkNavItem :sub="true" prop="ink">
+        <InkNavItem :sub="true" prop="dashboard-ink">
           <span class="material-symbols-outlined"> apps </span>
           <span class="ml-3">内容</span>
         </InkNavItem>

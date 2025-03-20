@@ -1,14 +1,14 @@
 <script setup lang="ts">
-import { onBeforeMount, ref } from 'vue'
+import { onBeforeMount, onMounted, ref, watch } from 'vue'
 import { profile } from '@/service/user.ts'
 import type { User } from '@/types/user.ts'
 import UserAvatar from '@/components/UserAvatar.vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user.ts'
-import InkList from '@/components/list/InkList.vue'
 
 const userStore = useUserStore()
 const route = useRoute()
+const router = useRouter()
 const userInfo = ref<User | null>(null)
 onBeforeMount(async () => {
   userInfo.value = await profile({
@@ -24,8 +24,17 @@ const parseFaviconUrl = (url: string) => {
 }
 const defaultBanner = 'https://lzacg.org/wp-content/uploads/2021/07/pid-67767892log3_p2-scaled.webp'
 
-const activeNav = ref('first')
-const handleNavClick = (nav: string) => {}
+const activeNav = ref('latest')
+onMounted(() => {
+  console.log('route.name: ', route.name)
+  activeNav.value = route?.name as string
+})
+
+watch(activeNav, () => {
+  router.push({
+    name: activeNav.value,
+  })
+})
 </script>
 
 <template>
@@ -55,20 +64,38 @@ const handleNavClick = (nav: string) => {}
         </div>
       </div>
     </div>
-    <div class="max-screen-w mt-2 line-padding">
-      <el-tabs v-model="activeNav" @tab-click="handleNavClick">
-        <el-tab-pane label="最新" name="first"></el-tab-pane>
-        <el-tab-pane label="点赞" name="second"></el-tab-pane>
-        <el-tab-pane label="收藏" name="third"></el-tab-pane>
-        <el-tab-pane label="浏览" name="fourth"></el-tab-pane>
+    <div class="max-screen-w mt-2 line-padding relative text-lg">
+      <el-tabs v-model="activeNav">
+        <el-tab-pane label="最新" name="latest"></el-tab-pane>
+        <el-tab-pane label="点赞" name="likes"></el-tab-pane>
+        <!--        <el-tab-pane label="收藏" name="collection"></el-tab-pane>-->
+        <el-tab-pane label="浏览" name="views"></el-tab-pane>
       </el-tabs>
+      <div class="absolute right-10 top-3 flex label-text-color">
+        <div
+          @click="activeNav = 'following'"
+          :class="['cursor-pointer', activeNav == 'following' ? 'active-color' : '']"
+        >
+          正在关注{{ userInfo?.following }}
+        </div>
+        <div
+          @click="activeNav = 'followers'"
+          :class="['ml-8 cursor-pointer', activeNav == 'followers' ? 'active-color' : '']"
+        >
+          关注者{{ userInfo?.followers }}
+        </div>
+      </div>
     </div>
-    <div class="flex justify-center mt-4">
+    <div class="max-screen-w flex justify-center mt-4">
       <div class="max-screen-w line-padding">
-        <InkList :max-cols="4"></InkList>
+        <router-view></router-view>
       </div>
     </div>
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.active-color {
+  color: var(--primary-color);
+}
+</style>

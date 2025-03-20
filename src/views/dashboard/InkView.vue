@@ -2,7 +2,7 @@
 import { onMounted, provide, reactive, ref, watch } from 'vue'
 import DashboardContent from '@/views/dashboard/DashboardContent.vue'
 import DashboardInkList from '@/components/list/dashboard/DashboardInkList.vue'
-import { type Ink, InkStatus } from '@/types/ink.ts'
+import { type Ink, InkStatus, inkStatusProp } from '@/types/ink.ts'
 import {
   listDraft,
   listRejected,
@@ -80,7 +80,7 @@ watch(
 
 const handleTabChange = (tab: string) => {
   router.push({
-    name: 'ink',
+    name: 'dashboard-ink',
     params: {
       status: tab,
     },
@@ -107,7 +107,6 @@ const delSuccess = () => {
     message: '内容删除成功',
   })
 }
-const refreshList = () => {}
 
 const handleInkOp = async (ink: Ink, op: 'delete' | 'preview' | 'edit') => {
   switch (op) {
@@ -131,7 +130,15 @@ const handleInkOp = async (ink: Ink, op: 'delete' | 'preview' | 'edit') => {
       }
       break
     case 'preview':
-      console.log('preview ink', ink.id)
+      await router.push({
+        name: 'ink-detail',
+        params: {
+          id: ink.id,
+        },
+        query: {
+          status: inkStatusProp(ink.status),
+        },
+      })
       break
     case 'edit':
       await router.push({

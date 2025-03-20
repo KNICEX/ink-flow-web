@@ -3,9 +3,10 @@ import { emptyInk, InkStatus } from '@/types/ink.ts'
 import type { User } from '@/types/user.ts'
 import { emptyUser } from '@/types/user.ts'
 
-export const demoInks = () => {
+export const demoInks = (n?: number) => {
   const res: Ink[] = []
-  for (let i = 0; i < 20; i++) {
+  n = n == undefined ? 20 : n
+  for (let i = 0; i < n; i++) {
     const ink = emptyInk()
     ink.id = i
     ink.cover =

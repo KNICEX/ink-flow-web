@@ -3,11 +3,15 @@ import { MilkdownProvider } from '@milkdown/vue'
 import MilkdownEditor from '@/components/editor/milkdown/MilkdownEditor.vue'
 import type { Ctx } from '@milkdown/ctx'
 import type { Node as ProseNode } from 'prosemirror-model'
-import { useTemplateRef } from 'vue'
+import { computed, useTemplateRef } from 'vue'
 defineProps({
   readOnly: {
     type: Boolean,
     default: false,
+  },
+  padding: {
+    type: Boolean,
+    default: true,
   },
 })
 const milkdownRef = useTemplateRef<InstanceType<typeof MilkdownEditor>>('milkdownRef')
@@ -29,7 +33,7 @@ const handleUpdate = (ctx: Ctx, doc: ProseNode, prevDoc: ProseNode | null) => {
 </script>
 
 <template>
-  <div>
+  <div :class="padding ? '' : 'milkdown-no-padding'">
     <MilkdownProvider>
       <MilkdownEditor
         :read-only="readOnly"
@@ -40,4 +44,4 @@ const handleUpdate = (ctx: Ctx, doc: ProseNode, prevDoc: ProseNode | null) => {
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style lang="scss"></style>

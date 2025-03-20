@@ -1,3 +1,5 @@
+import type { LocationQueryValue } from 'vue-router'
+
 export const parseRouteParam = (param: string | string[] | undefined) => {
   if (param == undefined) {
     return ''
@@ -20,6 +22,16 @@ export const parseRouteParamToInt = (param: string | string[] | undefined) => {
     return 0
   }
   return parseInt(param[0] == '' ? '0' : param[0])
+}
+
+export const parseRouteQuery = (query: LocationQueryValue | LocationQueryValue[]): string => {
+  if (query == undefined) {
+    return ''
+  }
+  if (typeof query === 'string') {
+    return query
+  }
+  return query[0] ?? ''
 }
 
 export const parseResponseDate = (data: any) => {

@@ -53,3 +53,21 @@
   @apply hover:bg-gray-100;
   @apply cursor-pointer;
 }
+
+.milkdown-no-padding {
+  .milkdown .ProseMirror {
+    padding: 0 !important;
+  }
+
+}
+.milkdown {
+  .img {
+    border-radius: 2rem !important;
+  }
+
+}
+
+.sticky-top {
+  position: sticky;
+  top: 6rem;
+}

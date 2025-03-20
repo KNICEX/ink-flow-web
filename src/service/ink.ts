@@ -48,7 +48,24 @@ export const publish = async (id: number) => {
 }
 
 export const draftDetail = async (id: number) => {
-  return await get<Ink>(`/ink/draft/detail/${id}`)
+  const draft = await get<Ink>(`/ink/draft/detail/${id}`)
+  const userStore = useUserStore()
+  draft.author = userStore.getActiveUser()?.user ?? emptyUser()
+  return draft
+}
+
+export const privateDetail = async (id: number) => {
+  const priInk = await get<Ink>(`/ink/private/detail/${id}`)
+  const userStore = useUserStore()
+  priInk.author = userStore.getActiveUser()?.user ?? emptyUser()
+  return priInk
+}
+
+export const rejectedDetail = async (id: number) => {
+  const rejected = await get<Ink>(`/ink/rejected/detail/${id}`)
+  const userStore = useUserStore()
+  rejected.author = userStore.getActiveUser()?.user ?? emptyUser()
+  return rejected
 }
 
 export const listDraft = async (req: ListSelfReq) => {

@@ -10,6 +10,10 @@ const props = defineProps({
     type: Object as () => Ink,
     required: true,
   },
+  showAuthor: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 const emit = defineEmits(['on-cover-click'])
@@ -24,12 +28,12 @@ const handleToUserHome = () => {
 
 <template>
   <div class="rounded-1 cursor-pointer">
-    <a>
-      <div>
+    <div class="flex flex-col justify-between">
+      <div class="overflow-hidden rounded-xl border border-gray-200 aspect-square">
         <el-image
           v-if="ink.cover != ''"
           @click="handleCoverClick"
-          class="rounded-xl w-full aspect-square"
+          class="w-full aspect-square hover:scale-105 transition duration-300"
           loading="lazy"
           fit="cover"
           :src="ink.cover"
@@ -38,28 +42,28 @@ const handleToUserHome = () => {
         <div
           v-else
           @click="handleCoverClick"
-          class="flex justify-center border border-gray-200 text-xl items-center rounded-xl w-full aspect-square"
+          class="flex justify-center hover:scale-115 transition duration-300 text-xl items-center w-full aspect-square"
         >
           <div>{{ ink.title }}</div>
         </div>
       </div>
-      <div class="flex flex-col" @click="handleToUserHome">
-        <span>Hello this is an ink</span>
-        <div class="flex">
-          <InkPopover>
-            <template #reference>
-              <div class="flex items-center mt-2">
-                <UserAvatar class="mr-3" :size="25" :src="ink.author.avatar"></UserAvatar>
-                <span>Chtholly</span>
-              </div>
-            </template>
-            <template #content>
-              <UserCard :user="ink.author"></UserCard>
-            </template>
-          </InkPopover>
-        </div>
+    </div>
+    <div class="flex flex-col mt-2" @click="handleToUserHome">
+      <span>Hello this is an ink</span>
+      <div class="flex" v-if="showAuthor">
+        <InkPopover>
+          <template #reference>
+            <div class="flex items-center mt-2">
+              <UserAvatar class="mr-3" :size="25" :src="ink.author.avatar"></UserAvatar>
+              <span>Chtholly</span>
+            </div>
+          </template>
+          <template #content>
+            <UserCard :user="ink.author"></UserCard>
+          </template>
+        </InkPopover>
       </div>
-    </a>
+    </div>
   </div>
 </template>
 

@@ -67,9 +67,21 @@ const statusClass = computed(() => {
         </template>
         <template #content>
           <div>
-            <div class="popover-button" @click="handleEdit">编辑</div>
+            <div
+              v-show="ink.status != InkStatus.Pending"
+              class="popover-button"
+              @click="handleEdit"
+            >
+              编辑
+            </div>
             <div class="popover-button" @click="handlePreview">预览</div>
-            <div class="popover-button" @click="handleDelete">删除</div>
+            <div
+              v-show="ink.status != InkStatus.Pending"
+              class="popover-button"
+              @click="handleDelete"
+            >
+              删除
+            </div>
             <div class="popover-button" @click="handleShare">分享</div>
           </div>
         </template>

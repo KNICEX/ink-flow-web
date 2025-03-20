@@ -29,8 +29,7 @@ import { onMounted, reactive, ref, useTemplateRef } from 'vue'
 import FormInput from '@/components/form/FormInput.vue'
 import { ElForm, type FormRules } from 'element-plus'
 import { loginEmailPwd } from '@/service/user.ts'
-import { useUserStore } from '@/stores/user.ts'
-import { notification, notifySuccessLogin } from '@/utils/notification.ts'
+import { notifySuccessLogin } from '@/utils/notification.ts'
 
 const pwdLoginInfo = ref({
   email: '',
@@ -58,6 +57,7 @@ const pwdRules = reactive<FormRules>({
 })
 
 const handlePwdLogin = () => {
+  console.log('tes')
   pwdLoginFormRef?.value?.validate(async (valid: boolean) => {
     if (valid) {
       await loginEmailPwd({

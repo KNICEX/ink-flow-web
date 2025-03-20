@@ -25,6 +25,41 @@ export const inkStatusLabel = (status: InkStatus) => {
       return 'Unknown'
   }
 }
+
+export const inkStatusProp = (status: InkStatus) => {
+  switch (status) {
+    case InkStatus.UnPublished:
+      return 'unPublished'
+    case InkStatus.Pending:
+      return 'pending'
+    case InkStatus.Published:
+      return 'published'
+    case InkStatus.Rejected:
+      return 'rejected'
+    case InkStatus.Private:
+      return 'private'
+    default:
+      return 'unknown'
+  }
+}
+
+export const inkStatusFromProp = (prop: string) => {
+  switch (prop) {
+    case 'unPublished':
+      return InkStatus.UnPublished
+    case 'pending':
+      return InkStatus.Pending
+    case 'published':
+      return InkStatus.Published
+    case 'rejected':
+      return InkStatus.Rejected
+    case 'private':
+      return InkStatus.Private
+    default:
+      return InkStatus.UnKnown
+  }
+}
+
 export interface Category {
   id: number
   name: string

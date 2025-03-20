@@ -18,9 +18,42 @@ const router = createRouter({
           path: '/user/:account',
           name: 'user',
           component: () => import('../views/user/UserView.vue'),
+          children: [
+            {
+              path: '',
+              name: 'latest',
+              component: () => import('../views/user/UserInkList.vue'),
+            },
+            {
+              path: 'likes',
+              name: 'likes',
+              component: () => import('../views/user/UserInkList.vue'),
+            },
+            {
+              path: 'views',
+              name: 'views',
+              component: () => import('../views/user/UserInkList.vue'),
+            },
+            {
+              path: 'following',
+              name: 'following',
+              component: () => import('../views/user/UserFollow.vue'),
+            },
+            {
+              path: 'followers',
+              name: 'followers',
+              component: () => import('../views/user/UserFollow.vue'),
+            },
+          ],
+        },
+        {
+          path: '/ink/:id',
+          name: 'ink-detail',
+          component: () => import('../views/ink/InkDetail.vue'),
         },
       ],
     },
+
     {
       path: '/dashboard/:account',
       name: 'dashboard',
@@ -38,13 +71,8 @@ const router = createRouter({
         },
         {
           path: 'ink/:status?',
-          name: 'ink',
+          name: 'dashboard-ink',
           component: () => import('../views/dashboard/InkView.vue'),
-        },
-        {
-          path: 'draft',
-          name: 'draft',
-          component: () => import('../views/dashboard/DraftView.vue'),
         },
       ],
     },

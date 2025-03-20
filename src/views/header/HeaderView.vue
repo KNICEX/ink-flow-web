@@ -28,9 +28,12 @@
           </InkPopover>
           <InkPopover place="bottom">
             <template #reference>
-              <span @click="toDashboard" class="material-symbols-outlined ml-3 cursor-pointer">
-                add_circle
-              </span>
+              <router-link
+                :to="`/dashboard/${userStore.getActiveUser()?.user.account}`"
+                class="material-symbols-outlined ml-3 cursor-pointer"
+              >
+                <span @click="toDashboard"> add_circle </span>
+              </router-link>
             </template>
           </InkPopover>
         </div>

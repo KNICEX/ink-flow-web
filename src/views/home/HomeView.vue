@@ -16,18 +16,13 @@
 <script setup lang="ts">
 import HomeNav from '@/views/home/HomeNav.vue'
 import HomeAside from '@/views/home/HomeAside.vue'
-import InkList from '@/components/list/InkList.vue'
+import InkList from '@/components/list/ink/InkList.vue'
 </script>
 <style scoped lang="scss">
 .home-nav {
   position: sticky;
   top: 6rem;
   z-index: 1;
-}
-
-.sticky-top {
-  position: sticky;
-  top: 6rem;
 }
 
 .ink-aside {

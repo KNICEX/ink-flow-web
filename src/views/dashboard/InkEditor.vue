@@ -1,13 +1,15 @@
 <script setup lang="ts">
-import { nextTick, onMounted, ref, useTemplateRef } from 'vue'
+import { onMounted, ref, useTemplateRef } from 'vue'
 import MilkdownWrapper from '@/components/editor/milkdown/MilkdownWrapper.vue'
 import type { UploadRawFile } from 'element-plus'
-import { saveDraft, publish, draftDetail } from '@/service/ink.ts'
+import { draftDetail, publish, saveDraft } from '@/service/ink.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { notification } from '@/utils/notification.ts'
 import { parseRouteParamToInt } from '@/utils/parse.ts'
 import DashboardContent from '@/views/dashboard/DashboardContent.vue'
 import { uploadCover } from '@/service/file.ts'
+import { InkStatus, inkStatusProp } from '@/types/ink.ts'
+
 const route = useRoute()
 const router = useRouter()
 const milkdownRef = useTemplateRef<InstanceType<typeof MilkdownWrapper>>('milkdownRef')
@@ -73,9 +75,12 @@ const handleUpdate = async () => {
     await save()
   }
 }
-const handleSave = () => {
+const handleSave = async () => {
   saveClicked = true
-  save()
+  await save()
+  notification({
+    message: '保存成功',
+  })
 }
 const handlePublish = async () => {
   await save()
@@ -83,13 +88,19 @@ const handlePublish = async () => {
   notification({
     message: '发布成功',
   })
+  await router.push({
+    name: 'dashboard-ink',
+    params: {
+      status: inkStatusProp(InkStatus.Pending),
+    },
+  })
 }
 </script>
 
 <template>
   <DashboardContent title="Edit">
     <div class="flex w-full flex-1 grow-1 overflow-hidden">
-      <div class="w-40 h-full hidden xl:inline">
+      <div class="w-40 h-full hidden 2xl:inline">
         <span> 自动目录区 </span>
         <span>待实现</span>
       </div>
@@ -99,7 +110,7 @@ const handlePublish = async () => {
         ref="milkdownRef"
         class="flex-1 overflow-y-auto overflow-x-visible"
       ></MilkdownWrapper>
-      <div class="w-80 h-full pl-4 hidden 2xl:inline">
+      <div class="w-80 h-full pl-4 hidden xl:inline">
         <div>
           <div class="label-text">封面</div>
           <el-upload
@@ -143,6 +154,7 @@ const handlePublish = async () => {
             >发布</el-button
           >
         </div>
+        <div>1分钟前自动保存</div>
       </div>
     </div>
   </DashboardContent>
