@@ -7,6 +7,7 @@ export interface User {
   aboutMe: string
   email: string
   phone: string
+  links: string[]
 
   followed: boolean
   followers: number
@@ -38,6 +39,7 @@ export const emptyUser = (): User => {
     aboutMe: '',
     email: '',
     phone: '',
+    links: [],
     followed: false,
     followers: 0,
     following: 0,

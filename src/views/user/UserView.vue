@@ -5,6 +5,8 @@ import type { User } from '@/types/user.ts'
 import UserAvatar from '@/components/UserAvatar.vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user.ts'
+import InkDialog from '@/components/InkDialog.vue'
+import UserInfoEditor from '@/views/user/UserInfoEditor.vue'
 
 const userStore = useUserStore()
 const route = useRoute()
@@ -35,6 +37,18 @@ watch(activeNav, () => {
     name: activeNav.value,
   })
 })
+
+const showEdit = ref(false)
+const handleEdit = () => {
+  showEdit.value = true
+}
+
+watch(
+  () => route.params.account,
+  () => {
+    // TODO reload user info
+  },
+)
 </script>
 
 <template>
@@ -44,10 +58,12 @@ watch(activeNav, () => {
         :src="userInfo?.banner ?? defaultBanner"
         fit="cover"
         class="absolute w-full h-100"
+        hide-on-click-modal
+        :preview-src-list="[userInfo?.banner ?? defaultBanner]"
       ></el-image>
       <div class="max-screen-w absolute bottom-10 flex justify-between line-padding">
-        <div class="flex w-54 justify-between items-center">
-          <UserAvatar :size="100" :border="true"></UserAvatar>
+        <div class="flex justify-between items-center">
+          <UserAvatar :size="80" class="mr-6" :border="true" :preview="true"></UserAvatar>
           <div>
             <div class="text-3xl text-white">{{ userInfo?.username }}</div>
             <div class="text-bg text-white mt-2">@{{ userInfo?.account }}</div>
@@ -55,7 +71,11 @@ watch(activeNav, () => {
         </div>
         <div>
           <div>
-            <el-button v-if="userStore.getActiveUser()?.user.id == userInfo?.id" size="large" round
+            <el-button
+              v-if="userStore.getActiveUser()?.user.id == userInfo?.id"
+              size="large"
+              round
+              @click="handleEdit"
               >编辑个人资料
             </el-button>
             <el-button v-else size="large" round>关注</el-button>
@@ -91,6 +111,9 @@ watch(activeNav, () => {
         <router-view></router-view>
       </div>
     </div>
+    <InkDialog v-model="showEdit" title="编辑个人资料">
+      <UserInfoEditor :user="userInfo"></UserInfoEditor>
+    </InkDialog>
   </div>
 </template>
 

@@ -8,6 +8,8 @@ import MilkdownWrapper from '@/components/editor/milkdown/MilkdownWrapper.vue'
 import { notification } from '@/utils/notification.ts'
 import UserCard from '@/components/UserCard.vue'
 import { demoInks } from '@/mock/demo_data.ts'
+import '@milkdown/crepe/theme/common/style.css'
+import '@milkdown/crepe/theme/frame.css'
 import RecommendCard from '@/components/ink/RecommendCard.vue'
 
 const milkdownRef = useTemplateRef<InstanceType<typeof MilkdownWrapper>>('milkdownRef')
@@ -52,16 +54,38 @@ onMounted(async () => {
 })
 
 const recommendInks = demoInks(5)
+
+const handleLike = () => {
+  console.log('like')
+}
+
+const handleCollect = () => {
+  console.log('collect')
+}
 </script>
 
 <template>
   <div class="max-screen-w flex items-start">
     <div class="flex-1">
-      <img class="w-full" :src="ink.cover" alt="" />
+      <el-image fit="cover" class="w-full h-60 rounded-xl" :src="ink.cover" alt="" />
       <MilkdownWrapper :padding="false" :read-only="true" ref="milkdownRef"> </MilkdownWrapper>
-      <div class="mt-10">
-        <div>点赞</div>
-        <div>评论</div>
+      <!--      <div class="milkdown" v-html="ink.contentHtml"></div>-->
+      <div class="mt-10 flex">
+        <div class="mr-8 flex items-center cursor-pointer hover:text-red-400" @click="handleLike">
+          <span class="material-symbols-outlined mr-1"> favorite </span>
+          <span class="text-lg">{{ ink?.interactive?.likeCnt ?? 0 }}</span>
+        </div>
+        <div
+          class="mr-8 flex items-center cursor-pointer hover:text-[var(--primary-color)]"
+          @click="handleCollect"
+        >
+          <span class="material-symbols-outlined mr-1"> bookmark </span>
+          <span class="text-lg">{{ ink?.interactive?.collectCnt ?? 0 }}</span>
+        </div>
+        <div class="flex items-center cursor-pointer hover:text-[var(--primary-color)]">
+          <span class="material-symbols-outlined mr-1"> bar_chart_4_bars </span>
+          <span class="text-lg">{{ ink?.interactive?.viewCnt ?? 0 }}</span>
+        </div>
       </div>
     </div>
     <div class="w-90 flex-col sticky-top line-padding ml-10">

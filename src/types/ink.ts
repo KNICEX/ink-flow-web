@@ -77,6 +77,7 @@ export interface Interactive {
   bizId: number
   viewCnt: number
   likeCnt: number
+  collectCnt: number
   commentCnt: number
   Liked: boolean
   Collected: boolean
@@ -88,6 +89,7 @@ export const emptyInteractive = (): Interactive => {
     bizId: 0,
     viewCnt: 0,
     likeCnt: 0,
+    collectCnt: 0,
     commentCnt: 0,
     Liked: false,
     Collected: false,

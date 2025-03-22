@@ -11,10 +11,7 @@ import type { Node as ProseNode } from 'prosemirror-model'
 import { uploadImage } from '@/service/file.ts'
 import '@milkdown/crepe/theme/common/style.css'
 import '@milkdown/crepe/theme/frame.css'
-import { emoji } from '@milkdown/plugin-emoji'
-import { diagram } from '@milkdown/plugin-diagram'
 import { indent } from '@milkdown/plugin-indent'
-// import '@milkdown/crepe/theme/frame-dark.css'
 const props = defineProps({
   readOnly: {
     type: Boolean,
@@ -82,7 +79,7 @@ useEditor((root) => {
   crepe.on((listener) => {
     listener.updated(handleUpdate)
   })
-  crepe.editor.use(emoji).use(upload).use(indent)
+  crepe.editor.use(upload).use(indent)
   crepe.editor.config((ctx) => {
     ctx.update(uploadConfig.key, (prev) => ({
       ...prev,

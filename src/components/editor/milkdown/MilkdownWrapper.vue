@@ -3,7 +3,7 @@ import { MilkdownProvider } from '@milkdown/vue'
 import MilkdownEditor from '@/components/editor/milkdown/MilkdownEditor.vue'
 import type { Ctx } from '@milkdown/ctx'
 import type { Node as ProseNode } from 'prosemirror-model'
-import { computed, useTemplateRef } from 'vue'
+import { useTemplateRef } from 'vue'
 defineProps({
   readOnly: {
     type: Boolean,

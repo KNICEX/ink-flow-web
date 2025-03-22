@@ -1,4 +1,4 @@
-import { post, get } from './axios'
+import { post, get, put } from './axios'
 import type { User } from '@/types/user.ts'
 import { useUserStore } from '@/stores/user.ts'
 
@@ -34,6 +34,14 @@ interface RefreshTokenReq {
   refreshToken: string
 }
 
+interface EditProfileReq {
+  username?: string
+  aboutMe?: string
+  avatar?: string
+  banner?: string
+  links?: string[]
+}
+
 export const logout = async () => {
   return await get<never>('/user/logout')
 }
@@ -58,6 +66,10 @@ export const registerByEmail = async (req: EmailRegisterReq) => {
 
 export const profile = async (req?: ProfileReq) => {
   return await post<User, ProfileReq>('/user/profile', req ?? {})
+}
+
+export const editProfile = async (req: EditProfileReq) => {
+  return await put<never, EditProfileReq>('/user/profile', req)
 }
 
 export const refreshToken = async () => {

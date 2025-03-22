@@ -49,13 +49,13 @@ const handleToUserHome = () => {
       </div>
     </div>
     <div class="flex flex-col mt-2" @click="handleToUserHome">
-      <span>Hello this is an ink</span>
+      <span>{{ ink.title }}</span>
       <div class="flex" v-if="showAuthor">
         <InkPopover>
           <template #reference>
             <div class="flex items-center mt-2">
               <UserAvatar class="mr-3" :size="25" :src="ink.author.avatar"></UserAvatar>
-              <span>Chtholly</span>
+              <span>{{ ink.author.username }}</span>
             </div>
           </template>
           <template #content>

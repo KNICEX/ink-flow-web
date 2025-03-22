@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { reactive, ref } from 'vue'
 import type { User } from '@/types/user.ts'
+import { profile } from '@/service/user.ts'
 
 // 支持多账户登录
 interface LoginUser {
@@ -78,11 +79,17 @@ export const useUserStore = defineStore('user', () => {
     saveInLocalStorage()
   }
 
+  async function refreshActiveUserInfo() {
+    const user = await profile()
+    updateActiveUserInfo(user)
+  }
+
   return {
     getActiveUser,
     setActiveUser,
     logout,
     updateActiveUser: updateActiveUserInfo,
+    refreshActiveUserInfo,
     addUser,
     getUserList,
     removeUser,

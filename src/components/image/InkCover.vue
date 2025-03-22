@@ -24,10 +24,7 @@ defineProps({
       class="w-full h-full"
       :src="src"
     ></el-image>
-    <div
-      v-else
-      class="w-full h-full flex transition-all justify-center items-center text-xl hover:text-2xl"
-    >
+    <div v-else class="w-full h-full flex transition-all justify-center items-center text-xl">
       {{ backoff }}
     </div>
   </div>

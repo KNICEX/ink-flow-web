@@ -20,7 +20,8 @@ onMounted(() => {
 
 <template>
   <div>
-    <MilkdownWrapper :read-only="true" ref="milkdownRef"> </MilkdownWrapper>
+    <!--    <MilkdownWrapper :read-only="true" ref="milkdownRef"> </MilkdownWrapper>-->
+    <div v-html="ink.contentHtml"></div>
   </div>
 </template>
 

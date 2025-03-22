@@ -26,6 +26,10 @@
     border-radius: 1rem;
   }
 
+  &:deep(.el-textarea__inner) {
+    border-radius: 1rem;
+  }
+
   border-radius: 1rem;
   font-size: 1rem;
 
