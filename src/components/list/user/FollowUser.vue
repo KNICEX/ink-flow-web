@@ -62,7 +62,7 @@ const listHover = ref(false)
 </script>
 
 <template>
-  <div class="flex h-72 pt-2 pb-6 border-gray-200 border-b-1">
+  <div class="flex h-74 pt-2 border-gray-200 border-b-1">
     <div class="sm:w-100 xl:w-100 pt-2">
       <UserCard :show-follow="false" :user="user"></UserCard>
     </div>
@@ -90,7 +90,7 @@ const listHover = ref(false)
       <!--          <span class="material-symbols-outlined text-white"> arrow_forward_ios </span>-->
       <!--        </div>-->
       <!--      </Transition>-->
-      <div ref="scrollDiv" class="flex overflow-x-auto h-full items-center pt-4 no-scroll pr-10">
+      <div ref="scrollDiv" class="flex overflow-x-auto h-full items-start pt-4 no-scroll pr-10">
         <div class="w-50 mr-5 flex-shrink-0" v-for="ink in inks" :key="ink.id">
           <ImageInk :ink="ink" :show-author="false"></ImageInk>
         </div>

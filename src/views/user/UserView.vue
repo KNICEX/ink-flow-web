@@ -7,6 +7,7 @@ import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user.ts'
 import InkDialog from '@/components/InkDialog.vue'
 import UserInfoEditor from '@/views/user/UserInfoEditor.vue'
+import { defaultBanner } from '@/consts/default.ts'
 
 const userStore = useUserStore()
 const route = useRoute()
@@ -24,8 +25,6 @@ const parseFaviconUrl = (url: string) => {
   }
   return `https://lzacg.org${url}`
 }
-const defaultBanner = 'https://lzacg.org/wp-content/uploads/2021/07/pid-67767892log3_p2-scaled.webp'
-
 const activeNav = ref('latest')
 onMounted(() => {
   console.log('route.name: ', route.name)
@@ -52,7 +51,7 @@ watch(
 </script>
 
 <template>
-  <div class="w-full relative flex flex-col items-center">
+  <div class="w-full flex flex-col items-center">
     <div class="w-full relative flex justify-center">
       <el-image
         :src="userInfo?.banner ?? defaultBanner"
@@ -84,30 +83,37 @@ watch(
         </div>
       </div>
     </div>
-    <div class="max-screen-w mt-2 line-padding relative text-lg">
-      <el-tabs v-model="activeNav">
-        <el-tab-pane label="最新" name="latest"></el-tab-pane>
-        <el-tab-pane label="点赞" name="likes"></el-tab-pane>
-        <!--        <el-tab-pane label="收藏" name="collection"></el-tab-pane>-->
-        <el-tab-pane label="浏览" name="views"></el-tab-pane>
-      </el-tabs>
-      <div class="absolute right-10 top-3 flex label-text-color">
-        <div
-          @click="activeNav = 'following'"
-          :class="['cursor-pointer', activeNav == 'following' ? 'active-color' : '']"
-        >
-          正在关注{{ userInfo?.following }}
-        </div>
-        <div
-          @click="activeNav = 'followers'"
-          :class="['ml-8 cursor-pointer', activeNav == 'followers' ? 'active-color' : '']"
-        >
-          关注者{{ userInfo?.followers }}
+    <div class="line-padding max-screen-w">
+      <div class="relative text-lg sticky-top white-bg z-1">
+        <el-tabs v-model="activeNav">
+          <el-tab-pane label="最新" name="latest"></el-tab-pane>
+          <el-tab-pane label="点赞" name="likes"></el-tab-pane>
+          <!--        <el-tab-pane label="收藏" name="collection"></el-tab-pane>-->
+          <el-tab-pane label="浏览" name="views"></el-tab-pane>
+          <el-tab-pane label="收藏" name="favorites"></el-tab-pane>
+        </el-tabs>
+        <div class="absolute right-10 top-3 flex label-text-color">
+          <div
+            @click="activeNav = 'following'"
+            :class="[
+              'cursor-pointer hover:text-[var(--primary-color)]',
+              activeNav == 'following' ? 'active-color' : '',
+            ]"
+          >
+            正在关注{{ userInfo?.following }}
+          </div>
+          <div
+            @click="activeNav = 'followers'"
+            :class="[
+              'ml-8 cursor-pointer hover:text-[var(--primary-color)]',
+              activeNav == 'followers' ? 'active-color' : '',
+            ]"
+          >
+            关注者{{ userInfo?.followers }}
+          </div>
         </div>
       </div>
-    </div>
-    <div class="max-screen-w flex justify-center mt-4">
-      <div class="max-screen-w line-padding">
+      <div class="flex justify-center mt-4">
         <router-view></router-view>
       </div>
     </div>

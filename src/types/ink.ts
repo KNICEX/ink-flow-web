@@ -79,8 +79,8 @@ export interface Interactive {
   likeCnt: number
   collectCnt: number
   commentCnt: number
-  Liked: boolean
-  Collected: boolean
+  liked: boolean
+  favorited: boolean
 }
 
 export const emptyInteractive = (): Interactive => {
@@ -91,8 +91,8 @@ export const emptyInteractive = (): Interactive => {
     likeCnt: 0,
     collectCnt: 0,
     commentCnt: 0,
-    Liked: false,
-    Collected: false,
+    liked: false,
+    favorited: false,
   }
 }
 

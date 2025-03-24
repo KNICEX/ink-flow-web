@@ -28,8 +28,9 @@ const props = defineProps({
 })
 const wrapClass = computed(() => {
   return clsx({
-    'grid gap-3 sm:gap-6 sm:grid-cols-2 md:grid-cols-3 ': true,
-    'xl:grid-cols-4': props.maxCols == 4,
+    'grid gap-3 sm:gap-6 sm:grid-cols-2  md:grid-cols-3': true,
+    'xl:grid-cols-4 ': props.maxCols == 4,
+    'xl:grid-cols-5 lg:grid-cols-4': props.maxCols == 5,
     '2xl:grid-cols-6': props.maxCols == 6,
   })
 })

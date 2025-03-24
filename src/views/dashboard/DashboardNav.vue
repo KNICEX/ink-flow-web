@@ -53,14 +53,14 @@ onMounted(() => {
           <span class="material-symbols-outlined"> bolt </span>
           <span>互动</span>
         </InkNavItem>
-        <InkNavItem :sub="true" prop="like">
+        <InkNavItem :sub="true" prop="notification">
           <span class="material-symbols-outlined"> notifications </span
           ><span class="ml-3">通知</span>
         </InkNavItem>
-        <InkNavItem :sub="true" prop="comment">
-          <span class="material-symbols-outlined"> chat </span> <span class="ml-3">评论</span>
+        <InkNavItem :sub="true" prop="dashboard-reply">
+          <span class="material-symbols-outlined"> chat </span> <span class="ml-3">回复</span>
         </InkNavItem>
-        <InkNavItem :sub="true" prop="like">
+        <InkNavItem :sub="true" prop="dashboard-like">
           <span class="material-symbols-outlined"> thumb_up </span> <span class="ml-3">点赞</span>
         </InkNavItem>
         <InkNavItem prop="setting">

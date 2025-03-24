@@ -29,7 +29,9 @@ const handleToUserHome = () => {
 <template>
   <div class="rounded-1 cursor-pointer">
     <div class="flex flex-col justify-between">
-      <div class="overflow-hidden rounded-xl border border-gray-200 aspect-square">
+      <div
+        class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-600 aspect-square"
+      >
         <el-image
           v-if="ink.cover != ''"
           @click="handleCoverClick"
@@ -44,7 +46,7 @@ const handleToUserHome = () => {
           @click="handleCoverClick"
           class="flex justify-center hover:scale-115 transition duration-300 text-xl items-center w-full aspect-square"
         >
-          <div>{{ ink.title }}</div>
+          <div class="line-clamp-2 px-8">{{ ink.title }}</div>
         </div>
       </div>
     </div>

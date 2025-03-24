@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { demoUsers } from '@/mock/demo_data.ts'
-import UserList from '@/components/list/user/UserList.vue'
+import FollowUserList from '@/components/list/user/FollowUserList.vue'
 </script>
 
 <template>
-  <UserList :users="demoUsers()"></UserList>
+  <FollowUserList :users="demoUsers()"></FollowUserList>
 </template>
 
 <style scoped lang="scss"></style>

@@ -1,6 +1,7 @@
 @use 'tailwindcss' as *;
 
 @use './base.scss' as *;
+
 @custom-variant dark (&:where(.dark, .dark *));
 #app {
   height: 100vh;
@@ -20,10 +21,17 @@
   @apply dark:text-gray-300;
 }
 
+.lg-semibold-text {
+  @apply font-semibold;
+  @apply text-lg;
+  @apply text-gray-800;
+  @apply dark:text-gray-300;
+}
+
 .nav-text {
-  @apply  text-base;
-  @apply  text-gray-600;
-  @apply  dark:text-gray-300;
+  @apply text-base;
+  @apply text-gray-600;
+  @apply dark:text-gray-300;
 }
 
 .label-text-color {
@@ -60,6 +68,7 @@
   }
 
 }
+
 .milkdown {
   .img {
     border-radius: 2rem !important;

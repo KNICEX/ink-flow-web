@@ -1,23 +1,40 @@
-/* just override what you need */
-@forward 'element-plus/theme-chalk/src/common/var.scss' with (
-  $colors: (
-    'primary': (
-      'base': #4ec7e6,
-    ),
-  )
-);
+///* just override what you need */
+//@forward 'element-plus/theme-chalk/src/common/var.scss' with (
+//  $colors: (
+//    'primary': (
+//      'base': #4ec7e6,
+//
+//    ),
+//  )
+//);
+//
+////@forward 'element-plus/theme-chalk/src/dark/var.scss' with (
+////  $colors: (
+////    'primary': (
+////      'base': #4ec7e6,
+////    ),
+////  )
+////);
 
+:root{
+  --primary-color: #4ec7e6;
+  --el-color-primary: #4ec7e6;
+}
+
+html.dark {
+  --el-color-primary: #4ec7e6;
+}
 
 .input-radius .el-input-group__prepend {
   border-radius: 2rem;
 }
 
 .rounded-input {
-  &:deep(.el-input__wrapper) {
-    border-radius: 2rem;
-  }
+  .el-input__wrapper {
+    border-radius: 2rem ;
 
-  border-radius: 2rem;
+  }
+  border-radius: 2rem ;
   font-size: 1.1rem;
 }
 

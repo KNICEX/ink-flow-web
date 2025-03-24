@@ -18,8 +18,8 @@ defineProps({
       :backoff="ink.title"
     >
     </ink-cover>
-    <div class="ml-4">
-      <div>{{ ink.title }}</div>
+    <div class="ml-4 flex-1">
+      <div class="line-clamp-2">{{ ink.title }}</div>
       <div>@{{ ink.author.account }}</div>
     </div>
   </div>

@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router'
 import { logout } from '@/service/user.ts'
 import { notification } from '@/utils/notification.ts'
 import { useUserStore } from '@/stores/user.ts'
+import { defaultBanner } from '@/consts/default.ts'
 const themeStore = useThemeStore()
 const router = useRouter()
 const props = defineProps({
@@ -32,7 +33,6 @@ onMounted(() => {
   })
 })
 
-const defaultBanner = 'https://lzacg.org/wp-content/uploads/2021/07/pid-67767892log3_p2-scaled.webp'
 const opItemClass = 'hover:bg-gray-100 cursor-pointer rounded-sm mt-3 p-2 px-4 flex items-center'
 
 const handleLogout = async () => {
@@ -68,8 +68,12 @@ const handleUserCenter = () => {
           <div class="text-lg text-gray-600 font-semibold">{{ user.username }}</div>
           <div class="text-sm text-gray-400">@{{ user.account }}</div>
           <div class="mt-2">
-            <el-link class="text-sm text-gray-400">{{ user.followers }}关注者</el-link>
-            <el-link class="text-sm text-gray-400 ml-4">{{ user.following }}正在关注</el-link>
+            <router-link :to="`/user/${user.account}/followers`" class="text-sm text-gray-400">
+              <el-link>{{ user.followers }}关注者</el-link>
+            </router-link>
+            <router-link :to="`/user/${user.account}/following`" class="text-sm text-gray-400 ml-4">
+              <el-link>{{ user.following }}正在关注</el-link>
+            </router-link>
           </div>
         </div>
         <div class="text-base mt-4 mb-4">

@@ -3,7 +3,7 @@ import { emptyInk, InkStatus } from '@/types/ink.ts'
 import type { User } from '@/types/user.ts'
 import { emptyUser } from '@/types/user.ts'
 
-const randomCover = () => {
+const randomCover = (mustImage?: boolean) => {
   const urls = [
     'https://res.cloudinary.com/dw3cnfcb5/image/upload/v1742147867/qzr5v0bavnefmijyjhzd.jpg',
     'https://res.cloudinary.com/dw3cnfcb5/image/upload/v1742200924/nchghsqliegrlcqmuqd1.jpg',
@@ -17,7 +17,7 @@ const randomCover = () => {
     'https://res.cloudinary.com/dw3cnfcb5/image/upload/v1742156721/cb9h1ixah2vgd3ytydax.jpg',
     'https://res.cloudinary.com/dw3cnfcb5/image/upload/v1742150049/rxzafga7q1rx1y6cqdjp.jpg',
   ]
-  if (Math.random() < 0.1) {
+  if (!mustImage && Math.random() < 0.1) {
     return ''
   }
   return urls[Math.floor(Math.random() * urls.length)]
@@ -87,21 +87,21 @@ export const demoInks = (n?: number) => {
   return res
 }
 
-export const demoUsers = () => {
+export const demoUsers = (n?: number) => {
   const res: User[] = []
-  for (let i = 0; i < 20; i++) {
+  n = n == undefined ? 20 : n
+  for (let i = 0; i < n; i++) {
     const user = emptyUser()
     user.id = i
-    user.avatar =
-      'https://res.cloudinary.com/dw3cnfcb5/image/upload/v1741972579/twitter_snowmint_snowlistenz__20241003-030616_1841676112663114079_photo_rii427.jpg'
+    user.avatar = randomCover()
     user.banner =
       'https://res.cloudinary.com/dw3cnfcb5/image/upload/v1741972579/twitter_snowmint_snowlistenz__20241003-030616_1841676112663114079_photo_rii427.jpg'
-    user.username = 'Mikan'
-    user.account = 'mikan'
+    user.username = randomAccount()
+    user.account = randomAccount()
     user.aboutMe = 'I am a cat'
     user.email = ''
     user.phone = ''
-    user.followed = i % 2 === 0
+    user.followed = Math.random() > 0.7
     user.followers = 100
     user.following = 100
     user.createdAt = new Date()

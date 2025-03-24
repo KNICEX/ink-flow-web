@@ -15,6 +15,11 @@ const router = createRouter({
           component: () => import('../views/home/HomeView.vue'),
         },
         {
+          path: '/search',
+          name: 'search',
+          component: () => import('../views/search/SearchView.vue'),
+        },
+        {
           path: '/user/:account',
           name: 'user',
           component: () => import('../views/user/UserView.vue'),
@@ -33,6 +38,11 @@ const router = createRouter({
               path: 'views',
               name: 'views',
               component: () => import('../views/user/UserInkList.vue'),
+            },
+            {
+              path: 'favorites',
+              name: 'favorites',
+              component: () => import('../views/user/UserFavorites.vue'),
             },
             {
               path: 'following',
@@ -73,6 +83,16 @@ const router = createRouter({
           path: 'ink/:status?',
           name: 'dashboard-ink',
           component: () => import('../views/dashboard/InkView.vue'),
+        },
+        {
+          path: 'reply',
+          name: 'dashboard-reply',
+          component: () => import('../views/dashboard/notification/ReplyView.vue'),
+        },
+        {
+          path: 'like',
+          name: 'dashboard-like',
+          component: () => import('../views/dashboard/notification/LikeView.vue'),
         },
       ],
     },

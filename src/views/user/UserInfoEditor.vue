@@ -5,7 +5,8 @@ import type { User } from '@/types/user.ts'
 import type { ElForm, FormRules } from 'element-plus'
 import { editProfile } from '@/service/user.ts'
 import { notification } from '@/utils/notification.ts'
-const defaultBanner = 'https://lzacg.org/wp-content/uploads/2021/07/pid-67767892log3_p2-scaled.webp'
+import { defaultBanner } from '@/consts/default.ts'
+
 const props = defineProps({
   user: {
     type: Object as () => User,
@@ -45,9 +46,17 @@ const rules = reactive<FormRules>({
 
 <template>
   <div class="relative">
-    <el-image fit="cover" class="w-full h-40" :src="user.banner ?? defaultBanner"></el-image>
+    <div class="relative">
+      <el-image fit="cover" class="w-full h-40" :src="user.banner ?? defaultBanner"></el-image>
+      <div
+        title="切换照片"
+        class="cursor-pointer absolute w-full h-40 left-0 top-0 flex justify-center items-center bg-black/20"
+      >
+        <span class="material-symbols-outlined"> add_a_photo </span>
+      </div>
+    </div>
     <div class="absolute left-4 top-30">
-      <UserAvatar :src="user.avatar" :size="80" :border="true"></UserAvatar>
+      <UserAvatar class="edit-avatar" :src="user.avatar" :size="80" :border="true"></UserAvatar>
     </div>
     <div class="mt-12 mb-4">
       <el-form :model="userInfoForm" label-position="top" :rules="rules" ref="userInfoFormRef">
@@ -81,4 +90,25 @@ const rules = reactive<FormRules>({
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+.edit-avatar {
+  &:hover {
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      height: 100%;
+      width: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 50%;
+
+      font-variation-settings:
+        'FILL' 0,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
+    }
+  }
+}
+</style>

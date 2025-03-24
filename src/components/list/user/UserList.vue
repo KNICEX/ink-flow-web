@@ -1,17 +1,12 @@
 <script setup lang="ts">
-import FollowUser from '@/components/list/user/FollowUser.vue'
-import type { User } from '@/types/user.ts'
-defineProps({
-  users: {
-    type: Array as () => User[],
-    required: true,
-  },
-})
+import UserItem from '@/components/list/user/UserItem.vue'
+import { demoUsers } from '@/mock/demo_data.ts'
+const users = demoUsers()
 </script>
 
 <template>
-  <div class="w-full">
-    <FollowUser v-for="user in users" :key="user.id" :user="user"></FollowUser>
+  <div class="grid gap-x-20 gap-y-10 md:grid-cols-2">
+    <UserItem v-for="user in users" :user="user" :key="user.id"></UserItem>
   </div>
 </template>
 

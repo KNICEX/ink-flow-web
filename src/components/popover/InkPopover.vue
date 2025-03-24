@@ -27,6 +27,14 @@ const props = defineProps({
     type: String,
     default: '',
   },
+  showAfter: {
+    type: Number,
+    default: 10,
+  },
+  width: {
+    type: String,
+    default: 'auto',
+  },
 })
 
 const popStyle = ref({
@@ -46,7 +54,8 @@ defineExpose({
 <template>
   <el-popover
     ref="popoverRef"
-    width="auto"
+    :width="width"
+    :show-after="showAfter"
     :trigger="trigger"
     :popper-style="popStyle"
     popper-class=" overflow-hidden
