@@ -23,7 +23,13 @@
     <div class="mt-8">
       <div class="text-center text-xl">为你推荐的创作者</div>
       <div class="mt-4">
-        <UserItem v-for="user in recommendUsers" :user="user" :key="user.id"></UserItem>
+        <UserItem
+          v-for="user in recommendUsers"
+          :user="user"
+          :key="user.id"
+          @followed="handleFollowed"
+          @cancel-followed="handleCancelFollowed"
+        ></UserItem>
       </div>
       <div class="text-center mt-2">
         <el-link type="primary">
@@ -44,6 +50,22 @@ onMounted(() => {
   recommendUsers.value = demoUsers()
 })
 const totalInk = ref(2332)
+const handleFollowed = (id: number) => {
+  for (let i = 0; i < recommendUsers.value.length; i++) {
+    if (recommendUsers.value[i].id == id) {
+      recommendUsers.value[i].followed = true
+      break
+    }
+  }
+}
+const handleCancelFollowed = (id: number) => {
+  for (let i = 0; i < recommendUsers.value.length; i++) {
+    if (recommendUsers.value[i].id == id) {
+      recommendUsers.value[i].followed = false
+      break
+    }
+  }
+}
 </script>
 <style scoped lang="scss">
 .round {

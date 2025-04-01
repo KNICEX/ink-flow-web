@@ -11,6 +11,8 @@ import { demoInks } from '@/mock/demo_data.ts'
 import '@milkdown/crepe/theme/common/style.css'
 import '@milkdown/crepe/theme/frame.css'
 import RecommendCard from '@/components/ink/RecommendCard.vue'
+import CommentList from '@/components/list/comment/CommentList.vue'
+import InkInteractive from '@/components/ink/InkInteractive.vue'
 
 const milkdownRef = useTemplateRef<InstanceType<typeof MilkdownWrapper>>('milkdownRef')
 const ink = ref<Ink>(emptyInk())
@@ -71,22 +73,10 @@ const handleCollect = () => {
       <MilkdownWrapper :padding="false" :read-only="true" ref="milkdownRef"> </MilkdownWrapper>
       <!--      <div class="milkdown" v-html="ink.contentHtml"></div>-->
       <div class="mt-10 flex">
-        <div class="mr-8 flex items-center cursor-pointer hover:text-red-400" @click="handleLike">
-          <span class="material-symbols-outlined mr-1"> favorite </span>
-          <span class="text-lg">{{ ink?.interactive?.likeCnt ?? 0 }}</span>
-        </div>
-        <div
-          class="mr-8 flex items-center cursor-pointer hover:text-[var(--primary-color)]"
-          @click="handleCollect"
-        >
-          <span class="material-symbols-outlined mr-1"> bookmark </span>
-          <span class="text-lg">{{ ink?.interactive?.collectCnt ?? 0 }}</span>
-        </div>
-        <div class="flex items-center cursor-pointer hover:text-[var(--primary-color)]">
-          <span class="material-symbols-outlined mr-1"> bar_chart_4_bars </span>
-          <span class="text-lg">{{ ink?.interactive?.viewCnt ?? 0 }}</span>
-        </div>
+        <InkInteractive :interactive="ink.interactive"></InkInteractive>
       </div>
+
+      <CommentList></CommentList>
     </div>
     <div class="w-90 flex-col sticky-top line-padding ml-10">
       <div>

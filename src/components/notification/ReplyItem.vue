@@ -1,34 +1,38 @@
 <script setup lang="ts">
-import InkCover from '@/components/image/InkCover.vue'
-import { defaultBanner } from '@/consts/default.ts'
 import NotificationItem from '@/components/notification/NotificationItem.vue'
 import { demoUsers } from '@/mock/demo_data.ts'
-
-const subjectType = Math.random() > 0.5 ? 'comment' : 'ink'
+import type { Ink } from '@/types/ink.ts'
+import type { ReplyContent, Notification } from '@/types/notification.ts'
+import { computed } from 'vue'
+import InkReference from '@/components/ink/InkReference.vue'
+const props = defineProps({
+  reply: {
+    type: Object as () => Notification<Ink, ReplyContent>,
+    required: true,
+  },
+})
+const replyTo = computed(() => {
+  if (props.reply.content.target?.content) {
+    return '评论'
+  }
+  return '文章'
+})
 </script>
 
 <template>
   <NotificationItem :users="demoUsers(1)">
-    <template #title> 回复了你的评论/文章 </template>
+    <template #title> 回复了你的{{ replyTo }} </template>
     <div class="line-clamp-3 my-2">
-      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci autem consequuntur
-      corporis cum deserunt dolores
+      {{ reply.content.source.content }}
     </div>
     <div
-      v-if="subjectType == 'comment'"
+      v-if="reply.content?.target && reply.content?.target?.content != ''"
       class="text-base text-gray-500 border-gray-300 pl-2 border-l-3 line-clamp-1"
     >
-      lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad adipisci autem consequuntur
+      {{ reply.content?.target?.content }}
     </div>
     <div v-else class="flex border-gray-300 pl-2 border-l-3">
-      <InkCover class="w-40 h-30 rounded-xl" :src="defaultBanner"></InkCover>
-      <div class="ml-4 flex flex-col justify-between">
-        <div>Title</div>
-        <div>
-          <el-tag type="info">web3</el-tag>
-        </div>
-        <div class="nav-text">2024年11月1日 22:22</div>
-      </div>
+      <InkReference :ink="reply.subject!"></InkReference>
     </div>
   </NotificationItem>
 </template>

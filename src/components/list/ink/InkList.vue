@@ -1,20 +1,10 @@
-<template>
-  <div>
-    <div :class="wrapClass" v-infinite-scroll="loadMore" :infinite-scroll-disabled="noMore">
-      <div v-for="ink in inks" :key="ink.id">
-        <InkItem @on-cover-click="handleItemClick" :ink="ink"></InkItem>
-      </div>
-    </div>
-    <p v-show="loading">Loading</p>
-    <el-backtop :style="{ height: '4rem', width: '4rem' }" :right="100" :bottom="100" />
-  </div>
-</template>
 <script setup lang="ts">
 import clsx from 'clsx'
 import InkItem from '@/components/list/ink/ImageInk.vue'
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import type { Ink } from '@/types/ink.ts'
 import { demoInks } from '@/mock/demo_data.ts'
+import NoData from '@/components/empty/NoData.vue'
 
 const props = defineProps({
   maxCols: {
@@ -34,15 +24,6 @@ const wrapClass = computed(() => {
     '2xl:grid-cols-6': props.maxCols == 6,
   })
 })
-const noMore = ref(false)
-const loading = ref(false)
-const loadMore = () => {
-  loading.value = true
-  setTimeout(() => {
-    loading.value = false
-  }, 2000)
-  noMore.value = true
-}
 
 const emit = defineEmits(['on-item-click'])
 const handleItemClick = (id: number) => {
@@ -50,4 +31,15 @@ const handleItemClick = (id: number) => {
   emit('on-item-click', id)
 }
 </script>
+<template>
+  <div>
+    <div :class="wrapClass">
+      <div v-for="ink in inks" :key="ink.id">
+        <InkItem @on-cover-click="handleItemClick" :ink="ink"></InkItem>
+      </div>
+    </div>
+    <NoData v-if="inks.length == 0"></NoData>
+    <el-backtop :style="{ height: '4rem', width: '4rem' }" :right="100" :bottom="100" />
+  </div>
+</template>
 <style scoped lang="scss"></style>

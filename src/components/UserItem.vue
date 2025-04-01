@@ -10,6 +10,14 @@ defineProps({
     required: true,
   },
 })
+
+const emit = defineEmits(['followed', 'cancelFollowed'])
+const handleFollowed = (id: number) => {
+  emit('followed', id)
+}
+const handleCancelFollowed = (id: number) => {
+  emit('cancelFollowed', id)
+}
 </script>
 
 <template>
@@ -19,7 +27,11 @@ defineProps({
     <div class="flex">
       <InkPopover>
         <template #content>
-          <UserCard :user="user"></UserCard>
+          <UserCard
+            :user="user"
+            @followed="handleFollowed"
+            @cancel-followed="handleCancelFollowed"
+          ></UserCard>
         </template>
         <template #reference>
           <div class="flex">
@@ -32,7 +44,12 @@ defineProps({
         <div class="text-sm text-gray-500">@{{ user.account }}</div>
       </div>
     </div>
-    <FollowButton :uid="1"></FollowButton>
+    <FollowButton
+      :uid="user.id"
+      :followed="user.followed"
+      @followed="handleFollowed"
+      @cancel-followed="handleCancelFollowed"
+    ></FollowButton>
   </div>
 </template>
 

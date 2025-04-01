@@ -4,8 +4,8 @@ export enum InkStatus {
   UnKnown = 0,
   UnPublished = 1,
   Pending = 2,
-  Published = 3,
-  Rejected = 4,
+  Rejected = 3,
+  Published = 4,
   Private = 5,
 }
 
@@ -73,11 +73,9 @@ export const emptyCategory = (): Category => {
 }
 
 export interface Interactive {
-  biz: string
-  bizId: number
   viewCnt: number
   likeCnt: number
-  collectCnt: number
+  favoriteCnt: number
   commentCnt: number
   liked: boolean
   favorited: boolean
@@ -85,11 +83,9 @@ export interface Interactive {
 
 export const emptyInteractive = (): Interactive => {
   return {
-    biz: '',
-    bizId: 0,
     viewCnt: 0,
     likeCnt: 0,
-    collectCnt: 0,
+    favoriteCnt: 0,
     commentCnt: 0,
     liked: false,
     favorited: false,

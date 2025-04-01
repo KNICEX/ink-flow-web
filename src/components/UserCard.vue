@@ -21,6 +21,7 @@ const props = defineProps({
     default: true,
   },
 })
+const emit = defineEmits(['followed', 'cancelFollowed'])
 const wrapClass = computed(() => {
   return clsx({
     'w-80': true,
@@ -28,18 +29,31 @@ const wrapClass = computed(() => {
   })
 })
 const joinDays = computed(() => {
-  const diff = new Date().getTime() - props.user.createdAt.getTime()
+  const diff = new Date().getTime() - props.user?.createdAt?.getTime()
   return Math.floor(diff / (1000 * 60 * 60 * 24))
 })
 const isSelf = computed(() => {
   return userStore.getActiveUser()?.user.id == props.user.id
 })
+const handleFollowed = (id: number) => {
+  emit('followed', id)
+}
+const handleCancelFollowed = (id: number) => {
+  emit('cancelFollowed', id)
+}
 </script>
 <template>
   <div :class="wrapClass">
     <div class="flex items-center justify-between">
       <UserAvatar :size="60" :src="user.avatar"></UserAvatar>
-      <FollowButton v-show="!isSelf" :uid="1" size="large" :followed="user.followed">
+      <FollowButton
+        v-show="!isSelf"
+        :uid="1"
+        size="large"
+        :followed="user.followed"
+        @followed="handleFollowed"
+        @cancel-followed="handleCancelFollowed"
+      >
         <template #before>
           <el-icon class="mr-1">
             <Plus></Plus>

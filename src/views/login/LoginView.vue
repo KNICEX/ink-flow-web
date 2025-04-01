@@ -42,6 +42,7 @@
         @report-size="handleReportSize"
         @has-account="changeType(LoginType.Email)"
         @report-title="handleReportTitle"
+        @register-success="handleRegisterSuccess"
       ></EmailRegister>
     </div>
   </InkDialog>
@@ -114,6 +115,10 @@ const handleReportTitle = (t: string) => {
 const handleClose = () => {
   // 关闭登录框之后，重置登录类型
   changeType(LoginType.Home)
+}
+
+const handleRegisterSuccess = () => {
+  model.value = false
 }
 </script>
 <style scoped lang="scss"></style>

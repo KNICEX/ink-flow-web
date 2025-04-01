@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import DashboardContent from '@/views/dashboard/DashboardContent.vue'
-import ReplyList from '@/components/notification/ReplyList.vue'
+import SystemList from '@/components/notification/SystemList.vue'
 import { demoNotifications } from '@/mock/demo_data.ts'
 import { NotificationType } from '@/types/notification.ts'
 
-const replies = demoNotifications(NotificationType.Reply)
+const nos = demoNotifications(NotificationType.System)
 </script>
 
 <template>
-  <DashboardContent title="Reply" class="overflow-hidden">
-    <ReplyList class="overflow-y-auto" :replies="replies"> </ReplyList>
+  <DashboardContent title="Notification" class="overflow-hidden">
+    <SystemList class="overflow-y-auto" :notifications="nos"></SystemList>
   </DashboardContent>
 </template>
 

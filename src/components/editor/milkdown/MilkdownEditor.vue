@@ -11,6 +11,7 @@ import type { Node as ProseNode } from 'prosemirror-model'
 import { uploadImage } from '@/service/file.ts'
 import '@milkdown/crepe/theme/common/style.css'
 import '@milkdown/crepe/theme/frame.css'
+
 import { indent } from '@milkdown/plugin-indent'
 const props = defineProps({
   readOnly: {
@@ -48,11 +49,10 @@ const uploader: Uploader = async (files, schema) => {
   return await Promise.all(
     images.map(async (image) => {
       const url = await uploadImage(image)
-      const node = schema.nodes.image.createAndFill({
+      return schema.nodes.image.createAndFill({
         src: url,
         alt: image.name,
-      })
-      return node ?? Node
+      })!
     }),
   )
 }
@@ -122,7 +122,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <Milkdown></Milkdown>
+  <Milkdown class="prose"></Milkdown>
 </template>
 
 <style scoped lang="scss"></style>

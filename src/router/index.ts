@@ -85,6 +85,11 @@ const router = createRouter({
           component: () => import('../views/dashboard/InkView.vue'),
         },
         {
+          path: 'system',
+          name: 'dashboard-system',
+          component: () => import('../views/dashboard/notification/SystemView.vue'),
+        },
+        {
           path: 'reply',
           name: 'dashboard-reply',
           component: () => import('../views/dashboard/notification/ReplyView.vue'),
@@ -93,6 +98,11 @@ const router = createRouter({
           path: 'like',
           name: 'dashboard-like',
           component: () => import('../views/dashboard/notification/LikeView.vue'),
+        },
+        {
+          path: 'follow',
+          name: 'dashboard-follow',
+          component: () => import('../views/dashboard/notification/FollowView.vue'),
         },
       ],
     },

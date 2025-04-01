@@ -1,4 +1,4 @@
-import { post, get, put } from './axios'
+import { post, get, put, del } from './axios'
 import type { User } from '@/types/user.ts'
 import { useUserStore } from '@/stores/user.ts'
 
@@ -82,4 +82,12 @@ export const refreshToken = async () => {
     refreshToken: activeUser.refreshToken,
   }
   return await post<never, RefreshTokenReq>('/user/refresh_token', req)
+}
+
+export const follow = async (uid: number) => {
+  return await post<never, null>(`/user/follow/${uid}`, null)
+}
+
+export const cancelFollow = async (uid: number) => {
+  return await del<never>(`/user/follow/${uid}`)
 }

@@ -6,7 +6,7 @@ import InkPopover from '@/components/popover/InkPopover.vue'
 
 import { computed, inject } from 'vue'
 import clsx from 'clsx'
-import MoreOpration from '@/components/button/MoreOpration.vue'
+import MoreOperation from '@/components/button/MoreOperation.vue'
 
 const props = defineProps({
   ink: {
@@ -60,7 +60,7 @@ const statusClass = computed(() => {
     <div class="flex items-center">
       <InkPopover place="left" padding="0" trigger="click">
         <template #reference>
-          <MoreOpration :horizon="true"></MoreOpration>
+          <MoreOperation :horizon="true"></MoreOperation>
         </template>
         <template #content>
           <div>

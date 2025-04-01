@@ -4,6 +4,7 @@ import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import { useRouter } from 'vue-router'
 import InkPopover from '@/components/popover/InkPopover.vue'
 import { ElInput } from 'element-plus'
+import { useSearchLog } from '@/stores/search.ts'
 const props = defineProps({
   placeholder: {
     type: String,
@@ -15,17 +16,19 @@ const props = defineProps({
   },
 })
 const router = useRouter()
+const searchLogStore = useSearchLog()
 
 const keywords = ref(props.value)
 const marshaledKeywords = computed(() => {
-  // 空格分隔替换为加号
-  return keywords.value.replace(/\s+/g, '+')
+  return encodeURIComponent(keywords.value)
 })
 const handleSearch = () => {
+  searchLogStore.addSearchLog(keywords.value)
   router.push({
     name: 'search',
     query: {
       key: marshaledKeywords.value,
+      type: router.currentRoute.value.query?.type,
     },
   })
 }
@@ -42,6 +45,19 @@ const setValue = (value: string) => {
 defineExpose({
   setValue,
 })
+
+const clearSearchLog = () => {
+  searchLogStore.clearSearchLogs()
+}
+
+const stopPropagation = (evt: Event) => {
+  evt.stopPropagation()
+}
+
+const searchLog = (key: string) => {
+  keywords.value = key
+  handleSearch()
+}
 </script>
 
 <template>
@@ -57,21 +73,34 @@ defineExpose({
         :prefix-icon="Search"
         :style="{ borderRadius: '2rem' }"
         @keyup.enter="handleSearch"
+        @keydown.space="stopPropagation"
+        @keyup.space="stopPropagation"
       />
     </template>
     <template #content>
       <div>
-        <div class="px-10 h-12 flex items-center justify-between">
+        <div
+          class="px-10 h-12 flex items-center justify-between"
+          v-if="searchLogStore.searchLogs.length > 0"
+        >
           <span class="lg-semibold-text">历史记录</span>
-          <span class="cursor-pointer text-[var(--primary-color)]">清除全部</span>
+          <span class="cursor-pointer text-[var(--primary-color)]" @click="clearSearchLog"
+            >清除全部</span
+          >
+        </div>
+        <div v-else class="h-14 text-base flex items-center justify-center">
+          <span>尝试搜索内容, 人物</span>
         </div>
         <div>
-          <div class="popover-button">
-            <span>Eth</span>
+          <div
+            class="popover-button"
+            v-for="(item, idx) in searchLogStore.searchLogs"
+            :key="idx"
+            @click="searchLog(item)"
+          >
+            <span>{{ item }}</span>
             <span></span>
           </div>
-          <div class="popover-button">Bitcoin</div>
-          <div class="popover-button">Lalalalallalalal</div>
         </div>
       </div>
     </template>

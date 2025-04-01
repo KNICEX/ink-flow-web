@@ -53,7 +53,7 @@ const handleToUserHome = () => {
     <div class="flex flex-col mt-2" @click="handleToUserHome">
       <span>{{ ink.title }}</span>
       <div class="flex" v-if="showAuthor">
-        <InkPopover>
+        <InkPopover :show-after="300">
           <template #reference>
             <div class="flex items-center mt-2">
               <UserAvatar class="mr-3" :size="25" :src="ink.author.avatar"></UserAvatar>

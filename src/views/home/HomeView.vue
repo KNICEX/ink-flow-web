@@ -5,7 +5,8 @@
         <HomeNav></HomeNav>
       </div>
       <div class="line-padding relative home-list">
-        <InkList></InkList>
+        <!--        <InkList></InkList>-->
+        <TwitterStyleInkList></TwitterStyleInkList>
       </div>
     </div>
     <el-aside width="20rem" class="sticky-top line-padding ml-10 ink-aside">
@@ -17,6 +18,7 @@
 import HomeNav from '@/views/home/HomeNav.vue'
 import HomeAside from '@/views/home/HomeAside.vue'
 import InkList from '@/components/list/ink/InkList.vue'
+import TwitterStyleInkList from '@/components/list/ink/TwitterStyleInkList.vue'
 </script>
 <style scoped lang="scss">
 .home-nav {

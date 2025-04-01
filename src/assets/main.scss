@@ -1,6 +1,8 @@
 @use 'tailwindcss' as *;
-
 @use './base.scss' as *;
+@plugin '@tailwindcss/typography';
+
+
 
 @custom-variant dark (&:where(.dark, .dark *));
 #app {

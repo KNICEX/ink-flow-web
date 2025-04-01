@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { defineProps, ref, watchEffect, onMounted } from 'vue'
+import { defineProps, ref, watchEffect, onMounted, computed } from 'vue'
 import type { User } from '@/types/user.ts'
 import UserAvatar from '@/components/UserAvatar.vue'
 import { useThemeStore } from '@/stores/theme.ts'
@@ -51,12 +51,16 @@ const handleUserCenter = () => {
   props.close()
   router.push(`/user/${props.user.account}`)
 }
+
+const banner = computed(() => {
+  return props.user.banner === '' ? defaultBanner : props.user.banner
+})
 </script>
 
 <template>
   <div>
     <div>
-      <el-image :src="user.banner ?? defaultBanner" class="w-60 h-20" fit="cover"></el-image>
+      <el-image :src="banner" class="w-60 h-20" fit="cover"></el-image>
       <UserAvatar
         @click="router.push(`/user/${user.account}`)"
         :size="60"

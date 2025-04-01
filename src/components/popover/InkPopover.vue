@@ -20,7 +20,7 @@ const props = defineProps({
     default: 'bottom-start',
   },
   trigger: {
-    type: String as () => 'hover' | 'click' | 'focus',
+    type: String as () => 'hover' | 'click' | 'focus' | '',
     default: 'hover',
   },
   padding: {
@@ -56,7 +56,7 @@ defineExpose({
     ref="popoverRef"
     :width="width"
     :show-after="showAfter"
-    :trigger="trigger"
+    :trigger="trigger == '' ? undefined : trigger"
     :popper-style="popStyle"
     popper-class=" overflow-hidden
  px-0 shadow-xl round-popover rounded-xl "
