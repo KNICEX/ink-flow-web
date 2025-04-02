@@ -15,6 +15,8 @@ defineProps({
     default: false,
   },
 })
+
+const handleDelNo = () => {}
 </script>
 
 <template>
@@ -66,7 +68,7 @@ defineProps({
           <div v-if="!system" class="flex">
             <div v-if="users.length == 1">
               <span>
-                <router-link to="/user/chtholly">
+                <router-link :to="`/user/${users[0].account}`">
                   <span>{{ users[0].username }}</span>
                   <el-link class="nav-text ml-2">@{{ users[0].account }}</el-link>
                 </router-link>
@@ -95,14 +97,14 @@ defineProps({
           </div>
           <div class="text-sm text-gray-500 mt-1">2025年3月1日 21:33</div>
         </div>
-        <InkPopover padding="0" trigger="click">
+        <InkPopover padding="0" trigger="click" place="bottom">
           <template #reference>
             <MoreOperation :horizon="true"></MoreOperation>
           </template>
           <template #content>
             <div class="transition-colors transition-300">
-              <div class="popover-button">回复</div>
-              <div class="popover-button">删除</div>
+              <!--              <div class="popover-button">回复</div>-->
+              <div class="popover-button" @click="handleDelNo">删除</div>
             </div>
           </template>
         </InkPopover>

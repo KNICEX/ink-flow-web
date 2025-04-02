@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
-import { onMounted, ref, useTemplateRef } from 'vue'
+import { h, nextTick, onMounted, ref, render, useTemplateRef } from 'vue'
 import { parseRouteParamToInt, parseRouteQuery } from '@/utils/parse.ts'
 import { emptyInk, type Ink, InkStatus, inkStatusFromProp } from '@/types/ink.ts'
 import {
@@ -25,10 +25,32 @@ import InkInteractive from '@/components/ink/InkInteractive.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import InkPopover from '@/components/popover/InkPopover.vue'
 import { formatDate } from '@/utils/date.ts'
+import { ElImage } from 'element-plus'
 
 const milkdownRef = useTemplateRef<InstanceType<typeof MilkdownWrapper>>('milkdownRef')
+const contentRef = useTemplateRef<HTMLElement>('contentRef')
 const ink = ref<Ink>(emptyInk())
 const route = useRoute()
+
+// 处理图片预览
+const replaceImage = () => {
+  const images = contentRef.value?.querySelectorAll('img')
+  if (images) {
+    images.forEach((img) => {
+      const vNode = h(ElImage, {
+        src: img.src,
+        fit: 'cover',
+        hideOnClickModal: true,
+        previewSrcList: [img.src],
+        class: 'rounded-image',
+      })
+      // 渲染到img之前
+      render(vNode, img.parentNode as HTMLElement)
+      img.remove()
+    })
+  }
+}
+
 const loadInk = async (id: number, status: InkStatus) => {
   switch (status) {
     case InkStatus.Published:
@@ -56,6 +78,10 @@ const loadInk = async (id: number, status: InkStatus) => {
   }
   console.log(ink.value)
   milkdownRef.value?.setContent(ink.value.contentMeta)
+
+  nextTick(() => {
+    replaceImage()
+  })
 }
 onMounted(async () => {
   const inkId = parseRouteParamToInt(route.params.id)
@@ -114,8 +140,9 @@ const handleCancelFavorite = async () => {
       <!--      <MilkdownWrapper :padding="false" :read-only="true" ref="milkdownRef" class="mt-4">-->
       <!--      </MilkdownWrapper>-->
       <div
-        class="prose mt-4 prose-slate dark:prose-invert rounded-image"
+        class="prose mt-4 prose-slate dark:prose-invert"
         v-html="ink.contentHtml"
+        ref="contentRef"
       ></div>
       <div class="nav-text mt-2">{{ formatDate(ink.createdAt) }}</div>
       <div class="mt-6 flex">

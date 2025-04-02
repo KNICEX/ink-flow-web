@@ -88,3 +88,13 @@
     border-radius: 0.8rem;
   }
 }
+.el-image {
+  img{
+    margin: 0;
+  }
+}
+.el-image-viewer__canvas {
+ img{
+   border-radius: 0 !important;
+ }
+}

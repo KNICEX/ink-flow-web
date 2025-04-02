@@ -47,12 +47,12 @@ const isSelf = computed(() => {
         </template>
       </FollowButton>
     </div>
-    <div class="flex flex-col justify-center mt-3">
+    <router-link :to="`/user/${user.account}`" class="flex flex-col justify-center mt-3">
       <span class="text-base">{{ user.username }}</span>
-      <span>
-        <el-link class="text-gray-500 text-sm">@{{ user.account }}</el-link>
+      <span class="text-gray-500 text-sm">
+        <el-link>@{{ user.account }}</el-link>
       </span>
-    </div>
+    </router-link>
     <div class="mt-3">
       <span class="text-base">{{ user.aboutMe }}</span>
     </div>

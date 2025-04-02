@@ -27,7 +27,7 @@ const handleFavorite = () => {
 </script>
 
 <template>
-  <div class="flex text-gray-600">
+  <div class="flex text-gray-500">
     <div class="mr-8 flex items-center cursor-pointer hover:text-[var(--primary-color)]">
       <span class="material-symbols-outlined mr-1 small-icon"> chat </span>
       <span class="">{{ interactive.commentCnt ?? 0 }}</span>
