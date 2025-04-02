@@ -20,7 +20,7 @@ const props = defineProps({
   },
   src: {
     type: Array as () => string[],
-    default: [],
+    default: () => [],
   },
 })
 
@@ -43,7 +43,6 @@ const handleUpload = (f: UploadRawFile) => {
     list-type="picture-card"
     :before-upload="handleUpload"
   >
-    <img :src="" />
   </el-upload>
 </template>
 

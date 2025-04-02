@@ -14,11 +14,11 @@ defineProps({
   <div class="flex justify-between">
     <div class="flex">
       <UserAvatar :src="user.avatar" :size="80"></UserAvatar>
-      <div class="ml-6">
+      <router-link :to="`/user/${user.account}`" class="ml-6 cursor-pointer">
         <div class="text-lg">{{ user.username }}</div>
-        <div class="nav-text">@{{ user.account }}</div>
+        <div class="nav-text hover:underline">@{{ user.account }}</div>
         <div>{{ user.aboutMe }}</div>
-      </div>
+      </router-link>
     </div>
     <div>
       <FollowButton size="large" :uid="user.id" :followed="user.followed"></FollowButton>

@@ -2,8 +2,9 @@
 import UserAvatar from '@/components/UserAvatar.vue'
 import UserCard from '@/components/UserCard.vue'
 import InkPopover from '@/components/popover/InkPopover.vue'
-import type { Ink } from '@/types/ink.ts'
+import { type Ink, inkStatusProp } from '@/types/ink.ts'
 import { useRouter } from 'vue-router'
+import { computed } from 'vue'
 const router = useRouter()
 const props = defineProps({
   ink: {
@@ -24,12 +25,17 @@ const handleCoverClick = () => {
 const handleToUserHome = () => {
   router.push(`/user/${props.ink.author.account}`)
 }
+
+const toDetailHref = computed(() => {
+  return `/ink/${props.ink.id}?status=${inkStatusProp(props.ink.status)}`
+})
 </script>
 
 <template>
   <div class="rounded-1 cursor-pointer">
     <div class="flex flex-col justify-between">
-      <div
+      <router-link
+        :to="toDetailHref"
         class="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-600 aspect-square"
       >
         <el-image
@@ -48,10 +54,10 @@ const handleToUserHome = () => {
         >
           <div class="line-clamp-2 px-8">{{ ink.title }}</div>
         </div>
-      </div>
+      </router-link>
     </div>
     <div class="flex flex-col mt-2" @click="handleToUserHome">
-      <span>{{ ink.title }}</span>
+      <router-link :to="toDetailHref">{{ ink.title }}</router-link>
       <div class="flex" v-if="showAuthor">
         <InkPopover :show-after="300">
           <template #reference>

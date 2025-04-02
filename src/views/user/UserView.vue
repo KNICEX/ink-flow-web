@@ -54,7 +54,7 @@ watch(
   <div class="w-full flex flex-col items-center">
     <div class="w-full relative flex justify-center">
       <el-image
-        :src="userInfo?.banner ?? defaultBanner"
+        :src="userInfo?.banner == '' ? defaultBanner : userInfo?.banner"
         fit="cover"
         class="absolute w-full h-100"
         hide-on-click-modal
@@ -114,7 +114,7 @@ watch(
         </div>
       </div>
       <div class="flex justify-center mt-4">
-        <router-view></router-view>
+        <router-view :uid="userInfo?.id"></router-view>
       </div>
     </div>
     <InkDialog v-model="showEdit" title="编辑个人资料">

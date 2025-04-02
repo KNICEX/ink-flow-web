@@ -1,14 +1,23 @@
 <script setup lang="ts">
-import { demoNotifications } from '@/mock/demo_data.ts'
-import { NotificationType } from '@/types/notification.ts'
+import type { Notification } from '@/types/notification.ts'
 import FollowItem from '@/components/notification/FollowItem.vue'
-
-const follows = demoNotifications(NotificationType.Follow)
+import NoData from '@/components/empty/NoData.vue'
+defineProps({
+  follows: {
+    type: Array as () => Notification<never, never>[],
+    default: () => [],
+  },
+  loadMore: {
+    type: Function,
+    default: () => {},
+  },
+})
 </script>
 
 <template>
-  <div>
+  <div v-infinite-scroll="loadMore">
     <FollowItem v-for="follow in follows" :notification="follow" :key="follow.id"></FollowItem>
+    <NoData v-if="follows.length == 0"></NoData>
   </div>
 </template>
 

@@ -3,7 +3,16 @@ import { useRoute } from 'vue-router'
 import { onMounted, ref, useTemplateRef } from 'vue'
 import { parseRouteParamToInt, parseRouteQuery } from '@/utils/parse.ts'
 import { emptyInk, type Ink, InkStatus, inkStatusFromProp } from '@/types/ink.ts'
-import { detail, draftDetail, privateDetail, rejectedDetail } from '@/service/ink.ts'
+import {
+  cancelFavorite,
+  cancelLike,
+  detail,
+  draftDetail,
+  favorite,
+  like,
+  privateDetail,
+  rejectedDetail,
+} from '@/service/ink.ts'
 import MilkdownWrapper from '@/components/editor/milkdown/MilkdownWrapper.vue'
 import { notification } from '@/utils/notification.ts'
 import UserCard from '@/components/UserCard.vue'
@@ -13,6 +22,9 @@ import '@milkdown/crepe/theme/frame.css'
 import RecommendCard from '@/components/ink/RecommendCard.vue'
 import CommentList from '@/components/list/comment/CommentList.vue'
 import InkInteractive from '@/components/ink/InkInteractive.vue'
+import UserAvatar from '@/components/UserAvatar.vue'
+import InkPopover from '@/components/popover/InkPopover.vue'
+import { formatDate } from '@/utils/date.ts'
 
 const milkdownRef = useTemplateRef<InstanceType<typeof MilkdownWrapper>>('milkdownRef')
 const ink = ref<Ink>(emptyInk())
@@ -57,31 +69,70 @@ onMounted(async () => {
 
 const recommendInks = demoInks(5)
 
-const handleLike = () => {
-  console.log('like')
+const handleLike = async () => {
+  await like(ink.value.id)
+  ink.value.interactive.likeCnt = ink.value.interactive.likeCnt + 1
+  ink.value.interactive.liked = !ink.value.interactive.liked
 }
 
-const handleCollect = () => {
-  console.log('collect')
+const handleFavorite = async () => {
+  await favorite(ink.value.id, 0)
+  ink.value.interactive.favoriteCnt = ink.value.interactive.favoriteCnt + 1
+  ink.value.interactive.favorited = !ink.value.interactive.favorited
+}
+
+const handleCancelLike = async () => {
+  await cancelLike(ink.value.id)
+  ink.value.interactive.likeCnt = Math.max(0, ink.value.interactive.likeCnt - 1)
+  ink.value.interactive.liked = !ink.value.interactive.liked
+}
+
+const handleCancelFavorite = async () => {
+  await cancelFavorite(ink.value.id)
+  ink.value.interactive.favoriteCnt = Math.max(0, ink.value.interactive.favoriteCnt - 1)
+  ink.value.interactive.favorited = !ink.value.interactive.favorited
 }
 </script>
 
 <template>
-  <div class="max-screen-w flex items-start">
+  <div class="max-screen-w flex items-start line-padding">
     <div class="flex-1">
-      <el-image fit="cover" class="w-full h-60 rounded-xl" :src="ink.cover" alt="" />
-      <MilkdownWrapper :padding="false" :read-only="true" ref="milkdownRef"> </MilkdownWrapper>
-      <!--      <div class="milkdown" v-html="ink.contentHtml"></div>-->
-      <div class="mt-10 flex">
-        <InkInteractive :interactive="ink.interactive"></InkInteractive>
+      <div class="flex cursor-pointer">
+        <InkPopover place="bottom">
+          <template #reference>
+            <UserAvatar :src="ink.author.avatar"></UserAvatar>
+          </template>
+          <template #content>
+            <UserCard :user="ink.author"></UserCard>
+          </template>
+        </InkPopover>
+        <div class="ml-3">
+          <div class="semibold-text">{{ ink.author.username }}</div>
+          <div class="nav-text hover:underline">@{{ ink.author.account }}</div>
+        </div>
       </div>
-
-      <CommentList></CommentList>
+      <!--      <MilkdownWrapper :padding="false" :read-only="true" ref="milkdownRef" class="mt-4">-->
+      <!--      </MilkdownWrapper>-->
+      <div
+        class="prose mt-4 prose-slate dark:prose-invert rounded-image"
+        v-html="ink.contentHtml"
+      ></div>
+      <div class="nav-text mt-2">{{ formatDate(ink.createdAt) }}</div>
+      <div class="mt-6 flex">
+        <InkInteractive
+          :interactive="ink.interactive"
+          @like="handleLike"
+          @cancel-like="handleCancelLike"
+          @favorite="handleFavorite"
+          @cancel-favorite="handleCancelFavorite"
+        ></InkInteractive>
+      </div>
+      <CommentList class="mt-6"></CommentList>
     </div>
     <div class="w-90 flex-col sticky-top line-padding ml-10">
       <div>
-        <UserCard :user="ink.author" :auto-padding="false"></UserCard>
-        <div class="mt-10">为你推荐</div>
+        <!--        <UserCard :user="ink.author" :auto-padding="false"></UserCard>-->
+        <div class="mt-6">相关推荐</div>
         <div>
           <RecommendCard
             class="my-6"

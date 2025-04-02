@@ -57,7 +57,7 @@ const likeIconClass = computed(() => {
   <div
     class="flex p-4 rounded-xl bg-white dark:bg-gray-800 transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-gray-700"
   >
-    <InkPopover :show-after="300">
+    <InkPopover :show-after="300" place="bottom">
       <template #reference>
         <UserAvatar :hover-mask="true" :src="comment.commentator.avatar" :size="46" />
       </template>

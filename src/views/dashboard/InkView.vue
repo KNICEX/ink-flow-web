@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, provide, reactive, ref, watch } from 'vue'
+import { provide, ref, watch } from 'vue'
 import DashboardContent from '@/views/dashboard/DashboardContent.vue'
 import DashboardInkList from '@/components/list/dashboard/DashboardInkList.vue'
 import { type Ink, InkStatus, inkStatusProp } from '@/types/ink.ts'
@@ -13,67 +13,79 @@ import {
   deleteDraft,
   deletePrivate,
 } from '@/service/ink.ts'
-import { demoInks } from '@/mock/demo_data.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user.ts'
 import { notification } from '@/utils/notification.ts'
 import { confirm } from '@/utils/message.ts'
+import { parseRouteParam } from '@/utils/parse.ts'
 const title = ref('Ink')
 const activeType = ref('published')
 const inks = ref<Ink[]>([])
 const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
-onMounted(async () => {
-  inks.value = demoInks()
-})
 
+let loading = false
+let offset = 0
+const limit = 15
+const load = async () => {
+  let res: Ink[] = []
+  loading = true
+  switch (activeType.value) {
+    case 'published':
+      res = await list({
+        authorId: userStore.getActiveUser()?.user.id ?? 0,
+        offset: offset,
+        limit: limit,
+      })
+      break
+    case 'pending':
+      res = await listPending({
+        offset: offset,
+        limit: limit,
+      })
+      break
+    case 'rejected':
+      res = await listRejected({
+        offset: offset,
+        limit: limit,
+      })
+      break
+    case 'draft':
+      res = await listDraft({
+        offset: offset,
+        limit: limit,
+      })
+      break
+    case 'private':
+      res = await listPrivate({
+        offset: offset,
+        limit: limit,
+      })
+      break
+    default:
+      break
+  }
+
+  if (res.length == 0) {
+    loading = false
+    return
+  }
+  inks.value.push(...res)
+  offset += res.length
+  loading = false
+}
 watch(
-  () => route.query,
-  async () => {
-    const type = route.params.status
-    console.log('ink view status: ', type)
-    switch (type) {
-      case 'published':
-        activeType.value = 'published'
-        inks.value = await list({
-          authorId: userStore.getActiveUser()?.user.id ?? 0,
-          offset: 0,
-          limit: 15,
-        })
-        break
-      case 'pending':
-        activeType.value = 'pending'
-        inks.value = await listPending({
-          offset: 0,
-          limit: 15,
-        })
-        break
-      case 'rejected':
-        activeType.value = 'rejected'
-        inks.value = await listRejected({
-          offset: 0,
-          limit: 15,
-        })
-        break
-      case 'draft':
-        activeType.value = 'draft'
-        inks.value = await listDraft({
-          offset: 0,
-          limit: 15,
-        })
-        break
-      case 'private':
-        activeType.value = 'private'
-        inks.value = await listPrivate({
-          offset: 0,
-          limit: 15,
-        })
-        break
-      default:
-        activeType.value = 'published'
-        break
+  () => route.params,
+  () => {
+    let type = parseRouteParam(route.params.status)
+    if (!type || type === '') {
+      type = 'published'
     }
+    inks.value = []
+    offset = 0
+    activeType.value = type
+    load()
   },
   { immediate: true },
 )
@@ -95,8 +107,8 @@ const handleNewInk = () => {
 
 const confirmBox = (onConfirm: () => void) => {
   confirm({
-    title: 'Warning',
-    message: '删除后无法恢复，确认删除吗？',
+    title: 'warning',
+    message: '删除后无法恢复，确认删除吗😰?',
     confirmed: onConfirm,
   })
 }
@@ -151,6 +163,13 @@ const handleInkOp = async (ink: Ink, op: 'delete' | 'preview' | 'edit') => {
   }
 }
 
+const loadMore = () => {
+  console.log('load more')
+  if (inks.value.length % limit !== 0 || loading) {
+    return
+  }
+  load()
+}
 provide('handle-ink-op', handleInkOp)
 </script>
 
@@ -171,7 +190,8 @@ provide('handle-ink-op', handleInkOp)
           <el-tab-pane label="私有" name="private"> </el-tab-pane>
         </el-tabs>
       </div>
-      <DashboardInkList :inks="inks" class="flex-1 overflow-y-auto"> </DashboardInkList>
+      <DashboardInkList :load-more="loadMore" :inks="inks" class="flex-1 overflow-y-auto">
+      </DashboardInkList>
     </div>
   </DashboardContent>
 </template>

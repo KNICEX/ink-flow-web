@@ -1,41 +1,70 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onBeforeMount, ref, watch } from 'vue'
 import InkList from '@/components/list/ink/InkList.vue'
+import { getFavorites } from '@/service/interactive.ts'
+import type { Favorite } from '@/types/interactive.ts'
+import type { Ink } from '@/types/ink.ts'
+import NoData from '@/components/empty/NoData.vue'
+import { listFavorited } from '@/service/ink.ts'
 const activeIndex = ref(0)
+const favorites = ref<Favorite[]>([])
+const inks = ref<Ink[]>([])
+onBeforeMount(async () => {
+  favorites.value = await getFavorites('ink')
+})
+
+watch(
+  activeIndex,
+  async () => {
+    inks.value = await listFavorited({
+      fid: activeIndex.value,
+      maxId: 0,
+      limit: 25,
+    })
+  },
+  { immediate: true },
+)
 </script>
 
 <template>
-  <div class="flex">
+  <div class="flex w-full">
     <div class="w-60">
       <div class="sticky top-44 pr-4">
-        <!--        <div>默认收藏</div>-->
-        <!--        <div>anime</div>-->
-        <!--        <div>comic</div>-->
-        <!--        <div>电影</div>-->
-        <!--        <div>电影</div>-->
-        <!--        <div>电影</div>-->
         <el-menu :default-active="activeIndex">
-          <el-menu-item :index="0"> <span class="text-base">默认收藏</span></el-menu-item>
-          <el-menu-item :index="1">
+          <el-menu-item :index="0">
             <div class="flex justify-between items-center w-full">
-              <span class="text-base">anime</span>
+              <span class="text-base">默认收藏夹</span>
+              <span></span>
+            </div>
+          </el-menu-item>
+          <el-menu-item v-for="fav in favorites" :index="fav.id" :key="fav.id">
+            <div class="flex justify-between items-center w-full">
+              <span class="text-base">{{ fav.name }}</span>
               <span>2</span>
             </div>
           </el-menu-item>
-          <el-menu-item :index="2">
-            <span class="text-base">comic</span>
-          </el-menu-item>
-          <el-menu-item :index="3">
-            <span class="text-base">电影</span>
-          </el-menu-item>
-          <el-menu-item :index="4">
-            <span class="text-base">电影</span>
-          </el-menu-item>
+          <!--          <el-menu-item :index="0"> <span class="text-base">默认收藏</span></el-menu-item>-->
+          <!--          <el-menu-item :index="1">-->
+          <!--            <div class="flex justify-between items-center w-full">-->
+          <!--              <span class="text-base">anime</span>-->
+          <!--              <span>2</span>-->
+          <!--            </div>-->
+          <!--          </el-menu-item>-->
+          <!--          <el-menu-item :index="2">-->
+          <!--            <span class="text-base">comic</span>-->
+          <!--          </el-menu-item>-->
+          <!--          <el-menu-item :index="3">-->
+          <!--            <span class="text-base">电影</span>-->
+          <!--          </el-menu-item>-->
+          <!--          <el-menu-item :index="4">-->
+          <!--            <span class="text-base">电影</span>-->
+          <!--          </el-menu-item>-->
         </el-menu>
       </div>
     </div>
     <div class="flex-1">
-      <InkList :max-cols="4"></InkList>
+      <InkList :max-cols="4" :inks="inks"></InkList>
+      <NoData v-if="inks.length == 0"></NoData>
     </div>
   </div>
 </template>

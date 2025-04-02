@@ -47,7 +47,11 @@ const rules = reactive<FormRules>({
 <template>
   <div class="relative">
     <div class="relative">
-      <el-image fit="cover" class="w-full h-40" :src="user.banner ?? defaultBanner"></el-image>
+      <el-image
+        fit="cover"
+        class="w-full h-40"
+        :src="user.banner == '' ? defaultBanner : user.banner"
+      ></el-image>
       <div
         title="切换照片"
         class="cursor-pointer absolute w-full h-40 left-0 top-0 flex justify-center items-center bg-black/20"

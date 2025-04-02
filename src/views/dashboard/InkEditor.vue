@@ -2,7 +2,7 @@
 import { onMounted, ref, useTemplateRef } from 'vue'
 import MilkdownWrapper from '@/components/editor/milkdown/MilkdownWrapper.vue'
 import type { UploadRawFile } from 'element-plus'
-import { draftDetail, publish, saveDraft } from '@/service/ink.ts'
+import { detailForEdit, publish, saveDraft } from '@/service/ink.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { notification } from '@/utils/notification.ts'
 import { parseRouteParamToInt } from '@/utils/parse.ts'
@@ -22,7 +22,7 @@ let lastSave = Date.now()
 let saveClicked = false
 onMounted(async () => {
   if (draftId != 0) {
-    const draft = await draftDetail(draftId)
+    const draft = await detailForEdit(draftId)
     milkdownRef.value?.setContent(draft.contentMeta)
     coverUrl.value = draft.cover
     tags.value = draft.tags
@@ -44,10 +44,10 @@ const handleCoverUploadSuccess = () => {
 
 const save = async () => {
   const markdown = milkdownRef.value?.getMarkdown() ?? ''
-  if (title.value == '' || markdown == '') {
+  if (markdown == '') {
     notification({
       title: 'Error',
-      message: '标题和内容不能为空',
+      message: '内容不能为空',
       type: 'error',
     })
     return
@@ -77,6 +77,21 @@ const handleUpdate = async () => {
 }
 const handleSave = async () => {
   saveClicked = true
+  // cover为空，设置第一个图片为cover
+  if (coverUrl.value == '') {
+    const markdown = milkdownRef.value?.getMarkdown() ?? ''
+    const firstImage = markdown.match(/!\[.*?\]\((.*?)\)/)
+    if (firstImage) {
+      coverUrl.value = firstImage[1]
+    }
+  }
+
+  // 标题为空, 设置第一段文字为标题
+  if (title.value == '') {
+    const markdown = milkdownRef.value?.getMarkdown() ?? ''
+    title.value = markdown.split('\n')[0]
+  }
+
   await save()
   notification({
     message: '保存成功',

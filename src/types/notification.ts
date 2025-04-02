@@ -63,6 +63,10 @@ export enum NotificationType {
   Subscribe = 'subscribe',
 }
 
+export interface UnreadCountMap {
+  [key: string]: number
+}
+
 export enum SubjectType {
   Ink = 'ink',
   Comment = 'comment',

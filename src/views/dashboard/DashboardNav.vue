@@ -58,13 +58,15 @@ onMounted(() => {
           ><span class="ml-3">系统通知</span>
         </InkNavItem>
         <InkNavItem :sub="true" prop="dashboard-reply">
-          <span class="material-symbols-outlined"> chat </span> <span class="ml-3">回复</span>
+          <span class="material-symbols-outlined"> chat </span> <span class="ml-3">回复我的</span>
         </InkNavItem>
         <InkNavItem :sub="true" prop="dashboard-like">
-          <span class="material-symbols-outlined"> thumb_up </span> <span class="ml-3">点赞</span>
+          <span class="material-symbols-outlined"> thumb_up </span>
+          <span class="ml-3">收到的赞</span>
         </InkNavItem>
         <InkNavItem :sub="true" prop="dashboard-follow">
-          <span class="material-symbols-outlined"> chat </span> <span class="ml-3">关注</span>
+          <span class="material-symbols-outlined"> how_to_reg </span>
+          <span class="ml-3">关注我的</span>
         </InkNavItem>
         <InkNavItem prop="setting">
           <span class="material-symbols-outlined"> manufacturing </span>

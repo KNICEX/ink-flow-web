@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    CommentInput: typeof import('./src/components/list/comment/CommentInput.vue')['default']
     CommentItem: typeof import('./src/components/list/comment/CommentItem.vue')['default']
     CommentList: typeof import('./src/components/list/comment/CommentList.vue')['default']
     CommentSearchList: typeof import('./src/components/list/comment/CommentSearchList.vue')['default']
@@ -27,12 +28,16 @@ declare module 'vue' {
     ElInputTag: typeof import('element-plus/es')['ElInputTag']
     ElLink: typeof import('element-plus/es')['ElLink']
     EllipseButton: typeof import('./src/components/button/EllipseButton.vue')['default']
+    ElMenu: typeof import('element-plus/es')['ElMenu']
+    ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElPopover: typeof import('element-plus/es')['ElPopover']
+    ElSkeleton: typeof import('element-plus/es')['ElSkeleton']
     ElStatistic: typeof import('element-plus/es')['ElStatistic']
     ElSwitch: typeof import('element-plus/es')['ElSwitch']
     ElTabPane: typeof import('element-plus/es')['ElTabPane']
     ElTabs: typeof import('element-plus/es')['ElTabs']
     ElTag: typeof import('element-plus/es')['ElTag']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     FollowButton: typeof import('./src/components/FollowButton.vue')['default']
     FollowItem: typeof import('./src/components/notification/FollowItem.vue')['default']
@@ -68,6 +73,7 @@ declare module 'vue' {
     NotificationItem: typeof import('./src/components/notification/NotificationItem.vue')['default']
     OthersList: typeof import('./src/components/notification/OthersList.vue')['default']
     RecommendCard: typeof import('./src/components/ink/RecommendCard.vue')['default']
+    RecommendUserList: typeof import('./src/components/list/user/RecommendUserList.vue')['default']
     ReplyItem: typeof import('./src/components/notification/ReplyItem.vue')['default']
     ReplyList: typeof import('./src/components/notification/ReplyList.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
@@ -82,6 +88,7 @@ declare module 'vue' {
     UserCard: typeof import('./src/components/UserCard.vue')['default']
     UserItem: typeof import('./src/components/list/user/UserItem.vue')['default']
     UserList: typeof import('./src/components/list/user/UserList.vue')['default']
+    UserSimpleItem: typeof import('./src/components/list/user/UserSimpleItem.vue')['default']
     VerticleMenu: typeof import('./src/components/menu/VerticleMenu.vue')['default']
   }
   export interface ComponentCustomProperties {

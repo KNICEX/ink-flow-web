@@ -7,6 +7,7 @@ import { useRouter } from 'vue-router'
 import { computed } from 'vue'
 import InkInteractive from '@/components/ink/InkInteractive.vue'
 import { formatDate } from '@/utils/date.ts'
+import { useInjectInkInteractiveHandler } from '@/hook/interactive.ts'
 
 const router = useRouter()
 const props = defineProps({
@@ -26,7 +27,6 @@ const props = defineProps({
 
 const contentPreview = computed(() => {
   // 从文章内容中提取文本预览
-  // 这里假设内容存储在ink.content中，根据实际情况可能需要调整
   if (!props.ink.contentHtml) return ''
   const text = props.ink.contentHtml.replace(/<[^>]*>/g, '') // 简单去除HTML标签
   return text.length > props.previewLength ? text.substring(0, props.previewLength) + '...' : text
@@ -49,6 +49,9 @@ const formattedDate = computed(() => {
   // 格式化日期，这里简单返回，实际应用中可能需要使用日期格式化函数
   return formatDate(props.ink.createdAt)
 })
+
+const { handleLike, handleFavorite, handleCancelLike, handleCancelFavorite } =
+  useInjectInkInteractiveHandler()
 </script>
 
 <template>
@@ -105,7 +108,14 @@ const formattedDate = computed(() => {
       </div>
 
       <!-- 互动数据 -->
-      <InkInteractive class="mt-2" :interactive="ink.interactive"></InkInteractive>
+      <InkInteractive
+        class="mt-2"
+        :interactive="ink.interactive"
+        @like="handleLike(ink.id)"
+        @cancel-like="handleCancelLike(ink.id)"
+        @favorite="handleFavorite(ink.id)"
+        @cancel-favorite="handleCancelFavorite(ink.id)"
+      ></InkInteractive>
     </div>
   </div>
 </template>

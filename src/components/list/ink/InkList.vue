@@ -4,8 +4,8 @@ import InkItem from '@/components/list/ink/ImageInk.vue'
 import { computed } from 'vue'
 import type { Ink } from '@/types/ink.ts'
 import { demoInks } from '@/mock/demo_data.ts'
-import NoData from '@/components/empty/NoData.vue'
-
+import { useRouter } from 'vue-router'
+const router = useRouter()
 const props = defineProps({
   maxCols: {
     type: Number,
@@ -14,6 +14,12 @@ const props = defineProps({
   inks: {
     type: Array as () => Ink[],
     default: () => demoInks(),
+  },
+  loadMore: {
+    type: Function,
+    default: () => {
+      return () => {}
+    },
   },
 })
 const wrapClass = computed(() => {
@@ -27,18 +33,17 @@ const wrapClass = computed(() => {
 
 const emit = defineEmits(['on-item-click'])
 const handleItemClick = (id: number) => {
-  console.log('item click', id)
   emit('on-item-click', id)
+  router.push({})
 }
 </script>
 <template>
   <div>
-    <div :class="wrapClass">
+    <div :class="wrapClass" v-infinite-scroll="loadMore">
       <div v-for="ink in inks" :key="ink.id">
         <InkItem @on-cover-click="handleItemClick" :ink="ink"></InkItem>
       </div>
     </div>
-    <NoData v-if="inks.length == 0"></NoData>
     <el-backtop :style="{ height: '4rem', width: '4rem' }" :right="100" :bottom="100" />
   </div>
 </template>

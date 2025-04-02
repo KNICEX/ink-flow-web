@@ -9,10 +9,7 @@
         ></TwitterStyleInk>
       </div>
     </div>
-    <div v-show="loading" class="py-4 text-center text-gray-500">
-      <el-icon class="is-loading mr-2"><Loading /></el-icon>
-      加载中...
-    </div>
+    <div v-show="loading" class="py-4 text-center text-gray-500">加载中...</div>
     <el-backtop :style="{ height: '4rem', width: '4rem' }" :right="100" :bottom="100" />
   </div>
 </template>
@@ -21,16 +18,11 @@
 import TwitterStyleInk from '@/components/list/ink/TwitterStyleInk.vue'
 import { ref } from 'vue'
 import type { Ink } from '@/types/ink.ts'
-import { demoInks } from '@/mock/demo_data.ts'
 
 defineProps({
   inks: {
     type: Array as () => Ink[],
-    default: () => demoInks(),
-  },
-  maxWidth: {
-    type: String,
-    default: '800px',
+    default: () => [],
   },
   previewLength: {
     type: Number,
@@ -42,13 +34,14 @@ const noMore = ref(false)
 const loading = ref(false)
 const loadMore = () => {
   loading.value = true
+  emit('loadMore')
   setTimeout(() => {
     loading.value = false
   }, 2000)
   noMore.value = true
 }
 
-const emit = defineEmits(['on-item-click'])
+const emit = defineEmits(['on-item-click', 'loadMore'])
 const handleItemClick = (id: number) => {
   console.log('item click', id)
   emit('on-item-click', id)

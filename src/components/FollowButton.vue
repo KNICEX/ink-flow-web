@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { cancelFollow, follow } from '@/service/user.ts'
+import { useInjectFollowHandler } from '@/hook/follow.ts'
 
-const props = defineProps({
+defineProps({
   uid: {
     type: Number,
     required: true,
@@ -17,7 +17,11 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['followed', 'cancelFollowed'])
+const emit = defineEmits(['follow', 'cancelFollow'])
+
+const { handleFollow: injectFollow, handleCancelFollow: injectCancelFollow } =
+  useInjectFollowHandler()
+
 const followTip = ref('正在关注')
 const followedColor = ref('')
 const handleMouseover = () => {
@@ -29,13 +33,14 @@ const handleMouseLeave = () => {
   followedColor.value = ''
 }
 
-const handleFollow = async () => {
-  await follow(props.uid)
-  emit('followed', props.uid)
+const handleFollow = (uid: number) => {
+  emit('follow', uid)
+  injectFollow(uid)
 }
-const handleCancelFollow = async () => {
-  await cancelFollow(props.uid)
-  emit('cancelFollowed', props.uid)
+
+const handleCancelFollow = (uid: number) => {
+  emit('cancelFollow', uid)
+  injectCancelFollow(uid)
 }
 </script>
 
@@ -43,7 +48,7 @@ const handleCancelFollow = async () => {
   <el-button
     v-if="followed"
     :color="followedColor"
-    @click="handleCancelFollow"
+    @click="handleCancelFollow(uid)"
     @mouseover="handleMouseover"
     @mouseleave="handleMouseLeave"
     :size="size"
@@ -52,7 +57,7 @@ const handleCancelFollow = async () => {
   >
     {{ followTip }}
   </el-button>
-  <el-button v-else color="black" :size="size" round @click="handleFollow"> 关注 </el-button>
+  <el-button v-else color="black" :size="size" round @click="handleFollow(uid)"> 关注 </el-button>
 </template>
 
 <style scoped lang="scss"></style>

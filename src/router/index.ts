@@ -32,12 +32,12 @@ const router = createRouter({
             {
               path: 'likes',
               name: 'likes',
-              component: () => import('../views/user/UserInkList.vue'),
+              component: () => import('../views/user/InkLiked.vue'),
             },
             {
               path: 'views',
               name: 'views',
-              component: () => import('../views/user/UserInkList.vue'),
+              component: () => import('../views/user/InkViewed.vue'),
             },
             {
               path: 'favorites',
@@ -78,6 +78,10 @@ const router = createRouter({
           name: 'editor',
           path: 'editor/:id?',
           component: () => import('../views/dashboard/InkEditor.vue'),
+        },
+        {
+          path: 'ink',
+          redirect: 'ink/published',
         },
         {
           path: 'ink/:status?',

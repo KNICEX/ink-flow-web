@@ -26,16 +26,13 @@
               <NotificationPop></NotificationPop>
             </template>
           </InkPopover>
-          <InkPopover place="bottom">
-            <template #reference>
-              <router-link
-                :to="`/dashboard/${userStore.getActiveUser()?.user.account}`"
-                class="material-symbols-outlined ml-3 cursor-pointer"
-              >
-                <span @click="toDashboard"> add_circle </span>
-              </router-link>
-            </template>
-          </InkPopover>
+          <router-link
+            title="新建"
+            :to="`/dashboard/${userStore.getActiveUser()?.user.account}`"
+            class="material-symbols-outlined ml-3 cursor-pointer"
+          >
+            <span @click="toDashboard"> add_circle </span>
+          </router-link>
         </div>
         <el-divider direction="vertical" style="height: 2rem" border-style="solid" />
         <UserPanel></UserPanel>

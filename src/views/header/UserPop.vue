@@ -33,7 +33,7 @@ onMounted(() => {
   })
 })
 
-const opItemClass = 'hover:bg-gray-100 cursor-pointer rounded-sm mt-3 p-2 px-4 flex items-center'
+const opItemClass = 'hover:bg-gray-100 cursor-pointer rounded-sm p-2 py-3 px-4 flex items-center'
 
 const handleLogout = async () => {
   await logout()
@@ -50,6 +50,16 @@ const handleUserCenter = () => {
   // 关闭popover
   props.close()
   router.push(`/user/${props.user.account}`)
+}
+
+const handleToDashboard = () => {
+  props.close()
+  router.push(`/dashboard/${props.user.account}`)
+}
+
+const handleToRecord = () => {
+  props.close()
+  router.push(`/user/${props.user.account}/views`)
 }
 
 const banner = computed(() => {
@@ -86,7 +96,11 @@ const banner = computed(() => {
             <span class="ml-2">个人中心</span>
           </div>
 
-          <div :class="opItemClass">
+          <div :class="opItemClass" @click="handleToDashboard">
+            <span class="material-symbols-outlined"> space_dashboard </span>
+            <span class="ml-2">仪表盘</span>
+          </div>
+          <div :class="opItemClass" @click="handleToRecord">
             <span class="material-symbols-outlined">schedule</span>
             <span class="ml-2">浏览记录</span>
           </div>

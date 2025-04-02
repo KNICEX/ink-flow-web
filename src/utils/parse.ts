@@ -43,6 +43,13 @@ export const parseResponseDate = (data: any) => {
       parseResponseDate(item)
     }
   } else if (typeof data == 'object') {
+    // 检查属性
+    for (const key in data) {
+      if (typeof data[key] == 'object') {
+        parseResponseDate(data[key])
+      }
+    }
+
     if (data.createdAt) {
       data.createdAt = new Date(data.createdAt)
     }

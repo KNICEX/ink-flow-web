@@ -22,50 +22,15 @@
     </div>
     <div class="mt-8">
       <div class="text-center text-xl">为你推荐的创作者</div>
-      <div class="mt-4">
-        <UserItem
-          v-for="user in recommendUsers"
-          :user="user"
-          :key="user.id"
-          @followed="handleFollowed"
-          @cancel-followed="handleCancelFollowed"
-        ></UserItem>
-      </div>
-      <div class="text-center mt-2">
-        <el-link type="primary">
-          <span class="text-base">展示更多</span>
-        </el-link>
-      </div>
+      <RecommendUserList></RecommendUserList>
     </div>
   </div>
 </template>
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import UserItem from '@/components/UserItem.vue'
+import { ref } from 'vue'
 import InkSearch from '@/components/InkSearch.vue'
-import { demoUsers } from '@/mock/demo_data.ts'
-import type { User } from '@/types/user.ts'
-const recommendUsers = ref<User[]>([])
-onMounted(() => {
-  recommendUsers.value = demoUsers()
-})
+import RecommendUserList from '@/components/list/user/RecommendUserList.vue'
 const totalInk = ref(2332)
-const handleFollowed = (id: number) => {
-  for (let i = 0; i < recommendUsers.value.length; i++) {
-    if (recommendUsers.value[i].id == id) {
-      recommendUsers.value[i].followed = true
-      break
-    }
-  }
-}
-const handleCancelFollowed = (id: number) => {
-  for (let i = 0; i < recommendUsers.value.length; i++) {
-    if (recommendUsers.value[i].id == id) {
-      recommendUsers.value[i].followed = false
-      break
-    }
-  }
-}
 </script>
 <style scoped lang="scss">
 .round {
