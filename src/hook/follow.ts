@@ -8,12 +8,10 @@ export const useProvideFollowHandler = (users: Ref<User[]>) => {
   const handleFollow = async (uid: number) => {
     console.log('handleFollow', uid)
     await follow(uid)
-    for (let i = 0; i < users.value.length; i++) {
-      if (users.value[i].id === uid) {
-        users.value[i].followed = true
-        users.value[i].followers++
-        break
-      }
+    const user = users.value.find((u) => u.id === uid)
+    if (user) {
+      user.followed = true
+      user.followers++
     }
     notification({
       message: '关注成功',
@@ -21,12 +19,10 @@ export const useProvideFollowHandler = (users: Ref<User[]>) => {
   }
   const handleCancelFollow = async (uid: number) => {
     await cancelFollow(uid)
-    for (let i = 0; i < users.value.length; i++) {
-      if (users.value[i].id === uid) {
-        users.value[i].followed = false
-        users.value[i].followers--
-        break
-      }
+    const user = users.value.find((u) => u.id === uid)
+    if (user) {
+      user.followed = false
+      user.followers--
     }
     notification({
       message: '取消关注成功',

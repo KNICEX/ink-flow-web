@@ -20,12 +20,12 @@ import { demoInks } from '@/mock/demo_data.ts'
 import '@milkdown/crepe/theme/common/style.css'
 import '@milkdown/crepe/theme/frame.css'
 import RecommendCard from '@/components/ink/RecommendCard.vue'
-import CommentList from '@/components/list/comment/CommentList.vue'
 import InkInteractive from '@/components/ink/InkInteractive.vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import InkPopover from '@/components/popover/InkPopover.vue'
 import { formatDate } from '@/utils/date.ts'
 import { ElImage } from 'element-plus'
+import CommentView from '@/views/ink/CommentView.vue'
 
 const milkdownRef = useTemplateRef<InstanceType<typeof MilkdownWrapper>>('milkdownRef')
 const contentRef = useTemplateRef<HTMLElement>('contentRef')
@@ -114,6 +114,7 @@ const handleCancelLike = async () => {
 }
 
 const handleCancelFavorite = async () => {
+  console.log('interactive: ', ink.value.interactive)
   await cancelFavorite(ink.value.id)
   ink.value.interactive.favoriteCnt = Math.max(0, ink.value.interactive.favoriteCnt - 1)
   ink.value.interactive.favorited = !ink.value.interactive.favorited
@@ -154,7 +155,7 @@ const handleCancelFavorite = async () => {
           @cancel-favorite="handleCancelFavorite"
         ></InkInteractive>
       </div>
-      <CommentList class="mt-6"></CommentList>
+      <CommentView biz="ink" :biz-id="ink.id"></CommentView>
     </div>
     <div class="w-90 flex-col sticky-top line-padding ml-10">
       <div>

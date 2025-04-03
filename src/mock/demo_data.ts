@@ -143,20 +143,25 @@ export const demoCommentPayload = () => {
 
 export const demoComments = (n?: number, sub?: boolean) => {
   const res: Comment[] = []
+  const startId = Math.floor(Math.random() * 100000)
   n = n == undefined ? 20 : n
   for (let i = 0; i < n; i++) {
     const comment = emptyComment()
-    comment.id = i
+    comment.id = i + startId
     comment.biz = 'ink'
     comment.bizId = 0
     comment.commentator = demoUsers(1)[0]
+    comment.isAuthor = Math.random() > 0.7
     comment.payload = demoCommentPayload()
     comment.parent = null
     comment.root = null
     comment.children = []
-    comment.liked = Math.random() > 0.7
-    comment.likeCnt = Math.floor(Math.random() * 1000)
-    comment.viewCnt = Math.floor(Math.random() * 1000)
+    comment.stats = {
+      liked: Math.random() > 0.5,
+      likeCnt: Math.floor(Math.random() * 1000),
+      viewCnt: Math.floor(Math.random() * 1000),
+      replyCnt: Math.floor(Math.random() * 1000),
+    }
     comment.createdAt = new Date()
     res.push(comment)
   }

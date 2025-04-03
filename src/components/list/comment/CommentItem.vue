@@ -1,10 +1,13 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import UserAvatar from '@/components/UserAvatar.vue'
 import InkPopover from '@/components/popover/InkPopover.vue'
 import type { Comment } from '@/types/comment.ts'
 import MoreOperation from '@/components/button/MoreOperation.vue'
 import UserCard from '@/components/UserCard.vue'
+import { formatDate } from '@/utils/date.ts'
+import { useUserStore } from '@/stores/user.ts'
+import { confirm } from '@/utils/message.ts'
 
 const props = defineProps({
   comment: {
@@ -25,37 +28,49 @@ const props = defineProps({
   },
 })
 
-const emit = defineEmits(['reply', 'like', 'favorite'])
+const userStore = useUserStore()
+
+const emit = defineEmits(['reply', 'delete', 'like', 'cancel-like'])
 
 const handleReply = () => {
   emit('reply', props.comment)
 }
 
+const { handleLike: doLike, handleCancelLike: doCancelLike } = inject<{
+  handleLike: (comment: Comment) => Promise<void>
+  handleCancelLike: (comment: Comment) => Promise<void>
+}>('handleCommentInteractive') ?? {
+  handleLike: async () => {},
+  handleCancelLike: async () => {},
+}
 const handleLike = () => {
+  if (props.comment.stats.liked) {
+    console.log('cancel like')
+    doCancelLike(props.comment)
+    emit('cancel-like', props.comment)
+    return
+  }
+  doLike(props.comment)
   emit('like', props.comment)
 }
 
-const formattedDate = computed(() => {
-  if (!props.comment.createdAt) return ''
-
-  const date = new Date(props.comment.createdAt)
-  return date.toLocaleString('zh-CN', {
-    year: 'numeric',
-    month: 'numeric',
-    day: 'numeric',
-    hour: '2-digit',
-    minute: '2-digit',
+const handleDelete = () => {
+  confirm({
+    message: '你确定要删除此条回复吗😨?',
+    confirmed: () => {
+      emit('delete', props.comment)
+    },
   })
-})
+}
 
 const likeIconClass = computed(() => {
-  return props.comment.liked ? 'text-red-500' : 'text-gray-500'
+  return props.comment.stats.liked ? 'text-red-500' : 'text-gray-500'
 })
 </script>
 
 <template>
   <div
-    class="flex p-4 rounded-xl bg-white dark:bg-gray-800 transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-gray-700"
+    class="flex p-4 rounded-xl transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-gray-700"
   >
     <InkPopover :show-after="300" place="bottom">
       <template #reference>
@@ -72,20 +87,26 @@ const likeIconClass = computed(() => {
             <div class="text-lg">
               <router-link :to="`/user/${comment.commentator.account}`" class="text-lg">
                 {{ comment.commentator.username }}
+                <el-link class="text-gray-500 text-lg">@{{ comment.commentator.account }} </el-link>
               </router-link>
-              <el-link class="text-gray-500 text-lg ml-1"
-                >@{{ comment.commentator.account }}
-              </el-link>
-              <span class="ml-3 text-sm text-gray-500">{{ formattedDate }}</span>
+
+              <span class="ml-3 text-sm text-gray-500">{{ formatDate(comment.createdAt) }}</span>
             </div>
 
-            <InkPopover padding="0" trigger="click">
+            <InkPopover padding="0" trigger="click" place="bottom">
               <template #reference>
                 <MoreOperation :horizon="true"></MoreOperation>
               </template>
               <template #content>
                 <div class="min-w-24">
                   <div class="popover-button">复制</div>
+                  <div
+                    v-if="userStore.getActiveUser()?.user.id == comment.commentator.id"
+                    class="popover-button"
+                    @click="handleDelete"
+                  >
+                    删除
+                  </div>
                   <div class="popover-button">举报</div>
                 </div>
               </template>
@@ -101,7 +122,7 @@ const likeIconClass = computed(() => {
         >
           回复
           <router-link
-            class="text-blue-500 hover:underline"
+            class="text-[var(--primary-color)] hover:underline"
             :to="`/user/${comment.parent.commentator.account}`"
           >
             @{{ comment.parent.commentator.username }}
@@ -122,7 +143,7 @@ const likeIconClass = computed(() => {
               :initial-index="index"
               preview-teleported
               class="w-28 h-28 rounded-lg object-cover cursor-pointer border border-gray-200 dark:border-gray-600 transition-transform duration-200 hover:scale-105"
-              @click.stop="handleReply()"
+              @click.stop="handleReply"
             />
           </div>
         </div>
@@ -134,19 +155,19 @@ const likeIconClass = computed(() => {
           @click="handleReply()"
         >
           <span class="material-symbols-outlined text-xl">chat_bubble_outline</span>
-          <span v-if="comment.children && comment.children.length > 0" class="text-sm ml-1">
-            {{ comment.children.length }}
+          <span v-if="comment.children && comment.stats.replyCnt > 0" class="text-sm ml-1">
+            {{ comment.stats.replyCnt }}
           </span>
         </div>
 
         <div
           class="flex items-center mr-6 cursor-pointer hover:text-red-500"
           :class="likeIconClass"
-          @click="handleLike()"
+          @click="handleLike"
         >
           <span class="material-symbols-outlined text-xl">favorite</span>
-          <span v-if="comment.likeCnt > 0" class="text-sm ml-1">
-            {{ comment.likeCnt }}
+          <span v-if="comment.stats.likeCnt > 0" class="text-sm ml-1">
+            {{ comment.stats.likeCnt }}
           </span>
         </div>
       </div>

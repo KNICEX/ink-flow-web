@@ -1,46 +1,39 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { type PropType, ref } from 'vue'
 import CommentItem from './CommentItem.vue'
-import type { Comment } from '@/types/comment.ts'
-import { demoComments } from '@/mock/demo_data.ts'
+import type { Comment, CommentPayload } from '@/types/comment.ts'
 import NoData from '@/components/empty/NoData.vue'
 import CommentInput from '@/components/list/comment/CommentInput.vue'
 
-const props = defineProps({
+defineProps({
   comments: {
     type: Array as () => Comment[],
-    default: () => demoComments(5),
+    default: () => [],
   },
   loading: {
     type: Boolean,
     default: false,
   },
-  noMore: {
-    type: Boolean,
-    default: false,
+  loadMore: {
+    type: Function,
+    default: () => {},
+  },
+  loadMoreChild: {
+    type: Function as PropType<(c: Comment) => void>,
+    default: () => {},
   },
 })
 
 const replyingComment = ref<Comment | null>(null)
 
-const loadMore = () => {
-  if (props.noMore || props.loading) return
-  emit('load-more')
-}
+const emit = defineEmits(['submit-comment', 'delete-comment'])
 
-const emit = defineEmits(['load-more', 'reply', 'like', 'favorite', 'submit-comment'])
-
-const handleReply = (comment: Comment) => {
+const showReply = (comment: Comment) => {
   replyingComment.value = comment
-  emit('reply', comment)
 }
 
-const handleLike = (comment: Comment) => {
-  emit('like', comment)
-}
-
-const handleSubmitComment = (content: string, parentComment: Comment | null = null, images: string[] = []) => {
-  emit('submit-comment', { content, parentComment, images })
+const handleSubmitComment = (parentComment: Comment | null = null, payload: CommentPayload) => {
+  emit('submit-comment', parentComment, payload)
   if (parentComment) {
     replyingComment.value = null
   }
@@ -49,28 +42,32 @@ const handleSubmitComment = (content: string, parentComment: Comment | null = nu
 const cancelReply = () => {
   replyingComment.value = null
 }
+
+const handleDelete = (c: Comment) => {
+  emit('delete-comment', c)
+}
 </script>
 
 <template>
-  <div class="w-full" v-infinite-scroll="loadMore" :infinite-scroll-disabled="noMore || loading">
+  <div class="w-full" v-infinite-scroll="loadMore">
     <div class="mb-4">
       <CommentInput
         placeholder="发表你的评论..."
-        @submit="(content, images) => handleSubmitComment(content, null, images)"
+        @submit="(payload) => handleSubmitComment(null, payload)"
       />
     </div>
 
     <div v-if="comments.length === 0" class="py-8">
-      <NoData></NoData>
+      <NoData description="没有更多评论"></NoData>
     </div>
     <div v-else>
       <div v-for="comment in comments" :key="comment.id" class="mb-2 last:mb-0">
-        <CommentItem :comment="comment" @reply="handleReply" @like="handleLike" />
+        <CommentItem :comment="comment" @reply="showReply" @delete="handleDelete" />
 
         <div v-if="replyingComment && replyingComment.id === comment.id" class="ml-12 mt-2 mb-4">
           <CommentInput
             :placeholder="`回复 @${comment.commentator.username}...`"
-            @submit="(content, images) => handleSubmitComment(content, comment, images)"
+            @submit="(payload) => handleSubmitComment(comment, payload)"
             @cancel="cancelReply"
             :show-cancel="true"
           />
@@ -78,25 +75,25 @@ const cancelReply = () => {
 
         <div
           v-if="comment.children && comment.children.length > 0"
-          class="ml-12 mt-4 pl-4 border-l-2 border-gray-200 dark:border-gray-700"
+          class="ml-12 mt-2 pl-4 border-l-2 border-gray-200 dark:border-gray-700"
         >
           <div
             v-for="childComment in comment.children"
             :key="childComment.id"
-            class="mb-4 last:mb-0"
+            class="mb-2 last:mb-0"
           >
             <CommentItem
               :comment="childComment"
               :is-child="true"
               :show-child="false"
-              @reply="handleReply"
-              @like="handleLike"
+              @reply="showReply"
+              @delete="handleDelete"
             />
 
             <div v-if="replyingComment && replyingComment.id === childComment.id" class="mt-2 mb-4">
               <CommentInput
                 :placeholder="`回复 @${childComment.commentator.username}...`"
-                @submit="(content, images) => handleSubmitComment(content, childComment, images)"
+                @submit="(payload) => handleSubmitComment(childComment, payload)"
                 @cancel="cancelReply"
                 :show-cancel="true"
               />
@@ -108,10 +105,6 @@ const cancelReply = () => {
 
     <div v-if="loading" class="py-4">
       <el-skeleton :rows="3" animated />
-    </div>
-
-    <div v-if="noMore && comments.length > 0" class="py-2 text-gray-500 text-sm">
-      <el-divider>没有更多评论了</el-divider>
     </div>
   </div>
 </template>

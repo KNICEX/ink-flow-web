@@ -1,5 +1,5 @@
-import { get, post } from './axios.ts'
-import type { CommentPayload } from '@/types/comment.ts'
+import { del, get, post } from './axios.ts'
+import type { CommentPayload, Comment } from '@/types/comment.ts'
 export interface CommentReq {
   biz: string
   bizId: number
@@ -13,11 +13,11 @@ export interface MaxIdPagedReq {
 }
 
 export interface ReplyReq {
-  Biz: string
-  BizId: number
-  RootId?: number
-  ParentId?: number
-  Payload: CommentPayload
+  biz: string
+  bizId: number
+  rootId?: number
+  parentId?: number
+  payload: CommentPayload
 }
 
 export const loadComment = async (req: CommentReq) => {
@@ -36,5 +36,17 @@ export const loadChild = async (rid: number, req: MaxIdPagedReq) => {
 }
 
 export const reply = async (req: ReplyReq) => {
-  return await post<Comment[], ReplyReq>('/comment/reply', req)
+  return await post<number, ReplyReq>('/comment/reply', req)
+}
+
+export const likeComment = async (cid: number) => {
+  return await post<Comment[], null>(`/comment/like/${cid}`, null)
+}
+
+export const cancelLikeComment = async (cid: number) => {
+  return await del<never>(`/comment/like/${cid}`)
+}
+
+export const deleteComment = async (cid: number) => {
+  return await del<Comment[]>(`/comment/${cid}`)
 }

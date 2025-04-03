@@ -3,37 +3,37 @@ import type { Ink } from '@/types/ink.ts'
 import { cancelLike, favorite, like } from '@/service/ink.ts'
 import { notification } from '@/utils/notification.ts'
 
+interface InteractiveHandler {
+  handleLike: (id: number) => Promise<void>
+  handleCancelLike: (id: number) => Promise<void>
+  handleFavorite: (id: number) => Promise<void>
+  handleCancelFavorite: (id: number) => Promise<void>
+}
 export const useProvideInkInteractiveHandler = (inks: Ref<Ink[]>) => {
   const handleLike = async (id: number) => {
     await like(id)
-    for (let i = 0; i < inks.value.length; i++) {
-      if (inks.value[i].id == id) {
-        inks.value[i].interactive.liked = true
-        inks.value[i].interactive.likeCnt++
-        break
-      }
+    const i = inks.value.find((v) => v.id == id)
+    if (i) {
+      i.interactive.liked = true
+      i.interactive.likeCnt++
     }
   }
   const handleCancelLike = async (id: number) => {
     await cancelLike(id)
-    for (let i = 0; i < inks.value.length; i++) {
-      if (inks.value[i].id == id) {
-        inks.value[i].interactive.liked = false
-        inks.value[i].interactive.likeCnt--
-        break
-      }
+    const i = inks.value.find((v) => v.id == id)
+    if (i) {
+      i.interactive.liked = false
+      i.interactive.likeCnt--
     }
   }
 
   const handleFavorite = async (id: number) => {
     //TODO弹出收藏夹选项
     await favorite(id, 0)
-    for (let i = 0; i < inks.value.length; i++) {
-      if (inks.value[i].id == id) {
-        inks.value[i].interactive.favorited = true
-        inks.value[i].interactive.favoriteCnt++
-        break
-      }
+    const i = inks.value.find((v) => v.id == id)
+    if (i) {
+      i.interactive.favorited = true
+      i.interactive.favoriteCnt++
     }
     notification({
       message: '收藏成功',
@@ -41,30 +41,33 @@ export const useProvideInkInteractiveHandler = (inks: Ref<Ink[]>) => {
   }
   const handleCancelFavorite = async (id: number) => {
     await favorite(id, 1)
-    for (let i = 0; i < inks.value.length; i++) {
-      if (inks.value[i].id == id) {
-        inks.value[i].interactive.favorited = false
-        inks.value[i].interactive.favoriteCnt--
-        break
-      }
+    const i = ink.value.find((v) => v.id == id)
+    if (i) {
+      i.interactive.favorited = false
+      i.interactive.favoriteCnt--
     }
     notification({
       message: '取消收藏成功',
     })
   }
 
-  provide('handleLike', handleLike)
-  provide('handleCancelLike', handleCancelLike)
-  provide('handleFavorite', handleFavorite)
-  provide('handleCancelFavorite', handleCancelFavorite)
+  provide('handleInteractive', {
+    handleLike,
+    handleCancelLike,
+    handleFavorite,
+    handleCancelFavorite,
+  })
 }
 
 export const useInjectInkInteractiveHandler = () => {
-  const doNothing = () => {}
-  const handleLike = inject<(id: number) => void>('handleLike') ?? doNothing
-  const handleCancelLike = inject<(id: number) => void>('handleCancelLike') ?? doNothing
-  const handleFavorite = inject<(id: number) => void>('handleFavorite') ?? doNothing
-  const handleCancelFavorite = inject<(id: number) => void>('handleCancelFavorite') ?? doNothing
+  const { handleLike, handleCancelLike, handleFavorite, handleCancelFavorite } =
+    inject<InteractiveHandler>('handleInteractive') ?? {
+      handleLike: async () => {},
+      handleCancelLike: async () => {},
+      handleFavorite: async () => {},
+      handleCancelFavorite: async () => {},
+    }
+
   return {
     handleLike,
     handleCancelLike,

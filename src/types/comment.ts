@@ -5,20 +5,35 @@ export interface Comment {
   biz: string
   bizId: number
   commentator: User
+  isAuthor: boolean
   payload: CommentPayload
   parent: Comment | null
   root: Comment | null
   children: Comment[] | null
 
+  stats: CommentStats
+  createdAt: Date
+}
+
+interface CommentStats {
   liked: boolean
   likeCnt: number
   viewCnt: number
-  createdAt: Date
+  replyCnt: number
 }
 
 export interface CommentPayload {
   content: string
   images: string[]
+}
+
+export const emptyCommentStats = (): CommentStats => {
+  return {
+    liked: false,
+    likeCnt: 0,
+    viewCnt: 0,
+    replyCnt: 0,
+  }
 }
 
 export const emptyComment = (): Comment => {
@@ -42,6 +57,7 @@ export const emptyComment = (): Comment => {
       createdAt: new Date(),
       updatedAt: new Date(),
     },
+    isAuthor: false,
     payload: {
       content: '',
       images: [],
@@ -49,9 +65,7 @@ export const emptyComment = (): Comment => {
     parent: null,
     root: null,
     children: [],
-    liked: false,
-    likeCnt: 0,
-    viewCnt: 0,
+    stats: emptyCommentStats(),
     createdAt: new Date(),
   }
 }

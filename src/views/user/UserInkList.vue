@@ -4,6 +4,7 @@ import type { Ink } from '@/types/ink.ts'
 import { list } from '@/service/ink.ts'
 import { ref, watch } from 'vue'
 import NoData from '@/components/empty/NoData.vue'
+import { wrapOffsetPagedFunc } from '@/utils/pagedLoadWrap.ts'
 const props = defineProps({
   uid: {
     type: Number,
@@ -11,37 +12,29 @@ const props = defineProps({
   },
 })
 
-let offset = 0
 const limit = 15
 const inks = ref<Ink[]>([])
-watch(
-  () => props.uid,
-  async () => {
-    if (props.uid != 0) {
-      inks.value = await list({
-        authorId: props.uid,
-        offset: offset,
-        limit: limit,
-      })
-      offset = inks.value.length
-    }
-  },
-  { immediate: true },
-)
 
-const loadMore = () => {
-  list({
+const { loadMore } = wrapOffsetPagedFunc(async (offset: number) => {
+  if (props.uid == 0) {
+    return
+  }
+  const res = await list({
     authorId: props.uid,
     offset: offset,
     limit: limit,
-  }).then((res) => {
-    if (res.length == 0) {
-      return
-    }
-    inks.value = [...inks.value, ...res]
-    offset += res.length
   })
-}
+  inks.value = [...inks.value, ...res]
+  return res.length
+}, limit)
+
+watch(
+  () => props.uid,
+  () => {
+    loadMore()
+  },
+  { immediate: true },
+)
 </script>
 
 <template>

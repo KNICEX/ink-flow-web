@@ -56,7 +56,7 @@ const { handleLike, handleFavorite, handleCancelLike, handleCancelFavorite } =
 
 <template>
   <div
-    class="flex border border-gray-200 dark:border-gray-700 rounded-xl p-4 mb-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition"
+    class="flex border border-gray-200 dark:border-gray-700 rounded-xl p-4 mb-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 transition"
     @click="handleItemClick"
   >
     <div class="mr-3">

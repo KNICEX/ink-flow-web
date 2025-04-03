@@ -3,15 +3,15 @@ import { ref } from 'vue'
 import type { UploadRawFile } from 'element-plus'
 import InkUpload from '@/components/upload/InkUpload.vue'
 
-const props = defineProps({
+defineProps({
   placeholder: {
     type: String,
-    default: '写下你的评论...'
+    default: '写下你的评论...',
   },
   showCancel: {
     type: Boolean,
-    default: false
-  }
+    default: false,
+  },
 })
 
 const emit = defineEmits(['submit', 'cancel'])
@@ -41,12 +41,15 @@ const removeImage = (index: number) => {
 
 const submitComment = () => {
   if (!commentContent.value.trim() && images.value.length === 0) return
-  
+
   isSubmitting.value = true
-  
+
   // 提交评论，增加images参数
-  emit('submit', commentContent.value, images.value)
-  
+  emit('submit', {
+    content: commentContent.value,
+    images: images.value,
+  })
+
   // 重置
   commentContent.value = ''
   images.value = []
@@ -61,7 +64,7 @@ const handleCancel = () => {
 </script>
 
 <template>
-  <div class="bg-white dark:bg-gray-800 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+  <div class="rounded-xl p-4 border border-gray-200 dark:border-gray-700">
     <el-input
       v-model="commentContent"
       :placeholder="placeholder"
@@ -70,7 +73,7 @@ const handleCancel = () => {
       resize="none"
       class="mb-3"
     />
-    
+
     <!-- 显示已上传的图片 -->
     <div v-if="images.length > 0" class="flex flex-wrap gap-2 mb-3">
       <div v-for="(image, index) in images" :key="index" class="relative">
@@ -87,12 +90,12 @@ const handleCancel = () => {
         </button>
       </div>
     </div>
-    
+
     <div class="flex justify-between items-center">
       <!-- 图片上传按钮 -->
       <div>
         <el-tooltip content="添加图片" placement="top">
-          <el-button type="primary" text circle @click="$refs.uploadRef.$el.click()">
+          <el-button type="primary" text circle>
             <span class="material-symbols-outlined">image</span>
           </el-button>
         </el-tooltip>
@@ -107,13 +110,13 @@ const handleCancel = () => {
           />
         </div>
       </div>
-      
+
       <div class="flex">
         <el-button v-if="showCancel" @click="handleCancel" class="mr-2">取消</el-button>
-        <el-button 
-          type="primary" 
-          @click="submitComment" 
-          :loading="isSubmitting" 
+        <el-button
+          type="primary"
+          @click="submitComment"
+          :loading="isSubmitting"
           :disabled="!commentContent.trim() && images.length === 0"
         >
           发布评论
@@ -127,7 +130,7 @@ const handleCancel = () => {
 :deep(.el-textarea__inner) {
   background-color: #f9f9f9;
   border-color: #e0e0e0;
-  
+
   .dark & {
     background-color: #2d3748;
     border-color: #4a5568;
@@ -138,4 +141,4 @@ const handleCancel = () => {
 .hidden {
   display: none;
 }
-</style> 
+</style>
