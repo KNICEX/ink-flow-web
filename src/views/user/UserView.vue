@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onBeforeMount, onMounted, ref, watch } from 'vue'
+import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
 import { profile } from '@/service/user.ts'
 import type { User } from '@/types/user.ts'
 import UserAvatar from '@/components/UserAvatar.vue'
@@ -48,17 +48,24 @@ watch(
     // TODO reload user info
   },
 )
+
+const banner = computed(() => {
+  if (userInfo.value?.banner == '') {
+    return defaultBanner
+  }
+  return userInfo.value?.banner
+})
 </script>
 
 <template>
   <div class="w-full flex flex-col items-center">
     <div class="w-full relative flex justify-center">
       <el-image
-        :src="userInfo?.banner == '' ? defaultBanner : userInfo?.banner"
+        :src="banner"
         fit="cover"
         class="absolute w-full h-100"
         hide-on-click-modal
-        :preview-src-list="[userInfo?.banner ?? defaultBanner]"
+        :preview-src-list="[banner]"
       ></el-image>
       <div class="max-screen-w absolute bottom-10 flex justify-between line-padding">
         <div class="flex justify-between items-center">

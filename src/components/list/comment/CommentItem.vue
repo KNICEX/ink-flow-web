@@ -66,12 +66,41 @@ const handleDelete = () => {
 const likeIconClass = computed(() => {
   return props.comment.stats.liked ? 'text-red-500' : 'text-gray-500'
 })
+
+const operations = (c: Comment) => {
+  const commonOps = [
+    {
+      name: '复制',
+      action: () => {
+        navigator.clipboard.writeText(c.payload.content)
+      },
+    },
+    {
+      name: '举报',
+      action: () => {
+        console.log('举报')
+      },
+    },
+  ]
+  if (c.commentator.id == userStore.getActiveUser()?.user.id) {
+    commonOps.unshift({
+      name: '删除',
+      action: () => {
+        confirm({
+          message: '你确定要删除此条回复吗😨?',
+          confirmed: () => {
+            emit('delete', c)
+          },
+        })
+      },
+    })
+  }
+  return commonOps
+}
 </script>
 
 <template>
-  <div
-    class="flex p-4 rounded-xl transition-colors duration-200 hover:bg-gray-50 dark:hover:bg-gray-700"
-  >
+  <div class="flex p-4 rounded-xl transition-colors duration-200 hover-bg">
     <InkPopover :show-after="300" place="bottom">
       <template #reference>
         <UserAvatar :hover-mask="true" :src="comment.commentator.avatar" :size="46" />
@@ -93,24 +122,7 @@ const likeIconClass = computed(() => {
               <span class="ml-3 text-sm text-gray-500">{{ formatDate(comment.createdAt) }}</span>
             </div>
 
-            <InkPopover padding="0" trigger="click" place="bottom">
-              <template #reference>
-                <MoreOperation :horizon="true"></MoreOperation>
-              </template>
-              <template #content>
-                <div class="min-w-24">
-                  <div class="popover-button">复制</div>
-                  <div
-                    v-if="userStore.getActiveUser()?.user.id == comment.commentator.id"
-                    class="popover-button"
-                    @click="handleDelete"
-                  >
-                    删除
-                  </div>
-                  <div class="popover-button">举报</div>
-                </div>
-              </template>
-            </InkPopover>
+            <MoreOperation :horizon="true" :operations="operations(comment)"></MoreOperation>
           </div>
         </div>
       </div>
@@ -140,10 +152,10 @@ const likeIconClass = computed(() => {
               :src="image"
               fit="cover"
               :preview-src-list="comment.payload.images"
+              hide-on-click-modal
               :initial-index="index"
               preview-teleported
               class="w-28 h-28 rounded-lg object-cover cursor-pointer border border-gray-200 dark:border-gray-600 transition-transform duration-200 hover:scale-105"
-              @click.stop="handleReply"
             />
           </div>
         </div>

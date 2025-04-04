@@ -31,6 +31,7 @@ export const wrapOffsetPagedFunc = (loadFunc: offsetLoadFunc, limit: number) => 
     },
     reset: () => {
       offset = 0
+      noMore = false
       loading = false
     },
   }
@@ -63,6 +64,7 @@ export const wrapMaxIdPagedFunc = (loadFunc: maxIdLoadFunc) => {
     },
     reset: () => {
       maxId = 0
+      noMore = false
       loading = false
     },
   }

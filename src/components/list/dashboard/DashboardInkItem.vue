@@ -15,7 +15,8 @@ const props = defineProps({
   },
 })
 
-const handleInkOp = inject<(ink: Ink, op: 'edit' | 'delete' | 'preview') => void>('handle-ink-op')
+const handleInkOp =
+  inject<(ink: Ink, op: 'edit' | 'delete' | 'preview' | 'share') => void>('handle-ink-op')
 const handleEdit = () => {
   handleInkOp!(props.ink, 'edit')
 }
@@ -37,6 +38,30 @@ const statusClass = computed(() => {
     'bg-red-500': props.ink.status == InkStatus.Private,
   })
 })
+
+const operations = (ink: Ink) => {
+  const commonOps = [
+    {
+      name: '预览',
+      action: () => handleInkOp!(ink, 'preview'),
+    },
+    {
+      name: '分享',
+      action: () => handleInkOp!(ink, 'share'),
+    },
+  ]
+  if (ink.status != InkStatus.Pending) {
+    commonOps.unshift({
+      name: '编辑',
+      action: () => handleInkOp!(ink, 'edit'),
+    })
+    commonOps.push({
+      name: '删除',
+      action: () => handleInkOp!(ink, 'delete'),
+    })
+  }
+  return commonOps
+}
 </script>
 
 <template>
@@ -60,7 +85,7 @@ const statusClass = computed(() => {
     <div class="flex items-center">
       <InkPopover place="left" padding="0" trigger="click">
         <template #reference>
-          <MoreOperation :horizon="true"></MoreOperation>
+          <MoreOperation :horizon="true" :operations="operations(ink)"></MoreOperation>
         </template>
         <template #content>
           <div>

@@ -88,8 +88,19 @@ html.dark {
 
 .el-message-box {
   border-radius: 1rem;
+  padding: 1.2rem;
+  .el-message-box__content {
+    font-size: 1rem;
+  }
 }
 
-.el-button-custom {
-
+.el-image {
+  img{
+    margin: 0;
+  }
+}
+.el-image-viewer__canvas {
+  img{
+    border-radius: 0 !important;
+  }
 }

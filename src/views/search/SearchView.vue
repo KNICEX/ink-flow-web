@@ -124,7 +124,13 @@ const loadMore = () => {
       v-infinite-scroll="loadMore"
       v-else-if="searchTarget == 'reply'"
     ></CommentSearchList>
-    <InkList v-else v-infinite-scroll="loadMore" :inks="inks" :max-cols="5"></InkList>
+    <InkList
+      v-else
+      v-infinite-scroll="loadMore"
+      :inks="inks"
+      :max-cols="5"
+      empty-desc="没有相关结果"
+    ></InkList>
   </div>
 </template>
 

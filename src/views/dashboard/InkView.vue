@@ -18,6 +18,7 @@ import { useUserStore } from '@/stores/user.ts'
 import { notification } from '@/utils/notification.ts'
 import { confirm } from '@/utils/message.ts'
 import { parseRouteParam } from '@/utils/parse.ts'
+import { wrapOffsetPagedFunc } from '@/utils/pagedLoadWrap.ts'
 const title = ref('Ink')
 const activeType = ref('published')
 const inks = ref<Ink[]>([])
@@ -25,12 +26,9 @@ const route = useRoute()
 const router = useRouter()
 const userStore = useUserStore()
 
-let loading = false
-let offset = 0
 const limit = 15
-const load = async () => {
+const load = async (offset: number) => {
   let res: Ink[] = []
-  loading = true
   switch (activeType.value) {
     case 'published':
       res = await list({
@@ -68,13 +66,15 @@ const load = async () => {
   }
 
   if (res.length == 0) {
-    loading = false
-    return
+    return 0
   }
   inks.value.push(...res)
-  offset += res.length
-  loading = false
+  return res.length
 }
+
+const { loadMore, reset: resetPage } = wrapOffsetPagedFunc(async (offset: number) => {
+  return await load(offset)
+}, limit)
 watch(
   () => route.params,
   () => {
@@ -82,10 +82,10 @@ watch(
     if (!type || type === '') {
       type = 'published'
     }
-    inks.value = []
-    offset = 0
     activeType.value = type
-    load()
+    resetPage()
+    inks.value = []
+    loadMore()
   },
   { immediate: true },
 )
@@ -163,13 +163,6 @@ const handleInkOp = async (ink: Ink, op: 'delete' | 'preview' | 'edit') => {
   }
 }
 
-const loadMore = () => {
-  console.log('load more')
-  if (inks.value.length % limit !== 0 || loading) {
-    return
-  }
-  load()
-}
 provide('handle-ink-op', handleInkOp)
 </script>
 

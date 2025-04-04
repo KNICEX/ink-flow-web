@@ -10,7 +10,7 @@
       </div>
     </div>
     <div v-show="loading" class="py-4 text-center text-gray-500">加载中...</div>
-    <el-backtop :style="{ height: '4rem', width: '4rem' }" :right="100" :bottom="100" />
+    <BackTop></BackTop>
   </div>
 </template>
 
@@ -18,6 +18,7 @@
 import TwitterStyleInk from '@/components/list/ink/TwitterStyleInk.vue'
 import { ref } from 'vue'
 import type { Ink } from '@/types/ink.ts'
+import BackTop from '@/components/BackTop.vue'
 
 defineProps({
   inks: {

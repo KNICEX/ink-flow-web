@@ -55,10 +55,7 @@ const { handleLike, handleFavorite, handleCancelLike, handleCancelFavorite } =
 </script>
 
 <template>
-  <div
-    class="flex border border-gray-200 dark:border-gray-700 rounded-xl p-4 mb-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-900 transition"
-    @click="handleItemClick"
-  >
+  <div class="flex rounded-border p-4 mb-4 cursor-pointer hover-bg" @click="handleItemClick">
     <div class="mr-3">
       <InkPopover place="bottom" :show-after="300">
         <template #reference>
@@ -76,7 +73,7 @@ const { handleLike, handleFavorite, handleCancelLike, handleCancelFavorite } =
       <div class="flex items-center" v-if="showAuthor" @click.stop="handleToUserHome">
         <div class="flex">
           <span class="font-semibold">{{ ink.author.username }}</span>
-          <span class="text-gray-500 ml-2 flex items-end">@{{ ink.author.account }}</span>
+          <el-link class="text-gray-500 ml-2">@{{ ink.author.account }}</el-link>
           <span class="text-gray-500 ml-2 flex items-end">{{ formattedDate }}</span>
         </div>
       </div>

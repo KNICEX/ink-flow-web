@@ -8,6 +8,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    BackTop: typeof import('./src/components/BackTop.vue')['default']
     CommentInput: typeof import('./src/components/list/comment/CommentInput.vue')['default']
     CommentItem: typeof import('./src/components/list/comment/CommentItem.vue')['default']
     CommentList: typeof import('./src/components/list/comment/CommentList.vue')['default']
@@ -46,6 +47,7 @@ declare module 'vue' {
     FollowUserList: typeof import('./src/components/list/user/FollowUserList.vue')['default']
     FormInput: typeof import('./src/components/form/FormInput.vue')['default']
     ImageInk: typeof import('./src/components/list/ink/ImageInk.vue')['default']
+    ImageList: typeof import('./src/components/upload/ImageList.vue')['default']
     InkCard: typeof import('./src/components/card/InkCard.vue')['default']
     InkCover: typeof import('./src/components/image/InkCover.vue')['default']
     InkDialog: typeof import('./src/components/InkDialog.vue')['default']

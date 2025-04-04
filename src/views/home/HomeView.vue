@@ -1,7 +1,7 @@
 <template>
   <div class="max-screen-w flex items-start">
     <div class="flex-1 h-full">
-      <div class="h-13 line-padding home-nav bg-white dark:bg-[#141414]">
+      <div class="h-13 line-padding sticky-top z-1 white-bg">
         <el-tabs class="demo-tabs" :model-value="activeNav" @tab-change="handleNavChange">
           <el-tab-pane label="推荐" name="recommend"></el-tab-pane>
           <el-tab-pane label="热门" name="hot"></el-tab-pane>
@@ -38,12 +38,6 @@ const loadMore = () => {
 }
 </script>
 <style scoped lang="scss">
-.home-nav {
-  position: sticky;
-  top: 6rem;
-  z-index: 1;
-}
-
 .ink-aside {
   @media (max-width: 1024px) {
     display: none;

@@ -64,7 +64,6 @@ watch(
     </div>
     <div class="flex-1">
       <InkList :max-cols="4" :inks="inks"></InkList>
-      <NoData v-if="inks.length == 0"></NoData>
     </div>
   </div>
 </template>

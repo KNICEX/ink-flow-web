@@ -17,6 +17,13 @@ defineProps({
 })
 
 const handleDelNo = () => {}
+
+const ops = [
+  {
+    name: '删除',
+    action: handleDelNo,
+  },
+]
 </script>
 
 <template>
@@ -97,17 +104,7 @@ const handleDelNo = () => {}
           </div>
           <div class="text-sm text-gray-500 mt-1">2025年3月1日 21:33</div>
         </div>
-        <InkPopover padding="0" trigger="click" place="bottom">
-          <template #reference>
-            <MoreOperation :horizon="true"></MoreOperation>
-          </template>
-          <template #content>
-            <div class="transition-colors transition-300">
-              <!--              <div class="popover-button">回复</div>-->
-              <div class="popover-button" @click="handleDelNo">删除</div>
-            </div>
-          </template>
-        </InkPopover>
+        <MoreOperation :horizon="true" :operations="ops"></MoreOperation>
       </div>
       <div>
         <slot></slot>

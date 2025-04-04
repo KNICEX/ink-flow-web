@@ -1,7 +1,5 @@
 <script setup lang="ts">
-import { defaultAvatar } from '@/consts/default.ts'
 import NotificationItem from '@/components/notification/NotificationItem.vue'
-import InkCover from '@/components/image/InkCover.vue'
 import { type MergedLike, SubjectType } from '@/types/notification.ts'
 import type { Comment } from '@/types/comment.ts'
 import type { Ink } from '@/types/ink.ts'

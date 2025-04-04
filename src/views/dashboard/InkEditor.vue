@@ -2,7 +2,7 @@
 import { onMounted, ref, useTemplateRef } from 'vue'
 import MilkdownWrapper from '@/components/editor/milkdown/MilkdownWrapper.vue'
 import type { UploadRawFile } from 'element-plus'
-import { detailForEdit, publish, saveDraft } from '@/service/ink.ts'
+import { draftDetail, publish, saveDraft } from '@/service/ink.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { notification } from '@/utils/notification.ts'
 import { parseRouteParamToInt } from '@/utils/parse.ts'
@@ -22,7 +22,7 @@ let lastSave = Date.now()
 let saveClicked = false
 onMounted(async () => {
   if (draftId != 0) {
-    const draft = await detailForEdit(draftId)
+    const draft = await draftDetail(draftId)
     milkdownRef.value?.setContent(draft.contentMeta)
     coverUrl.value = draft.cover
     tags.value = draft.tags

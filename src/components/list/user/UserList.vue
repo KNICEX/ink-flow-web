@@ -14,8 +14,8 @@ defineProps({
 <template>
   <div class="grid gap-x-20 gap-y-10 md:grid-cols-2">
     <UserItem v-for="user in users" :user="user" :key="user.id"></UserItem>
-    <NoData v-if="users.length == 0"></NoData>
   </div>
+  <NoData v-if="users.length == 0"></NoData>
 </template>
 
 <style scoped lang="scss"></style>

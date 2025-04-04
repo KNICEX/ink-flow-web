@@ -5,6 +5,8 @@ import { computed } from 'vue'
 import type { Ink } from '@/types/ink.ts'
 import { demoInks } from '@/mock/demo_data.ts'
 import { useRouter } from 'vue-router'
+import NoData from '@/components/empty/NoData.vue'
+import BackTop from '@/components/BackTop.vue'
 const router = useRouter()
 const props = defineProps({
   maxCols: {
@@ -20,6 +22,10 @@ const props = defineProps({
     default: () => {
       return () => {}
     },
+  },
+  emptyDesc: {
+    type: String,
+    default: undefined,
   },
 })
 const wrapClass = computed(() => {
@@ -44,7 +50,8 @@ const handleItemClick = (id: number) => {
         <InkItem @on-cover-click="handleItemClick" :ink="ink"></InkItem>
       </div>
     </div>
-    <el-backtop :style="{ height: '4rem', width: '4rem' }" :right="100" :bottom="100" />
+    <NoData v-if="inks.length == 0" :description="emptyDesc"></NoData>
+    <BackTop></BackTop>
   </div>
 </template>
 <style scoped lang="scss"></style>

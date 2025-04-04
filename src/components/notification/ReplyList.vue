@@ -5,7 +5,7 @@ import type { Ink } from '@/types/ink.ts'
 import NoData from '@/components/empty/NoData.vue'
 defineProps({
   replies: {
-    type: Array as () => Notification<Ink, ReplyContent>[],
+    type: Array as () => Notification<never, ReplyContent>[],
     default: () => [],
   },
   loadMore: {

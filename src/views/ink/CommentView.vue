@@ -116,7 +116,7 @@ const handleDelete = async (c: Comment) => {
   }
   for (let i = 0; i < comments.value.length; i++) {
     // 二级评论， 找到对应根评论
-    const comment = comments.value.find((v) => v.id == c.root.id)
+    const comment = comments.value.find((v) => v.id == c?.root?.id)
     if (!comment || !comment.children) {
       return
     }

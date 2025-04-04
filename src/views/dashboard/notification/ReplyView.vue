@@ -4,40 +4,27 @@ import DashboardContent from '@/views/dashboard/DashboardContent.vue'
 import ReplyList from '@/components/notification/ReplyList.vue'
 import type { Notification, ReplyContent } from '@/types/notification.ts'
 import { replyNotification } from '@/service/notification.ts'
+import { wrapMaxIdPagedFunc } from '@/utils/pagedLoadWrap.ts'
 
-const replies = ref<Notification<any, ReplyContent>[]>([])
-let maxId = 0
+const replies = ref<Notification<never, ReplyContent>[]>([])
 const limit = 15
-let loading = false
-onMounted(async () => {
-  loading = true
-  replies.value = await replyNotification({
-    maxId,
-    limit,
-  })
-
-  maxId = replies.value[replies.value.length - 1]?.id ?? 0
-  loading = false
-})
-
-const loadMore = async () => {
-  if (loading) {
-    return
-  }
-  console.log('load more')
-  loading = true
+const { loadMore } = wrapMaxIdPagedFunc(async (maxId: number) => {
   const res = await replyNotification({
     maxId,
     limit,
   })
   if (res.length == 0) {
-    loading = false
-    return
+    return 0
   }
   replies.value = [...replies.value, ...res]
-  maxId = res[res.length - 1]?.id ?? 0
-  loading = false
-}
+  if (res.length < limit) {
+    return 0
+  }
+  return replies.value[replies.value.length - 1].id
+})
+onMounted(() => {
+  loadMore()
+})
 </script>
 
 <template>

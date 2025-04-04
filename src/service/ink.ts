@@ -122,6 +122,12 @@ export const listViewed = async (req: MaxIdPagedReq) => {
   })
 }
 
+export const listLiked = async (req: MaxIdPagedReq) => {
+  return await get<Ink[]>('/ink/liked', {
+    params: req,
+  })
+}
+
 export const listRejected = async (req: ListSelfReq) => {
   const res = await get<Ink[]>('/ink/rejected', {
     params: req,
