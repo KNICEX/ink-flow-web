@@ -2,7 +2,7 @@
 
 <template>
   <div>
-    <router-link to="/" class="text-3xl">InkFlow</router-link>
+    <router-link to="/" class="text-3xl"> InkFlow</router-link>
   </div>
 </template>
 

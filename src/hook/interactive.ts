@@ -41,7 +41,7 @@ export const useProvideInkInteractiveHandler = (inks: Ref<Ink[]>) => {
   }
   const handleCancelFavorite = async (id: number) => {
     await favorite(id, 1)
-    const i = ink.value.find((v) => v.id == id)
+    const i = inks.value.find((v) => v.id == id)
     if (i) {
       i.interactive.favorited = false
       i.interactive.favoriteCnt--

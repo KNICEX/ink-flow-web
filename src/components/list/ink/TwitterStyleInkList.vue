@@ -8,6 +8,7 @@
           :previewLength="previewLength"
         ></TwitterStyleInk>
       </div>
+      <NoData v-if="inks.length == 0 && !loading"></NoData>
     </div>
     <div v-show="loading" class="py-4 text-center text-gray-500">加载中...</div>
     <BackTop></BackTop>
@@ -19,6 +20,7 @@ import TwitterStyleInk from '@/components/list/ink/TwitterStyleInk.vue'
 import { ref } from 'vue'
 import type { Ink } from '@/types/ink.ts'
 import BackTop from '@/components/BackTop.vue'
+import NoData from '@/components/empty/NoData.vue'
 
 defineProps({
   inks: {

@@ -10,9 +10,15 @@ useProvideFollowHandler(users)
 </script>
 
 <template>
-  <div>
-    <UserSimpleItem v-for="user in users" :user="user" :key="user.id"></UserSimpleItem>
-    <div class="text-center mt-2">
+  <div class="rounded-border">
+    <div class="pb-2 px-4 py-4 text-lg font-bold">为你推荐的创作者</div>
+    <UserSimpleItem
+      class="cursor-pointer p-4 hover-bg"
+      v-for="user in users"
+      :user="user"
+      :key="user.id"
+    ></UserSimpleItem>
+    <div class="text-center py-2 hover-bg">
       <el-link type="primary">
         <span class="text-base">展示更多</span>
       </el-link>

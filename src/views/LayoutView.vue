@@ -1,10 +1,10 @@
 <template>
-  <div class="h-full flex-col">
+  <div class="flex-col">
     <el-popover></el-popover>
     <div class="flex fixed w-full header-height white-bg z-10 top-0 items-center justify-center">
       <HeaderView class="line-padding"> </HeaderView>
     </div>
-    <div class="flex flex-1 justify-center pt-[var(--header-height)]">
+    <div class="flex justify-center pt-[var(--header-height)]">
       <router-view> </router-view>
     </div>
     <div class="border-t-1 border-gray-200 mt-10 flex justify-center">

@@ -13,11 +13,9 @@ defineProps({
 </script>
 
 <template>
-  <div
-    class="flex items-center justify-between py-2 my-2 px-2 hover:bg-gray-100 dark:hover:bg-gray-600 rounded-4xl"
-  >
+  <div class="flex items-center justify-between">
     <div class="flex">
-      <InkPopover>
+      <InkPopover place="bottom">
         <template #content>
           <UserCard :user="user"></UserCard>
         </template>
@@ -27,9 +25,11 @@ defineProps({
           </div>
         </template>
       </InkPopover>
-      <div class="ml-2 flex flex-col justify-center">
-        <div type="info" class="text-sm hover:underline cursor-pointer">{{ user.username }}</div>
-        <div class="text-sm text-gray-500">@{{ user.account }}</div>
+      <div class="ml-2 flex flex-col justify-center items-start">
+        <div type="info" class="text-sm cursor-pointer">{{ user.username }}</div>
+        <router-link :to="`/user/${user.account}`">
+          <el-link class="text-sm text-gray-500">@{{ user.account }}</el-link>
+        </router-link>
       </div>
     </div>
     <FollowButton :uid="user.id" :followed="user.followed"></FollowButton>

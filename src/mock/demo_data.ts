@@ -1,5 +1,6 @@
 import type { Ink } from '@/types/ink.ts'
 import { emptyInk, InkStatus } from '@/types/ink.ts'
+import type { TagStats } from '@/types/tag.ts'
 import type { User } from '@/types/user.ts'
 import { emptyUser } from '@/types/user.ts'
 import { type Comment, emptyComment } from '@/types/comment.ts'
@@ -273,4 +274,17 @@ export const demoMergedLike = (n?: number) => {
     res.push(no)
   }
   return res
+}
+
+export const demoHotTags = (n?: number) => {
+  const tags: TagStats[] = []
+  n = n == undefined ? 20 : n
+  for (let i = 0; i < n; i++) {
+    const tag = {
+      name: `tag${i}`,
+      reference: Math.floor(Math.random() * 1000),
+    }
+    tags.push(tag)
+  }
+  return tags
 }
