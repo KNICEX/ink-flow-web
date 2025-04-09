@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-center pl-2 pt-2 h-[calc(100vh-var(--header-height))]">
+  <div class="flex flex-col justify-start pl-2 pt-2 h-[calc(100vh-var(--header-height))]">
     <div class="flex justify-between">
       <div>Twitter</div>
       <div>Github</div>

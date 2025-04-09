@@ -2,11 +2,7 @@
   <div>
     <div v-infinite-scroll="loadMore" :infinite-scroll-disabled="noMore">
       <div v-for="ink in inks" :key="ink.id" class="mb-4">
-        <TwitterStyleInk
-          @on-cover-click="handleItemClick"
-          :ink="ink"
-          :previewLength="previewLength"
-        ></TwitterStyleInk>
+        <TwitterStyleInk :ink="ink" :previewLength="previewLength"></TwitterStyleInk>
       </div>
       <NoData v-if="inks.length == 0 && !loading"></NoData>
     </div>
@@ -45,10 +41,6 @@ const loadMore = () => {
 }
 
 const emit = defineEmits(['on-item-click', 'loadMore'])
-const handleItemClick = (id: number) => {
-  console.log('item click', id)
-  emit('on-item-click', id)
-}
 </script>
 
 <style scoped lang="scss"></style>

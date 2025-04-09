@@ -5,7 +5,11 @@
       <HeaderView class="line-padding"> </HeaderView>
     </div>
     <div class="flex justify-center pt-[var(--header-height)]">
-      <router-view> </router-view>
+      <router-view v-slot="{ Component }">
+        <keep-alive :include="['HomeView']">
+          <Component :is="Component"></Component>
+        </keep-alive>
+      </router-view>
     </div>
     <div class="border-t-1 border-gray-200 mt-10 flex justify-center">
       <FooterView></FooterView>

@@ -1,7 +1,7 @@
 <template>
   <div class="max-screen-w flex items-start">
     <div class="flex-1 h-full">
-      <div class="line-padding z-1 white-bg">
+      <div class="line-padding z-1">
         <el-tabs :model-value="activeNav" @tab-change="handleNavChange">
           <el-tab-pane label="推荐" name="recommend" lazy v-if="loggedIn">
             <HomeList type="recommend"></HomeList>
@@ -26,7 +26,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import HomeAside from '@/views/home/HomeAside.vue'
 import HomeList from '@/views/home/HomeList.vue'
 import { useUserStore } from '@/stores/user.ts'
@@ -40,6 +40,13 @@ const activeNav = ref('recommend')
 const handleNavChange = () => {
   console.log('nav: ', activeNav.value)
 }
+onMounted(() => {
+  if (!loggedIn.value) {
+    activeNav.value = 'hot'
+  }
+})
+
+// TODO tab滚动条缓存
 </script>
 <style scoped lang="scss">
 .ink-aside {
@@ -55,6 +62,6 @@ const handleNavChange = () => {
 :deep(.el-tabs__header) {
   position: sticky;
   top: var(--header-height);
-  background-color: white;
+  background-color: var(--white-background);
 }
 </style>

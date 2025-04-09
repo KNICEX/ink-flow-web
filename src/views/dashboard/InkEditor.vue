@@ -89,7 +89,7 @@ const handleSave = async () => {
   // 标题为空, 设置第一段文字为标题
   if (title.value == '') {
     const markdown = milkdownRef.value?.getMarkdown() ?? ''
-    title.value = markdown.split('\n')[0]
+    title.value = markdown.split('\n')[0].replace(/[#*`~]/g, '')
   }
 
   await save()
@@ -129,7 +129,7 @@ const handlePublish = async () => {
         <div>
           <div class="label-text">封面</div>
           <el-upload
-            class="w-full bg-gray-50 h-50 upload mt-3 overflow-hidden"
+            class="w-full bg-gray-50 h-50 upload mt-3 overflow-hidden relative"
             action="#"
             list-type="picture-card"
             :show-file-list="false"
@@ -143,6 +143,9 @@ const handlePublish = async () => {
               class="w-full h-full"
               alt="cover"
             />
+            <div class="absolute w-4 h-4 right-2 top-2" v-if="coverUrl">
+              <span class="material-symbols-outlined"> close </span>
+            </div>
             <div v-else class="h-full flex justify-center items-center nav-text">点击上传封面</div>
           </el-upload>
         </div>

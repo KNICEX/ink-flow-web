@@ -70,8 +70,8 @@ onMounted(() => {
     return
   }
   activated = true
-  // loadMore()
-  inks.value = demoInks()
+  loadMore()
+  // inks.value = demoInks()
 })
 </script>
 

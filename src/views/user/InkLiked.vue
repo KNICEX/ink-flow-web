@@ -32,7 +32,6 @@ onMounted(() => {
 <template>
   <div>
     <InkList :inks="inks" :max-cols="4" :load-more="loadMore"></InkList>
-    <NoData v-if="inks.length == 0"></NoData>
     <BackTop></BackTop>
   </div>
 </template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
-import { h, nextTick, onMounted, ref, render, useTemplateRef, watch } from 'vue'
+import { computed, h, nextTick, onMounted, ref, render, useTemplateRef, watch } from 'vue'
 import { parseRouteParamToInt, parseRouteQuery } from '@/utils/parse.ts'
 import { emptyInk, type Ink, InkStatus, inkStatusFromProp } from '@/types/ink.ts'
 import {
@@ -10,6 +10,7 @@ import {
   draftDetail,
   favorite,
   like,
+  pendingDetail,
   privateDetail,
   rejectedDetail,
 } from '@/service/ink.ts'
@@ -28,12 +29,14 @@ import { ElImage } from 'element-plus'
 import CommentView from '@/views/ink/CommentView.vue'
 import MoreOperation from '@/components/button/MoreOperation.vue'
 import BackTop from '@/components/BackTop.vue'
+import { useUserStore } from '@/stores/user.ts'
 
 const milkdownRef = useTemplateRef<InstanceType<typeof MilkdownWrapper>>('milkdownRef')
 const contentRef = useTemplateRef<HTMLElement>('contentRef')
 const ink = ref<Ink>(emptyInk())
 const route = useRoute()
 const router = useRouter()
+const userStore = useUserStore()
 
 // 处理图片预览
 const replaceImage = () => {
@@ -66,7 +69,7 @@ const loadInk = async (id: number, status: InkStatus) => {
       ink.value = await privateDetail(id)
       break
     case InkStatus.Pending:
-      ink.value = await draftDetail(id)
+      ink.value = await pendingDetail(id)
       break
     case InkStatus.Rejected:
       ink.value = await rejectedDetail(id)
@@ -128,6 +131,32 @@ const handleCancelFavorite = async () => {
   ink.value.interactive.favoriteCnt = Math.max(0, ink.value.interactive.favoriteCnt - 1)
   ink.value.interactive.favorited = !ink.value.interactive.favorited
 }
+
+const ops = computed(() => {
+  const baseOps = [
+    {
+      name: '举报',
+      action: () => {
+        console.log('举报')
+      },
+    },
+  ]
+  if (ink.value.author.id == userStore.getActiveUser()?.user.id) {
+    baseOps.unshift({
+      name: '编辑',
+      action: () => {
+        router.push(`/dashboard/${ink.value.author.account}/editor/${ink.value.id}`)
+      },
+    })
+    baseOps.push({
+      name: '删除',
+      action: () => {
+        console.log('删除')
+      },
+    })
+  }
+  return baseOps
+})
 </script>
 
 <template>
@@ -151,12 +180,14 @@ const handleCancelFavorite = async () => {
               <UserCard :user="ink.author"></UserCard>
             </template>
           </InkPopover>
-          <div class="ml-3">
-            <div class="semibold-text">{{ ink.author.username }}</div>
-            <el-link class="nav-text hover:underline">@{{ ink.author.account }}</el-link>
-          </div>
+          <router-link :to="`/user/${ink.author.account}`">
+            <div class="ml-3">
+              <div class="semibold-text">{{ ink.author.username }}</div>
+              <el-link class="nav-text hover:underline">@{{ ink.author.account }}</el-link>
+            </div>
+          </router-link>
         </div>
-        <MoreOperation :horizon="true"></MoreOperation>
+        <MoreOperation :horizon="true" :operations="ops"></MoreOperation>
       </div>
       <!--      <MilkdownWrapper :padding="false" :read-only="true" ref="milkdownRef" class="mt-4">-->
       <!--      </MilkdownWrapper>-->

@@ -66,6 +66,13 @@ export const draftDetail = async (id: number) => {
   return draft
 }
 
+export const pendingDetail = async (id: number) => {
+  const pending = await get<Ink>(`/ink/pending/${id}`)
+  const userStore = useUserStore()
+  pending.author = userStore.getActiveUser()?.user ?? emptyUser()
+  return pending
+}
+
 export const privateDetail = async (id: number) => {
   const priInk = await get<Ink>(`/ink/private/${id}`)
   const userStore = useUserStore()

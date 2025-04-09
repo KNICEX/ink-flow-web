@@ -51,8 +51,7 @@
 }
 
 .white-bg {
-  @apply bg-white;
-  @apply dark:bg-[#141414];
+  background-color: var(--white-background);
 }
 
 .popover-button {

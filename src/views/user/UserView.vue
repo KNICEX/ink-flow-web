@@ -69,7 +69,13 @@ const banner = computed(() => {
       ></el-image>
       <div class="max-screen-w absolute bottom-10 flex justify-between line-padding">
         <div class="flex justify-between items-center">
-          <UserAvatar :size="80" class="mr-6" :border="true" :preview="true"></UserAvatar>
+          <UserAvatar
+            :size="80"
+            class="mr-6"
+            :src="userInfo?.avatar"
+            :border="true"
+            :preview="true"
+          ></UserAvatar>
           <div>
             <div class="text-3xl text-white">{{ userInfo?.username }}</div>
             <div class="text-bg text-white mt-2">@{{ userInfo?.account }}</div>

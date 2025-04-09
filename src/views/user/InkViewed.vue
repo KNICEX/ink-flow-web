@@ -18,7 +18,6 @@ onBeforeMount(async () => {
 <template>
   <div>
     <InkList :inks="inks" :max-cols="4"></InkList>
-    <NoData v-if="inks.length == 0"></NoData>
   </div>
 </template>
 

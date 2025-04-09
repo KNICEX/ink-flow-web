@@ -48,6 +48,7 @@ declare module 'vue' {
     FollowUserList: typeof import('./src/components/list/user/FollowUserList.vue')['default']
     FormInput: typeof import('./src/components/form/FormInput.vue')['default']
     HotTagList: typeof import('./src/components/tags/HotTagList.vue')['default']
+    ImageCropper: typeof import('./src/components/image/ImageCropper.vue')['default']
     ImageInk: typeof import('./src/components/list/ink/ImageInk.vue')['default']
     ImageList: typeof import('./src/components/upload/ImageList.vue')['default']
     InkCard: typeof import('./src/components/card/InkCard.vue')['default']

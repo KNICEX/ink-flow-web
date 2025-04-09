@@ -1,3 +1,37 @@
+<script setup lang="ts">
+import { ArrowLeftBold, CloseBold } from '@element-plus/icons-vue'
+const model = defineModel()
+defineProps({
+  title: {
+    type: String,
+    default: 'TITLE',
+  },
+  showClose: {
+    type: Boolean,
+    default: true,
+  },
+  showBack: {
+    type: Boolean,
+    default: false,
+  },
+  width: {
+    type: String,
+    default: '30rem',
+  },
+  height: {
+    type: String,
+    default: 'auto',
+  },
+})
+
+const emit = defineEmits(['onClose', 'onBack'])
+const onClose = () => {
+  emit('onClose')
+}
+const onBack = () => {
+  emit('onBack')
+}
+</script>
 <template>
   <el-dialog
     ref="dialogRef"
@@ -41,38 +75,5 @@
     <slot name="footer"> </slot>
   </el-dialog>
 </template>
-<script setup lang="ts">
-import { ArrowLeftBold, CloseBold } from '@element-plus/icons-vue'
-const model = defineModel()
-defineProps({
-  title: {
-    type: String,
-    default: 'TITLE',
-  },
-  showClose: {
-    type: Boolean,
-    default: true,
-  },
-  showBack: {
-    type: Boolean,
-    default: false,
-  },
-  width: {
-    type: String,
-    default: '30rem',
-  },
-  height: {
-    type: String,
-    default: 'auto',
-  },
-})
 
-const emit = defineEmits(['onClose', 'onBack'])
-const onClose = () => {
-  emit('onClose')
-}
-const onBack = () => {
-  emit('onBack')
-}
-</script>
 <style scoped lang="scss"></style>

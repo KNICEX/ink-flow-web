@@ -40,7 +40,6 @@ watch(
 <template>
   <div>
     <InkList :max-cols="4" :inks="inks" :load-more="loadMore"></InkList>
-    <NoData v-if="inks.length == 0"></NoData>
   </div>
 </template>
 

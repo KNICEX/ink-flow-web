@@ -6,6 +6,9 @@ import type { ElForm, FormRules } from 'element-plus'
 import { editProfile } from '@/service/user.ts'
 import { notification } from '@/utils/notification.ts'
 import { defaultBanner } from '@/consts/default.ts'
+import ImageCropper, { type CropperResult } from '@/components/image/ImageCropper.vue'
+import InkDialog from '@/components/InkDialog.vue'
+import { uploadAvatar, uploadImage } from '@/service/file.ts'
 
 const props = defineProps({
   user: {
@@ -42,6 +45,77 @@ const rules = reactive<FormRules>({
     trigger: 'blur',
   },
 })
+
+const showCropper = ref(false)
+const tempImageSrc = ref('')
+const tempImageName = ref('')
+const cropperAspectRatio = ref<number | undefined>(1)
+const cropperType = ref<'avatar' | 'banner'>('avatar')
+
+const triggerCropper = (ratio?: number) => {
+  const fileInput = document.createElement('input')
+  fileInput.type = 'file'
+  fileInput.accept = 'image/*'
+  fileInput.onchange = (event) => {
+    const file = (event.target as HTMLInputElement).files?.[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        tempImageSrc.value = e.target?.result as string
+        tempImageName.value = file.name
+        cropperAspectRatio.value = ratio
+        showCropper.value = true
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+  fileInput.click()
+}
+const handleAvatarClick = () => {
+  cropperType.value = 'avatar'
+  triggerCropper(1)
+}
+
+// Banner update
+const handleBannerClick = () => {
+  cropperType.value = 'banner'
+  triggerCropper()
+}
+
+const base64ToFile = (src: string, name: string) => {
+  const arr = src.split(',')
+  const mime = arr[0].match(/:(.*?);/)?.[1]
+  const bstr = atob(arr[1])
+  let n = bstr.length
+  const u8arr = new Uint8Array(n)
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n)
+  }
+  return new File([u8arr], name, { type: mime })
+}
+
+const handleCropConfirm = (result: CropperResult) => {
+  const file = base64ToFile(result.src, result.name)
+
+  if (cropperType.value === 'banner') {
+    uploadImage(file).then((url) => {
+      userInfoForm.value.banner = url
+    })
+    userInfoForm.value.banner = result.src
+    showCropper.value = false
+    return
+  }
+
+  uploadAvatar(file).then((url) => {
+    userInfoForm.value.avatar = url
+  })
+  userInfoForm.value.avatar = result.src
+  showCropper.value = false
+}
+
+const handleCropCancel = () => {
+  showCropper.value = false
+}
 </script>
 
 <template>
@@ -50,17 +124,32 @@ const rules = reactive<FormRules>({
       <el-image
         fit="cover"
         class="w-full h-40"
-        :src="user.banner == '' ? defaultBanner : user.banner"
+        :src="userInfoForm.banner == '' ? defaultBanner : userInfoForm.banner"
       ></el-image>
       <div
         title="切换照片"
         class="cursor-pointer absolute w-full h-40 left-0 top-0 flex justify-center items-center bg-black/20"
+        @click="handleBannerClick"
       >
         <span class="material-symbols-outlined"> add_a_photo </span>
       </div>
     </div>
     <div class="absolute left-4 top-30">
-      <UserAvatar class="edit-avatar" :src="user.avatar" :size="80" :border="true"></UserAvatar>
+      <div class="relative inline-block">
+        <UserAvatar
+          class="edit-avatar"
+          :src="userInfoForm.avatar"
+          :size="80"
+          :border="true"
+        ></UserAvatar>
+        <div
+          title="切换头像"
+          class="absolute z-10 cursor-pointer absolute left-0 top-0 w-full h-full flex justify-center items-center bg-black/20 rounded-full"
+          @click="handleAvatarClick"
+        >
+          <span class="material-symbols-outlined text-white"> add_a_photo </span>
+        </div>
+      </div>
     </div>
     <div class="mt-12 mb-4">
       <el-form :model="userInfoForm" label-position="top" :rules="rules" ref="userInfoFormRef">
@@ -91,27 +180,25 @@ const rules = reactive<FormRules>({
     <div class="mb-2 flex justify-end">
       <el-button class="w-24" round size="large" type="primary" @click="handleSave">保存</el-button>
     </div>
+
+    <!-- Image Cropper Dialog -->
+    <InkDialog v-model="showCropper" title="裁剪图片">
+      <ImageCropper
+        :src="tempImageSrc"
+        :image-name="tempImageName"
+        :aspect-ratio="cropperAspectRatio"
+        @confirm="handleCropConfirm"
+        @cancel="handleCropCancel"
+      />
+    </InkDialog>
   </div>
 </template>
 
 <style scoped lang="scss">
 .edit-avatar {
   &:hover {
-    &::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      height: 100%;
-      width: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      border-radius: 50%;
-
-      font-variation-settings:
-        'FILL' 0,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 24;
+    .avatar-overlay {
+      opacity: 1;
     }
   }
 }

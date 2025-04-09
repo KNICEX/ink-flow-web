@@ -38,7 +38,7 @@ const handleCoverClick = () => {
 }
 
 const handleItemClick = () => {
-  emit('on-cover-click', props.ink.id)
+  router.push('/ink/' + props.ink.id)
 }
 
 const handleToUserHome = () => {
