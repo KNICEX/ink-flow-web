@@ -4,7 +4,9 @@ import UserCard from '@/components/UserCard.vue'
 import InkPopover from '@/components/popover/InkPopover.vue'
 import { type Ink, inkStatusProp } from '@/types/ink.ts'
 import { useRouter } from 'vue-router'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
+import { useProvideFollowHandler } from '@/hook/follow.ts'
+import type { User } from '@/types/user.ts'
 const router = useRouter()
 const props = defineProps({
   ink: {
@@ -29,6 +31,7 @@ const handleToUserHome = () => {
 const toDetailHref = computed(() => {
   return `/ink/${props.ink.id}?status=${inkStatusProp(props.ink.status)}`
 })
+useProvideFollowHandler(ref<User[]>([props.ink.author]))
 </script>
 
 <template>
@@ -52,12 +55,12 @@ const toDetailHref = computed(() => {
           @click="handleCoverClick"
           class="flex justify-center hover:scale-115 transition duration-300 text-xl items-center w-full aspect-square"
         >
-          <div class="line-clamp-2 px-8">{{ ink.title }}</div>
+          <div class="px-8 line-clamp-2">{{ ink.title }}</div>
         </div>
       </router-link>
     </div>
     <div class="flex flex-col mt-2" @click="handleToUserHome">
-      <router-link :to="toDetailHref">{{ ink.title }}</router-link>
+      <router-link :to="toDetailHref" class="line-clamp-2">{{ ink.title }}</router-link>
       <div class="flex" v-if="showAuthor">
         <InkPopover :show-after="300">
           <template #reference>

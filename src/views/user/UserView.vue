@@ -55,6 +55,10 @@ const banner = computed(() => {
   }
   return userInfo.value?.banner
 })
+
+const isSelf = computed(() => {
+  return userStore.getActiveUser()?.user.id == userInfo.value?.id
+})
 </script>
 
 <template>
@@ -102,7 +106,7 @@ const banner = computed(() => {
           <el-tab-pane label="最新" name="latest"></el-tab-pane>
           <el-tab-pane label="点赞" name="likes"></el-tab-pane>
           <!--        <el-tab-pane label="收藏" name="collection"></el-tab-pane>-->
-          <el-tab-pane label="浏览" name="views"></el-tab-pane>
+          <el-tab-pane label="浏览" name="views" v-if="isSelf"></el-tab-pane>
           <el-tab-pane label="收藏" name="favorites"></el-tab-pane>
         </el-tabs>
         <div class="absolute right-10 top-3 flex label-text-color">

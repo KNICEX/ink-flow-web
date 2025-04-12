@@ -39,7 +39,7 @@ export const inkStatusProp = (status: InkStatus) => {
     case InkStatus.Private:
       return 'private'
     default:
-      return 'unknown'
+      return 'published'
   }
 }
 

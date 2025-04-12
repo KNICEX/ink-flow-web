@@ -10,7 +10,7 @@ const likes = ref<MergedLike<never>[]>([])
 
 const limit = 15
 
-const { loadMore } = wrapOffsetPagedFunc(async (offset: number) => {
+const { loadMore, loading } = wrapOffsetPagedFunc(async (offset: number) => {
   const res = await mergedLikeNotification({
     offset,
     limit,
@@ -27,7 +27,12 @@ onMounted(() => {
 </script>
 <template>
   <DashboardContent title="Like" class="overflow-hidden">
-    <LikeList class="overflow-y-auto" :merged-likes="likes" :load-more="loadMore"></LikeList>
+    <LikeList
+      class="overflow-y-auto"
+      :merged-likes="likes"
+      :load-more="loadMore"
+      :loading="loading"
+    ></LikeList>
   </DashboardContent>
 </template>
 

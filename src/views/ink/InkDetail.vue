@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
-import { computed, h, nextTick, onMounted, ref, render, useTemplateRef, watch } from 'vue'
+import { computed, h, nextTick, ref, render, useTemplateRef, watch } from 'vue'
 import { parseRouteParamToInt, parseRouteQuery } from '@/utils/parse.ts'
 import { emptyInk, type Ink, InkStatus, inkStatusFromProp } from '@/types/ink.ts'
 import {
@@ -57,7 +57,9 @@ const replaceImage = () => {
   }
 }
 
+const loading = ref(false)
 const loadInk = async (id: number, status: InkStatus) => {
+  loading.value = true
   switch (status) {
     case InkStatus.Published:
       ink.value = await detail(id)
@@ -75,6 +77,7 @@ const loadInk = async (id: number, status: InkStatus) => {
       ink.value = await rejectedDetail(id)
       break
     default:
+      loading.value = false
       notification({
         title: 'Error',
         message: 'Ink status not supported',
@@ -87,6 +90,7 @@ const loadInk = async (id: number, status: InkStatus) => {
 
   nextTick(() => {
     replaceImage()
+    loading.value = false
   })
 }
 
@@ -99,7 +103,9 @@ watch(
     if (statusStr != '') {
       inkStatus = inkStatusFromProp(statusStr)
     }
-    await loadInk(inkId, inkStatus)
+    await loadInk(inkId, inkStatus).catch(() => {
+      loading.value = false
+    })
   },
   { immediate: true },
 )
@@ -170,41 +176,43 @@ const ops = computed(() => {
         </el-tooltip>
         <span class="ml-5 cursor-pointer">帖子</span>
       </div>
-      <div class="flex justify-between">
-        <div class="flex cursor-pointer">
-          <InkPopover place="bottom">
-            <template #reference>
-              <UserAvatar :src="ink.author.avatar"></UserAvatar>
-            </template>
-            <template #content>
-              <UserCard :user="ink.author"></UserCard>
-            </template>
-          </InkPopover>
-          <router-link :to="`/user/${ink.author.account}`">
-            <div class="ml-3">
-              <div class="semibold-text">{{ ink.author.username }}</div>
-              <el-link class="nav-text hover:underline">@{{ ink.author.account }}</el-link>
-            </div>
-          </router-link>
+      <div v-loading="loading">
+        <div class="flex justify-between">
+          <div class="flex cursor-pointer">
+            <InkPopover place="bottom">
+              <template #reference>
+                <UserAvatar :src="ink.author.avatar"></UserAvatar>
+              </template>
+              <template #content>
+                <UserCard :user="ink.author"></UserCard>
+              </template>
+            </InkPopover>
+            <router-link :to="`/user/${ink.author.account}`">
+              <div class="ml-3">
+                <div class="semibold-text">{{ ink.author.username }}</div>
+                <el-link class="nav-text hover:underline">@{{ ink.author.account }}</el-link>
+              </div>
+            </router-link>
+          </div>
+          <MoreOperation :horizon="true" :operations="ops"></MoreOperation>
         </div>
-        <MoreOperation :horizon="true" :operations="ops"></MoreOperation>
-      </div>
-      <!--      <MilkdownWrapper :padding="false" :read-only="true" ref="milkdownRef" class="mt-4">-->
-      <!--      </MilkdownWrapper>-->
-      <div
-        class="prose mt-4 prose-slate dark:prose-invert"
-        v-html="ink.contentHtml"
-        ref="contentRef"
-      ></div>
-      <div class="nav-text mt-2">{{ formatDate(ink.createdAt) }}</div>
-      <div class="mt-6 flex">
-        <InkInteractive
-          :interactive="ink.interactive"
-          @like="handleLike"
-          @cancel-like="handleCancelLike"
-          @favorite="handleFavorite"
-          @cancel-favorite="handleCancelFavorite"
-        ></InkInteractive>
+        <!--      <MilkdownWrapper :padding="false" :read-only="true" ref="milkdownRef" class="mt-4">-->
+        <!--      </MilkdownWrapper>-->
+        <div
+          class="prose mt-4 prose-slate dark:prose-invert"
+          v-html="ink.contentHtml"
+          ref="contentRef"
+        ></div>
+        <div class="nav-text mt-2">{{ formatDate(ink.createdAt) }}</div>
+        <div class="mt-6 flex">
+          <InkInteractive
+            :interactive="ink.interactive"
+            @like="handleLike"
+            @cancel-like="handleCancelLike"
+            @favorite="handleFavorite"
+            @cancel-favorite="handleCancelFavorite"
+          ></InkInteractive>
+        </div>
       </div>
       <CommentView biz="ink" :biz-id="ink.id"></CommentView>
     </div>

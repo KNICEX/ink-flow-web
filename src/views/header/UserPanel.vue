@@ -20,7 +20,7 @@ const hide = () => {
         class="flex items-center justify-between w-60 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl px-4 py-2 cursor-pointer"
       >
         <div class="flex items-center">
-          <InkAvatar></InkAvatar>
+          <InkAvatar :src="userStore.getActiveUser()?.user.avatar"></InkAvatar>
           <div class="ml-2">
             <div class="semibold-text">
               {{ userStore.getActiveUser()?.user.username }}

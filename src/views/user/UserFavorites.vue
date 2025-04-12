@@ -43,22 +43,6 @@ watch(
               <span>2</span>
             </div>
           </el-menu-item>
-          <!--          <el-menu-item :index="0"> <span class="text-base">默认收藏</span></el-menu-item>-->
-          <!--          <el-menu-item :index="1">-->
-          <!--            <div class="flex justify-between items-center w-full">-->
-          <!--              <span class="text-base">anime</span>-->
-          <!--              <span>2</span>-->
-          <!--            </div>-->
-          <!--          </el-menu-item>-->
-          <!--          <el-menu-item :index="2">-->
-          <!--            <span class="text-base">comic</span>-->
-          <!--          </el-menu-item>-->
-          <!--          <el-menu-item :index="3">-->
-          <!--            <span class="text-base">电影</span>-->
-          <!--          </el-menu-item>-->
-          <!--          <el-menu-item :index="4">-->
-          <!--            <span class="text-base">电影</span>-->
-          <!--          </el-menu-item>-->
         </el-menu>
       </div>
     </div>

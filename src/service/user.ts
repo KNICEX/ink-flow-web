@@ -1,6 +1,7 @@
 import { post, get, put, del } from './axios'
 import type { User } from '@/types/user.ts'
 import { useUserStore } from '@/stores/user.ts'
+import type { UserActionStats } from '@/types/stats.ts'
 
 interface AccountPwdLoginReq {
   account: string
@@ -65,7 +66,9 @@ export const registerByEmail = async (req: EmailRegisterReq) => {
 }
 
 export const profile = async (req?: ProfileReq) => {
-  return await post<User, ProfileReq>('/user/profile', req ?? {})
+  return await get<User>('/user/profile', {
+    params: req,
+  })
 }
 
 export const editProfile = async (req: EditProfileReq) => {
@@ -90,4 +93,8 @@ export const follow = async (uid: number) => {
 
 export const cancelFollow = async (uid: number) => {
   return await del<never>(`/user/follow/${uid}`)
+}
+
+export const userActionStats = async () => {
+  return await get<UserActionStats>('/user/action-stats')
 }

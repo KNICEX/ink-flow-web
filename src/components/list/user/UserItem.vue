@@ -13,11 +13,15 @@ defineProps({
 <template>
   <div class="flex justify-between">
     <div class="flex">
-      <UserAvatar :src="user.avatar" :size="80"></UserAvatar>
+      <router-link :to="`/user/${user.account}`">
+        <UserAvatar :src="user.avatar" :size="80"></UserAvatar>
+      </router-link>
       <router-link :to="`/user/${user.account}`" class="ml-6 cursor-pointer">
         <div class="text-lg">{{ user.username }}</div>
-        <div class="nav-text hover:underline">@{{ user.account }}</div>
-        <div>{{ user.aboutMe }}</div>
+        <div class="nav-text">
+          <el-link>@{{ user.account }}</el-link>
+        </div>
+        <div class="line-clamp-3">{{ user.aboutMe }}</div>
       </router-link>
     </div>
     <div>

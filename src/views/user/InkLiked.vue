@@ -2,7 +2,6 @@
 import { onMounted, ref } from 'vue'
 import type { Ink } from '@/types/ink.ts'
 import InkList from '@/components/list/ink/InkList.vue'
-import NoData from '@/components/empty/NoData.vue'
 import { wrapMaxIdPagedFunc } from '@/utils/pagedLoadWrap.ts'
 import { listLiked } from '@/service/ink.ts'
 import BackTop from '@/components/BackTop.vue'
@@ -10,7 +9,7 @@ import BackTop from '@/components/BackTop.vue'
 const inks = ref<Ink[]>([])
 
 const limit = 15
-const { loadMore } = wrapMaxIdPagedFunc(async (maxId: number) => {
+const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
   const res = await listLiked({
     maxId,
     limit,
@@ -31,8 +30,7 @@ onMounted(() => {
 
 <template>
   <div>
-    <InkList :inks="inks" :max-cols="4" :load-more="loadMore"></InkList>
-    <BackTop></BackTop>
+    <InkList :inks="inks" :max-cols="4" :load-more="loadMore" :loading="loading"></InkList>
   </div>
 </template>
 

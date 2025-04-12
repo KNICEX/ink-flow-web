@@ -3,29 +3,32 @@ import { ref, watch } from 'vue'
 import FollowUserList from '@/components/list/user/FollowUserList.vue'
 import { wrapMaxIdPagedFunc } from '@/utils/pagedLoadWrap.ts'
 import { follower, following } from '@/service/relation.ts'
-import { useUserStore } from '@/stores/user.ts'
 import type { User } from '@/types/user.ts'
 import { useRoute } from 'vue-router'
-const userStore = useUserStore()
+import { useProvideFollowHandler } from '@/hook/follow.ts'
 const route = useRoute()
+
+const props = defineProps({
+  uid: {
+    type: Number,
+    default: 0,
+  },
+})
 
 const limit = 15
 const users = ref<User[]>([])
-let loadFunc: (
-  uid: number,
-  req: { maxId?: number; limit: number },
-) => Promise<User[]> = async () => {
-  return []
-}
-const { loadMore, reset } = wrapMaxIdPagedFunc(async (maxId: number) => {
-  const uid = userStore.getActiveUser()?.user.id
-  if (!uid) {
+
+const { loadMore, reset, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
+  if (props.uid == 0) {
     return
   }
-  const res = await loadFunc(uid, {
-    maxId,
-    limit,
-  })
+
+  let res: User[]
+  if (route.name == 'following') {
+    res = await following(props.uid, { maxId, limit })
+  } else {
+    res = await follower(props.uid, { maxId, limit })
+  }
   if (res.length == 0) {
     return 0
   }
@@ -40,23 +43,30 @@ const resetList = () => {
   users.value = []
   reset()
 }
+
 watch(
   () => route.name,
   () => {
-    if (route.name == 'following') {
-      loadFunc = following
-    } else {
-      loadFunc = follower
-    }
     resetList()
     loadMore()
   },
-  { immediate: true },
 )
+
+watch(
+  () => props.uid,
+  () => {
+    resetList()
+    loadMore()
+  },
+  {
+    immediate: true,
+  },
+)
+useProvideFollowHandler(users)
 </script>
 
 <template>
-  <FollowUserList :users="users" :load-more="loadMore"></FollowUserList>
+  <FollowUserList :users="users" :loading="loading" :load-more="loadMore"></FollowUserList>
 </template>
 
 <style scoped lang="scss"></style>

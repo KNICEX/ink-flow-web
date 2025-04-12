@@ -3,6 +3,7 @@ import { defineProps } from 'vue'
 import type { Ink } from '@/types/ink.ts'
 import DashboardInkItem from '@/components/list/dashboard/DashboardInkItem.vue'
 import NoData from '@/components/empty/NoData.vue'
+import InkLoading from '@/components/loading/InkLoading.vue'
 defineProps({
   inks: {
     type: Array as () => Ink[],
@@ -11,6 +12,10 @@ defineProps({
   loadMore: {
     type: Function,
     default: () => {},
+  },
+  loading: {
+    type: Boolean,
+    default: false,
   },
 })
 </script>
@@ -23,7 +28,8 @@ defineProps({
       :ink="ink"
       :key="ink.id"
     ></DashboardInkItem>
-    <NoData v-if="inks.length == 0"></NoData>
+    <InkLoading v-show="loading"></InkLoading>
+    <NoData v-show="!loading && inks.length == 0"></NoData>
   </div>
 </template>
 

@@ -6,6 +6,9 @@ import { demoHotTags } from '@/mock/demo_data.ts'
 
 const loading = ref(false)
 const hotTags = ref<TagStats[]>(demoHotTags(4))
+onMounted(async () => {
+  hotTags.value = await topTag(0, 5)
+})
 </script>
 
 <template>

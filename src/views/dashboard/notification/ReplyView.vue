@@ -8,7 +8,7 @@ import { wrapMaxIdPagedFunc } from '@/utils/pagedLoadWrap.ts'
 
 const replies = ref<Notification<never, ReplyContent>[]>([])
 const limit = 15
-const { loadMore } = wrapMaxIdPagedFunc(async (maxId: number) => {
+const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
   const res = await replyNotification({
     maxId,
     limit,
@@ -29,7 +29,8 @@ onMounted(() => {
 
 <template>
   <DashboardContent title="Reply" class="overflow-hidden">
-    <ReplyList class="overflow-y-auto" :replies="replies" :load-more="loadMore"> </ReplyList>
+    <ReplyList class="overflow-y-auto" :replies="replies" :load-more="loadMore" :loading="loading">
+    </ReplyList>
   </DashboardContent>
 </template>
 

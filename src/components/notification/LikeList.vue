@@ -4,6 +4,7 @@ import type { MergedLike } from '@/types/notification.ts'
 import type { Comment } from '@/types/comment.ts'
 import type { Ink } from '@/types/ink.ts'
 import NoData from '@/components/empty/NoData.vue'
+import InkLoading from '@/components/loading/InkLoading.vue'
 defineProps({
   mergedLikes: {
     type: Array as () => MergedLike<Comment | Ink>[],
@@ -12,6 +13,10 @@ defineProps({
   loadMore: {
     type: Function,
     default: () => {},
+  },
+  loading: {
+    type: Boolean,
+    default: false,
   },
 })
 </script>
@@ -24,7 +29,8 @@ defineProps({
       :mergedLike="like"
       :key="idx"
     ></LikeItem>
-    <NoData v-if="mergedLikes.length == 0"></NoData>
+    <InkLoading v-show="loading"></InkLoading>
+    <NoData v-show="!loading && mergedLikes.length == 0"></NoData>
   </div>
 </template>
 

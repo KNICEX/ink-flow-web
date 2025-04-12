@@ -41,7 +41,9 @@ interface ListSelfReq {
 }
 
 export const list = async (req: ListReq) => {
-  return await post<Ink[], ListReq>('/ink/list', req)
+  return await get<Ink[]>('/ink/list', {
+    params: req,
+  })
 }
 
 export const saveDraft = async (req: SaveDraftReq) => {

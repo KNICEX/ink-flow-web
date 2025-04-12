@@ -2,7 +2,11 @@
   <div class="max-screen-w flex items-start">
     <div class="flex-1 h-full">
       <div class="line-padding z-1">
-        <el-tabs :model-value="activeNav" @tab-change="handleNavChange">
+        <el-tabs
+          :model-value="activeNav"
+          @tab-change="handleNavChange"
+          :before-leave="handleBeforeLeave"
+        >
           <el-tab-pane label="推荐" name="recommend" lazy v-if="loggedIn">
             <HomeList type="recommend"></HomeList>
           </el-tab-pane>
@@ -30,6 +34,7 @@ import { computed, onMounted, ref } from 'vue'
 import HomeAside from '@/views/home/HomeAside.vue'
 import HomeList from '@/views/home/HomeList.vue'
 import { useUserStore } from '@/stores/user.ts'
+import type { TabPaneName } from 'element-plus'
 
 const userStore = useUserStore()
 const loggedIn = computed(() => {
@@ -37,16 +42,31 @@ const loggedIn = computed(() => {
 })
 
 const activeNav = ref('recommend')
-const handleNavChange = () => {
-  console.log('nav: ', activeNav.value)
-}
 onMounted(() => {
   if (!loggedIn.value) {
     activeNav.value = 'hot'
   }
 })
 
-// TODO tab滚动条缓存
+// 滚动条缓存
+const tabScrollTop: Map<string, number> = new Map([
+  ['recommend', 0],
+  ['hot', 0],
+  ['follow', 0],
+])
+
+const handleBeforeLeave = (activeName: TabPaneName, oldName: TabPaneName) => {
+  // 记录滚动条位置
+  tabScrollTop.set(oldName as string, document.documentElement.scrollTop || document.body.scrollTop)
+  return true
+}
+const handleNavChange = (activeName: TabPaneName) => {
+  // 恢复滚动条位置
+  const scrollTop = tabScrollTop.get(activeName as string)
+  if (scrollTop != undefined) {
+    document.documentElement.scrollTop = scrollTop
+  }
+}
 </script>
 <style scoped lang="scss">
 .ink-aside {

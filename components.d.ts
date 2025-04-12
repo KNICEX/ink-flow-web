@@ -58,6 +58,7 @@ declare module 'vue' {
     InkIcon: typeof import('./src/components/icons/InkIcon.vue')['default']
     InkInteractive: typeof import('./src/components/ink/InkInteractive.vue')['default']
     InkList: typeof import('./src/components/list/ink/InkList.vue')['default']
+    InkLoading: typeof import('./src/components/loading/InkLoading.vue')['default']
     InkLogo: typeof import('./src/components/icons/InkLogo.vue')['default']
     InkNav: typeof import('./src/components/nav/InkNav.vue')['default']
     InkNavItem: typeof import('./src/components/nav/InkNavItem.vue')['default']

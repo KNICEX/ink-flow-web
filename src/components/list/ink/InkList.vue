@@ -7,6 +7,7 @@ import { demoInks } from '@/mock/demo_data.ts'
 import { useRouter } from 'vue-router'
 import NoData from '@/components/empty/NoData.vue'
 import BackTop from '@/components/BackTop.vue'
+import InkLoading from '@/components/loading/InkLoading.vue'
 const router = useRouter()
 const props = defineProps({
   maxCols: {
@@ -27,6 +28,10 @@ const props = defineProps({
     type: String,
     default: undefined,
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 })
 const wrapClass = computed(() => {
   return clsx({
@@ -40,7 +45,6 @@ const wrapClass = computed(() => {
 const emit = defineEmits(['on-item-click'])
 const handleItemClick = (id: number) => {
   emit('on-item-click', id)
-  router.push({})
 }
 </script>
 <template>
@@ -50,7 +54,8 @@ const handleItemClick = (id: number) => {
         <InkItem @on-cover-click="handleItemClick" :ink="ink"></InkItem>
       </div>
     </div>
-    <NoData v-if="inks.length == 0" :description="emptyDesc"></NoData>
+    <InkLoading v-show="loading"></InkLoading>
+    <NoData v-show="!loading && inks.length == 0" :description="emptyDesc"></NoData>
     <BackTop></BackTop>
   </div>
 </template>

@@ -40,7 +40,7 @@ const handleFavorite = () => {
           'mr-8 flex items-center cursor-pointer hover:text-red-400',
           interactive.liked ? 'text-red-400' : '',
         ]"
-        @click="handleLike"
+        @click.stop="handleLike"
         title="点赞"
       >
         <span class="material-symbols-outlined mr-1 small-icon"> favorite </span>
@@ -53,7 +53,7 @@ const handleFavorite = () => {
           'mr-8 flex items-center cursor-pointer hover:text-[var(--primary-color)]',
           interactive.favorited ? 'text-[var(--primary-color)]' : '',
         ]"
-        @click="handleFavorite"
+        @click.stop="handleFavorite"
         title="收藏"
       >
         <span class="material-symbols-outlined mr-1 small-icon"> bookmark </span>

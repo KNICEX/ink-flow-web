@@ -57,8 +57,12 @@ const isSelf = computed(() => {
       <span class="text-base">{{ user.aboutMe }}</span>
     </div>
     <div v-if="showFollow" class="flex items-center mt-4">
-      <el-link>{{ user.followers }}关注者</el-link>
-      <el-link class="ml-7">{{ user.following }}正在关注</el-link>
+      <router-link :to="`/user/${user.account}/followers`"
+        ><el-link>{{ user.followers }}关注者</el-link></router-link
+      >
+      <router-link :to="`/user/${user.account}/following`"
+        ><el-link class="ml-7">{{ user.following }}正在关注</el-link></router-link
+      >
     </div>
     <div class="flex mt-4">
       <span class="text-base text-gray-600 dark:text-gray-300">{{ joinDays }}天前加入</span>

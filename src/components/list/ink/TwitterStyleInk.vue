@@ -4,10 +4,12 @@ import UserCard from '@/components/UserCard.vue'
 import InkPopover from '@/components/popover/InkPopover.vue'
 import type { Ink } from '@/types/ink.ts'
 import { useRouter } from 'vue-router'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import InkInteractive from '@/components/ink/InkInteractive.vue'
 import { formatDate } from '@/utils/date.ts'
 import { useInjectInkInteractiveHandler } from '@/hook/interactive.ts'
+import { useProvideFollowHandler } from '@/hook/follow.ts'
+import type { User } from '@/types/user.ts'
 
 const router = useRouter()
 const props = defineProps({
@@ -28,8 +30,12 @@ const props = defineProps({
 const contentPreview = computed(() => {
   // 从文章内容中提取文本预览
   if (!props.ink.contentHtml) return ''
-  const text = props.ink.contentHtml.replace(/<[^>]*>/g, '') // 简单去除HTML标签
+  // const text = props.ink.contentHtml.replace(/<[^>]*>/g, '') // 简单去除HTML标签
+  // return text.length > props.previewLength ? text.substring(0, props.previewLength) + '...' : text
+  // 去除html，保留换行
+  const text = props.ink.contentHtml.replace(/<[^>]*>/g, '\n')
   return text.length > props.previewLength ? text.substring(0, props.previewLength) + '...' : text
+  // return text
 })
 
 const emit = defineEmits(['on-cover-click'])
@@ -52,6 +58,8 @@ const formattedDate = computed(() => {
 
 const { handleLike, handleFavorite, handleCancelLike, handleCancelFavorite } =
   useInjectInkInteractiveHandler()
+
+useProvideFollowHandler(ref<User[]>([props.ink.author]))
 </script>
 
 <template>
@@ -59,7 +67,7 @@ const { handleLike, handleFavorite, handleCancelLike, handleCancelFavorite } =
     <div class="mr-3">
       <InkPopover place="bottom" :show-after="300">
         <template #reference>
-          <div class="flex items-center">
+          <div class="flex items-center" @click.stop="router.push(`/user/${ink.author.account}`)">
             <UserAvatar :size="48" :src="ink.author.avatar"></UserAvatar>
           </div>
         </template>
@@ -79,10 +87,10 @@ const { handleLike, handleFavorite, handleCancelLike, handleCancelFavorite } =
       </div>
 
       <!-- 标题 -->
-      <h3 class="text-lg">{{ ink.title }}</h3>
+      <!--      <h3 class="text-lg">{{ ink.title }}</h3>-->
 
       <!-- 内容预览 -->
-      <p class="text-gray-700 dark:text-gray-300 mb-3">{{ contentPreview }}</p>
+      <p class="mb-3">{{ contentPreview }}</p>
 
       <!-- 封面图片 -->
       <div v-if="ink.cover" class="mb-3 flex">

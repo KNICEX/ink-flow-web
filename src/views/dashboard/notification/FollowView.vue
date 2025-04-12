@@ -8,7 +8,7 @@ import { wrapMaxIdPagedFunc } from '@/utils/pagedLoadWrap.ts'
 
 const follows = ref<Notification<never, never>[]>([])
 const limit = 15
-const { loadMore } = wrapMaxIdPagedFunc(async (maxId: number) => {
+const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
   const res = await followNotification({
     maxId,
     limit,

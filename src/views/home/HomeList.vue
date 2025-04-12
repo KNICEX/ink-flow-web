@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, type Ref, ref } from 'vue'
 import TwitterStyleInkList from '@/components/list/ink/TwitterStyleInkList.vue'
 import { wrapMaxIdTimestampPagedFunc, wrapOffsetPagedFunc } from '@/utils/pagedLoadWrap.ts'
 import { followInks, hotInks, recommendInks } from '@/service/feed.ts'
 import type { Ink } from '@/types/ink.ts'
 import { useProvideInkInteractiveHandler } from '@/hook/interactive.ts'
-import { demoInks } from '@/mock/demo_data.ts'
 
 const props = defineProps({
   type: {
@@ -17,33 +16,43 @@ const props = defineProps({
 let loadMore: () => Promise<boolean | undefined>
 
 const inks = ref<Ink[]>([])
+let loading: Ref<boolean>
 useProvideInkInteractiveHandler(inks)
 const limit = 15
 switch (props.type) {
   case 'recommend':
-    const { loadMore: loadRecommend } = wrapOffsetPagedFunc(async (offset: number) => {
-      const res = await recommendInks(offset, limit)
-      if (res.length == 0) {
-        return 0
-      }
-      inks.value = [...inks.value, ...res]
-      return res.length
-    }, limit)
+    const { loadMore: loadRecommend, loading: recommendLoading } = wrapOffsetPagedFunc(
+      async (offset: number) => {
+        const res = await recommendInks(offset, limit)
+        if (res.length == 0) {
+          return 0
+        }
+        inks.value = [...inks.value, ...res]
+        return res.length
+      },
+      limit,
+    )
     loadMore = loadRecommend
+    loading = recommendLoading
     break
   case 'hot':
-    const { loadMore: loadHot } = wrapOffsetPagedFunc(async (offset: number) => {
-      const res = await hotInks(offset, limit)
-      if (res.length == 0) {
-        return 0
-      }
-      inks.value = [...inks.value, ...res]
-      return res.length
-    }, limit)
+    const { loadMore: loadHot, loading: hotLoading } = wrapOffsetPagedFunc(
+      async (offset: number) => {
+        const res = await hotInks(offset, limit)
+        if (res.length == 0) {
+          return 0
+        }
+        console.log('res len', res.length)
+        inks.value = [...inks.value, ...res]
+        return res.length
+      },
+      limit,
+    )
     loadMore = loadHot
+    loading = hotLoading
     break
   case 'follow':
-    const { loadMore: loadFollow } = wrapMaxIdTimestampPagedFunc(
+    const { loadMore: loadFollow, loading: followLoading } = wrapMaxIdTimestampPagedFunc(
       async (maxId: number, timestamp: number) => {
         const res = await followInks(maxId, timestamp, limit)
         if (res.length == 0) {
@@ -60,6 +69,7 @@ switch (props.type) {
       },
     )
     loadMore = loadFollow
+    loading = followLoading
     break
   default:
     console.error('unknown type', props.type)
@@ -77,7 +87,11 @@ onMounted(() => {
 
 <template>
   <div>
-    <TwitterStyleInkList :inks="inks" @load-more="loadMore"></TwitterStyleInkList>
+    <TwitterStyleInkList
+      :inks="inks"
+      :load-more="loadMore"
+      :loading="loading"
+    ></TwitterStyleInkList>
   </div>
 </template>
 

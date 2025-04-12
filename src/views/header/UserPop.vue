@@ -75,6 +75,7 @@ const banner = computed(() => {
         @click="router.push(`/user/${user.account}`)"
         :size="60"
         :border="true"
+        :src="user.avatar"
         class="absolute z-1 left-3 top-13"
       ></UserAvatar>
       <div class="mt-8">

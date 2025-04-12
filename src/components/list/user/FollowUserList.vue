@@ -2,6 +2,7 @@
 import FollowUser from '@/components/list/user/FollowUser.vue'
 import type { User } from '@/types/user.ts'
 import NoData from '@/components/empty/NoData.vue'
+import InkLoading from '@/components/loading/InkLoading.vue'
 defineProps({
   users: {
     type: Array as () => User[],
@@ -11,13 +12,18 @@ defineProps({
     type: Function,
     default: () => {},
   },
+  loading: {
+    type: Boolean,
+    default: false,
+  },
 })
 </script>
 
 <template>
   <div class="w-full" v-infinite-scroll="loadMore">
     <FollowUser v-for="user in users" :key="user.id" :user="user"></FollowUser>
-    <NoData v-if="users.length == 0" description="还没有关注噢"></NoData>
+    <InkLoading v-show="loading"></InkLoading>
+    <NoData v-show="!loading && users.length == 0" description="还没有关注噢"></NoData>
   </div>
 </template>
 

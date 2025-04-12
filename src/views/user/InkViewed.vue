@@ -4,20 +4,30 @@ import InkList from '@/components/list/ink/InkList.vue'
 import type { Ink } from '@/types/ink.ts'
 import { onBeforeMount } from 'vue'
 import { listViewed } from '@/service/ink.ts'
-import NoData from '@/components/empty/NoData.vue'
+import { wrapMaxIdPagedFunc } from '@/utils/pagedLoadWrap.ts'
 const inks = ref<Ink[]>([])
 
-onBeforeMount(async () => {
-  inks.value = await listViewed({
-    maxId: 0,
-    limit: 25,
+const limit = 15
+const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
+  const res = await listViewed({
+    maxId,
+    limit,
   })
+  if (res.length == 0) {
+    return 0
+  }
+  inks.value = [...inks.value, ...res]
+  return inks.value[inks.value.length - 1].id
+})
+
+onBeforeMount(() => {
+  loadMore()
 })
 </script>
 
 <template>
   <div>
-    <InkList :inks="inks" :max-cols="4"></InkList>
+    <InkList :inks="inks" :max-cols="4" :loading="loading"></InkList>
   </div>
 </template>
 

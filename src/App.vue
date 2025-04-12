@@ -11,6 +11,7 @@ onBeforeMount(async () => {
   const activeUser = userStore.getActiveUser()
   if (activeUser) {
     const userInfo = await profile()
+    console.log('userInfo: ', userInfo)
     userStore.updateActiveUser(userInfo)
   }
 })

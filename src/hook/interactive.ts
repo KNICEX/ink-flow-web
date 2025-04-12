@@ -14,6 +14,7 @@ export const useProvideInkInteractiveHandler = (inks: Ref<Ink[]>) => {
     await like(id)
     const i = inks.value.find((v) => v.id == id)
     if (i) {
+      console.log(i)
       i.interactive.liked = true
       i.interactive.likeCnt++
     }
