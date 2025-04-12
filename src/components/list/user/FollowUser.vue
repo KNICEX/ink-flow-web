@@ -71,25 +71,6 @@ const listHover = ref(false)
       @mouseenter="listHover = true"
       @mouseleave="listHover = false"
     >
-      <!--      <Transition-->
-      <!--        name="fade"-->
-      <!--        enter-active-class="animate__animated animate__fadeIn"-->
-      <!--        leave-active-class="animate__animated animate__fadeOut"-->
-      <!--      >-->
-      <!--        <div v-show="showLeft" class="button left-button z-2" @click="moveLeft">-->
-      <!--          <span v-show="showLeft && listHover" class="material-symbols-outlined text-white">-->
-      <!--            arrow_back_ios-->
-      <!--          </span>-->
-      <!--        </div>-->
-      <!--      </Transition>-->
-      <!--      <Transition-->
-      <!--        enter-active-class="animate__animated animate__fadeIn"-->
-      <!--        leave-active-class="animate__animated animate__fadeOut"-->
-      <!--      >-->
-      <!--        <div v-show="showRight" class="button right-button z-2" @click="moveRight">-->
-      <!--          <span class="material-symbols-outlined text-white"> arrow_forward_ios </span>-->
-      <!--        </div>-->
-      <!--      </Transition>-->
       <div ref="scrollDiv" class="flex overflow-x-auto h-full items-start pt-4 no-scroll pr-10">
         <div class="w-50 mr-5 flex-shrink-0" v-for="ink in inks" :key="ink.id">
           <ImageInk :ink="ink" :show-author="false"></ImageInk>

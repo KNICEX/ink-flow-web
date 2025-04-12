@@ -13,11 +13,6 @@ const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
 const userInfo = ref<User | null>(null)
-onBeforeMount(async () => {
-  userInfo.value = await profile({
-    account: route.params.account as string,
-  })
-})
 
 const parseFaviconUrl = (url: string) => {
   if (url.startsWith('http')) {
@@ -25,17 +20,7 @@ const parseFaviconUrl = (url: string) => {
   }
   return `https://lzacg.org${url}`
 }
-const activeNav = ref('latest')
-onMounted(() => {
-  console.log('route.name: ', route.name)
-  activeNav.value = route?.name as string
-})
-
-watch(activeNav, () => {
-  router.push({
-    name: activeNav.value,
-  })
-})
+const activeNav = ref('')
 
 const showEdit = ref(false)
 const handleEdit = () => {
@@ -43,10 +28,24 @@ const handleEdit = () => {
 }
 
 watch(
-  () => route.params.account,
+  activeNav,
   () => {
-    // TODO reload user info
+    router.push({
+      name: activeNav.value,
+    })
   },
+  { immediate: true },
+)
+
+watch(
+  () => route.params.account,
+  async () => {
+    activeNav.value = route.name as string
+    userInfo.value = await profile({
+      account: route.params.account as string,
+    })
+  },
+  { immediate: true },
 )
 
 const banner = computed(() => {
@@ -104,10 +103,10 @@ const isSelf = computed(() => {
       <div class="relative text-lg sticky-top white-bg z-1">
         <el-tabs v-model="activeNav">
           <el-tab-pane label="最新" name="latest"></el-tab-pane>
-          <el-tab-pane label="点赞" name="likes"></el-tab-pane>
+          <el-tab-pane label="点赞" name="likes" v-if="isSelf"></el-tab-pane>
           <!--        <el-tab-pane label="收藏" name="collection"></el-tab-pane>-->
           <el-tab-pane label="浏览" name="views" v-if="isSelf"></el-tab-pane>
-          <el-tab-pane label="收藏" name="favorites"></el-tab-pane>
+          <el-tab-pane label="收藏" name="favorites" v-if="isSelf"></el-tab-pane>
         </el-tabs>
         <div class="absolute right-10 top-3 flex label-text-color">
           <div
@@ -131,7 +130,11 @@ const isSelf = computed(() => {
         </div>
       </div>
       <div class="flex justify-center mt-4">
-        <router-view :uid="userInfo?.id"></router-view>
+        <router-view v-slot="{ Component }">
+          <keep-alive>
+            <Component :is="Component" :uid="userInfo?.id"> </Component>
+          </keep-alive>
+        </router-view>
       </div>
     </div>
     <InkDialog v-model="showEdit" title="编辑个人资料">

@@ -1,4 +1,4 @@
-import type { LocationQueryValue } from 'vue-router'
+import type { LocationQueryValue, RouteRecordNameGeneric } from 'vue-router'
 
 export const parseRouteParam = (param: string | string[] | undefined) => {
   if (param == undefined) {

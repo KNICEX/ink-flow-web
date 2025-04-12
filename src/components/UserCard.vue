@@ -38,7 +38,9 @@ const isSelf = computed(() => {
 <template>
   <div :class="wrapClass">
     <div class="flex items-center justify-between">
-      <UserAvatar :size="60" :src="user.avatar"></UserAvatar>
+      <router-link :to="`/user/${user.account}`"
+        ><UserAvatar :size="60" :src="user.avatar"></UserAvatar
+      ></router-link>
       <FollowButton v-show="!isSelf" :uid="user.id" size="large" :followed="user.followed">
         <template #before>
           <el-icon class="mr-1">
