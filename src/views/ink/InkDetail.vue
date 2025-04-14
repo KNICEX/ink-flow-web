@@ -30,6 +30,7 @@ import CommentView from '@/views/ink/CommentView.vue'
 import MoreOperation from '@/components/button/MoreOperation.vue'
 import BackTop from '@/components/BackTop.vue'
 import { useUserStore } from '@/stores/user.ts'
+import { similarInks } from '@/service/recommend.ts'
 
 const milkdownRef = useTemplateRef<InstanceType<typeof MilkdownWrapper>>('milkdownRef')
 const contentRef = useTemplateRef<HTMLElement>('contentRef')
@@ -85,6 +86,11 @@ const loadInk = async (id: number, status: InkStatus) => {
       })
       return
   }
+
+  similarInks(ink.value.id, 0, 5).then((si) => {
+    recommendInks.value = si
+  })
+
   console.log(ink.value)
   milkdownRef.value?.setContent(ink.value.contentMeta)
 
@@ -111,7 +117,7 @@ watch(
 )
 
 // TODO 动态加载
-const recommendInks = demoInks(5)
+const recommendInks = ref<Ink[]>([])
 
 const handleLike = async () => {
   await like(ink.value.id)

@@ -5,6 +5,7 @@ import type { Comment } from '@/types/comment.ts'
 import type { Ink } from '@/types/ink.ts'
 import NoData from '@/components/empty/NoData.vue'
 import InkLoading from '@/components/loading/InkLoading.vue'
+import { useActive } from '@/hook/active.ts'
 defineProps({
   mergedLikes: {
     type: Array as () => MergedLike<Comment | Ink>[],
@@ -19,10 +20,12 @@ defineProps({
     default: false,
   },
 })
+
+const active = useActive()
 </script>
 
 <template>
-  <div v-infinite-scroll="loadMore">
+  <div v-infinite-scroll="loadMore" :infinite-scroll-disabled="!active">
     <LikeItem
       class="mb-2"
       v-for="(like, idx) in mergedLikes"

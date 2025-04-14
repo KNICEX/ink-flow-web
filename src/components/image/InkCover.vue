@@ -25,7 +25,7 @@ defineProps({
       :src="src"
     ></el-image>
     <div v-else class="w-full h-full flex transition-all justify-center items-center text-xl">
-      {{ backoff }}
+      <div class="line-clamp-1">{{ backoff }}</div>
     </div>
   </div>
 </template>

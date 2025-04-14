@@ -67,7 +67,7 @@ useProvideFollowHandler(ref<User[]>([props.ink.author]))
     <div class="mr-3">
       <InkPopover place="bottom" :show-after="300">
         <template #reference>
-          <div class="flex items-center" @click.stop="router.push(`/user/${ink.author.account}`)">
+          <div class="flex items-center">
             <UserAvatar :size="48" :src="ink.author.avatar"></UserAvatar>
           </div>
         </template>

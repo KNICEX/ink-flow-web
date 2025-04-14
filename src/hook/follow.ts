@@ -4,6 +4,11 @@ import type { User } from '@/types/user.ts'
 import { cancelFollow, follow } from '@/service/user.ts'
 import { notification } from '@/utils/notification.ts'
 
+interface config {
+  before?: () => boolean
+  onError?: (error: Error) => void
+}
+
 export const useProvideFollowHandler = (users: Ref<User[]>) => {
   const handleFollow = async (uid: number) => {
     console.log('handleFollow', uid)

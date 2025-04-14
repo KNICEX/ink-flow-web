@@ -3,7 +3,6 @@ import InkList from '@/components/list/ink/InkList.vue'
 import type { Ink } from '@/types/ink.ts'
 import { list } from '@/service/ink.ts'
 import { ref, watch } from 'vue'
-import NoData from '@/components/empty/NoData.vue'
 import { wrapOffsetPagedFunc } from '@/utils/pagedLoadWrap.ts'
 const props = defineProps({
   uid: {
@@ -31,6 +30,7 @@ const { loadMore, reset, loading } = wrapOffsetPagedFunc(async (offset: number) 
 watch(
   () => props.uid,
   () => {
+    console.log('ink list uid change', props.uid)
     inks.value = []
     reset()
     loadMore()

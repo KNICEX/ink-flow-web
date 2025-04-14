@@ -43,13 +43,11 @@
         </el-button>
       </div>
     </div>
-    <LoginView v-model="showLoginDialog"></LoginView>
+    <LoginView v-model="loginStore.showLogin"></LoginView>
   </div>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
-
-import { useUserStore } from '@/stores/user.ts'
+import { useShowLoginStore, useUserStore } from '@/stores/user.ts'
 import LoginView from '@/views/login/LoginView.vue'
 import InkPopover from '@/components/popover/InkPopover.vue'
 import NotificationPop from '@/views/header/NotificationPop.vue'
@@ -58,10 +56,10 @@ import InkLogo from '@/components/icons/InkLogo.vue'
 import UserPanel from '@/views/header/UserPanel.vue'
 const router = useRouter()
 const userStore = useUserStore()
-const showLoginDialog = ref(false)
 
+const loginStore = useShowLoginStore()
 const handleLogin = () => {
-  showLoginDialog.value = true
+  loginStore.showLogin = true
 }
 
 const toDashboard = () => {

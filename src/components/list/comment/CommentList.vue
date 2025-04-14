@@ -4,6 +4,7 @@ import CommentItem from './CommentItem.vue'
 import type { Comment, CommentPayload } from '@/types/comment.ts'
 import NoData from '@/components/empty/NoData.vue'
 import CommentInput from '@/components/list/comment/CommentInput.vue'
+import { useActive } from '@/hook/active.ts'
 
 defineProps({
   comments: {
@@ -46,10 +47,12 @@ const cancelReply = () => {
 const handleDelete = (c: Comment) => {
   emit('delete-comment', c)
 }
+
+const active = useActive()
 </script>
 
 <template>
-  <div class="w-full" v-infinite-scroll="loadMore">
+  <div class="w-full" v-infinite-scroll="loadMore" :infinite-scroll-disabled="!active">
     <div class="mb-4">
       <CommentInput
         placeholder="发表你的评论..."

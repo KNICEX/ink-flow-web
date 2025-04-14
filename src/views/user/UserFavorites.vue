@@ -4,7 +4,6 @@ import InkList from '@/components/list/ink/InkList.vue'
 import { getFavorites } from '@/service/interactive.ts'
 import type { Favorite } from '@/types/interactive.ts'
 import type { Ink } from '@/types/ink.ts'
-import NoData from '@/components/empty/NoData.vue'
 import { listFavorited } from '@/service/ink.ts'
 const activeIndex = ref(0)
 const favorites = ref<Favorite[]>([])

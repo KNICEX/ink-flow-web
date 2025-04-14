@@ -4,11 +4,10 @@ import InkItem from '@/components/list/ink/ImageInk.vue'
 import { computed } from 'vue'
 import type { Ink } from '@/types/ink.ts'
 import { demoInks } from '@/mock/demo_data.ts'
-import { useRouter } from 'vue-router'
 import NoData from '@/components/empty/NoData.vue'
 import BackTop from '@/components/BackTop.vue'
 import InkLoading from '@/components/loading/InkLoading.vue'
-const router = useRouter()
+import { useActive } from '@/hook/active.ts'
 const props = defineProps({
   maxCols: {
     type: Number,
@@ -46,10 +45,12 @@ const emit = defineEmits(['on-item-click'])
 const handleItemClick = (id: number) => {
   emit('on-item-click', id)
 }
+
+const active = useActive()
 </script>
 <template>
   <div>
-    <div :class="wrapClass" v-infinite-scroll="loadMore">
+    <div :class="wrapClass" v-infinite-scroll="loadMore" :infinite-scroll-disabled="!active">
       <div v-for="ink in inks" :key="ink.id">
         <InkItem @on-cover-click="handleItemClick" :ink="ink"></InkItem>
       </div>

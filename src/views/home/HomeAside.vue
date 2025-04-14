@@ -24,14 +24,29 @@
       <HotTagList />
     </div>
     <div class="mt-4">
-      <RecommendUserList></RecommendUserList>
+      <RecommendUserList :users="recommendAuthors"></RecommendUserList>
     </div>
   </div>
 </template>
 <script setup lang="ts">
+import { ref } from 'vue'
 import InkSearch from '@/components/InkSearch.vue'
 import RecommendUserList from '@/components/list/user/RecommendUserList.vue'
 import HotTagList from '@/components/tags/HotTagList.vue'
+import { onMounted } from 'vue'
+import { recommendAuthor } from '@/service/recommend.ts'
+import type { User } from '@/types/user.ts'
+import { useProvideFollowHandler } from '@/hook/follow.ts'
+
+const recommendAuthors = ref<User[]>([])
+
+onMounted(() => {
+  recommendAuthor(0, 5).then((authors) => {
+    recommendAuthors.value = authors
+  })
+})
+
+useProvideFollowHandler(recommendAuthors)
 </script>
 <style scoped lang="scss">
 .round {

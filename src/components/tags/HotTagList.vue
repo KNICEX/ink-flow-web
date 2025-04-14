@@ -22,7 +22,7 @@ onMounted(async () => {
       </template>
       <template #default>
         <router-link
-          :to="`/search?key=${encodeURIComponent(`#${tag.name}`)}`"
+          :to="`/search/ink?key=${encodeURIComponent(`#${tag.name}`)}`"
           v-for="tag in hotTags"
           :key="tag.name"
           class="hover-bg py-3 cursor-pointer px-4 flex flex-col"

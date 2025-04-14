@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { reactive, ref } from 'vue'
+import { computed, reactive, ref } from 'vue'
 import type { User } from '@/types/user.ts'
 import { profile } from '@/service/user.ts'
 
@@ -84,6 +84,10 @@ export const useUserStore = defineStore('user', () => {
     updateActiveUserInfo(user)
   }
 
+  const hasLogin = computed(() => {
+    return !!userState.value.activeUser?.user.id
+  })
+
   return {
     getActiveUser,
     setActiveUser,
@@ -95,6 +99,7 @@ export const useUserStore = defineStore('user', () => {
     removeUser,
     loadFromLocalStorage,
     saveInLocalStorage,
+    hasLogin,
   }
 })
 
@@ -126,4 +131,12 @@ export const useRegisterTokenStore = defineStore('registerToken', () => {
   }
 
   return { setEmailToken, getEmailToken, emailToken }
+})
+
+export const useShowLoginStore = defineStore('showLogin', () => {
+  const showLogin = ref(false)
+  function setShowLogin(val: boolean) {
+    showLogin.value = val
+  }
+  return { showLogin, setShowLogin }
 })

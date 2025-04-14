@@ -25,10 +25,9 @@ const marshaledKeywords = computed(() => {
 const handleSearch = () => {
   searchLogStore.addSearchLog(keywords.value)
   router.push({
-    name: 'search',
+    name: 'search-ink',
     query: {
       key: marshaledKeywords.value,
-      type: router.currentRoute.value.query?.type,
     },
   })
 }

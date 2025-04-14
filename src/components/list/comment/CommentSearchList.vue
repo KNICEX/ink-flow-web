@@ -5,6 +5,7 @@ import type { Comment } from '@/types/comment.ts'
 import NoData from '@/components/empty/NoData.vue'
 import InkLoading from '@/components/loading/InkLoading.vue'
 import BackTop from '@/components/BackTop.vue'
+import { useActive } from '@/hook/active.ts'
 defineProps({
   comments: {
     type: Array as () => Comment[],
@@ -19,11 +20,13 @@ defineProps({
     default: false,
   },
 })
+
+const active = useActive()
 </script>
 
 <template>
   <div>
-    <div v-infinite-scroll="loadMore">
+    <div v-infinite-scroll="loadMore" :infinite-scroll-disabled="!active">
       <CommentItem
         v-for="comment in comments"
         :comment="comment"

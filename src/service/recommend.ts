@@ -1,5 +1,6 @@
 import type { User } from '@/types/user.ts'
 import { get } from './axios.ts'
+import type { Ink } from '@/types/ink.ts'
 
 export const recommendAuthor = async (offset: number, limit: number) => {
   return await get<User[]>('/recommend/author', {
@@ -11,7 +12,7 @@ export const recommendAuthor = async (offset: number, limit: number) => {
 }
 
 export const similarInks = async (id: number, offset: number, limit: number) => {
-  return await get<User[]>(`/recommend/ink/similar/${id}`, {
+  return await get<Ink[]>(`/recommend/ink/similar/${id}`, {
     params: {
       offset,
       limit,

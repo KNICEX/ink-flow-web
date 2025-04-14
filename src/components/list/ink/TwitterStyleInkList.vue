@@ -4,6 +4,7 @@ import type { Ink } from '@/types/ink.ts'
 import BackTop from '@/components/BackTop.vue'
 import NoData from '@/components/empty/NoData.vue'
 import InkLoading from '@/components/loading/InkLoading.vue'
+import { useActive } from '@/hook/active.ts'
 
 defineProps({
   inks: {
@@ -23,11 +24,13 @@ defineProps({
     default: false,
   },
 })
+
+const active = useActive()
 </script>
 
 <template>
   <div>
-    <div v-infinite-scroll="loadMore">
+    <div v-infinite-scroll="loadMore" :infinite-scroll-disabled="!active">
       <div v-for="ink in inks" :key="ink.id" class="mb-4">
         <TwitterStyleInk :ink="ink" :previewLength="previewLength"></TwitterStyleInk>
       </div>

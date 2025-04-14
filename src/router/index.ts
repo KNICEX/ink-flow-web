@@ -18,6 +18,23 @@ const router = createRouter({
           path: '/search',
           name: 'search',
           component: () => import('../views/search/SearchView.vue'),
+          children: [
+            {
+              path: 'ink',
+              name: 'search-ink',
+              component: () => import('../views/search/SearchInk.vue'),
+            },
+            {
+              path: 'user',
+              name: 'search-user',
+              component: () => import('../views/search/SearchUser.vue'),
+            },
+            {
+              path: 'reply',
+              name: 'search-reply',
+              component: () => import('../views/search/SearchReply.vue'),
+            },
+          ],
         },
         {
           path: '/user/:account',

@@ -1,6 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useInjectFollowHandler } from '@/hook/follow.ts'
+import { useShowLoginStore, useUserStore } from '@/stores/user.ts'
+
+const userStore = useUserStore()
+const showLoginStore = useShowLoginStore()
+const hasLogin = computed(() => {
+  return !!userStore.getActiveUser()?.user.id
+})
 
 defineProps({
   uid: {
@@ -34,6 +41,10 @@ const handleMouseLeave = () => {
 }
 
 const handleFollow = (uid: number) => {
+  if (!hasLogin.value) {
+    showLoginStore.showLogin = true
+    return
+  }
   emit('follow', uid)
   injectFollow(uid)
 }

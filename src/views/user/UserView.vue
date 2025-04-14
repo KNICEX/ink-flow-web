@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onBeforeMount, onMounted, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { profile } from '@/service/user.ts'
 import type { User } from '@/types/user.ts'
 import UserAvatar from '@/components/UserAvatar.vue'
@@ -8,18 +8,14 @@ import { useUserStore } from '@/stores/user.ts'
 import InkDialog from '@/components/InkDialog.vue'
 import UserInfoEditor from '@/views/user/UserInfoEditor.vue'
 import { defaultBanner } from '@/consts/default.ts'
+import FollowButton from '@/components/FollowButton.vue'
+import { useProvideFollowHandler } from '@/hook/follow.ts'
 
 const userStore = useUserStore()
 const route = useRoute()
 const router = useRouter()
 const userInfo = ref<User | null>(null)
 
-const parseFaviconUrl = (url: string) => {
-  if (url.startsWith('http')) {
-    return url
-  }
-  return `https://lzacg.org${url}`
-}
 const activeNav = ref('')
 
 const showEdit = ref(false)
@@ -37,13 +33,20 @@ watch(
   { immediate: true },
 )
 
+const followUserUsers = ref<User[]>([])
+useProvideFollowHandler(followUserUsers)
+
 watch(
   () => route.params.account,
   async () => {
+    if (route.params.account == undefined) {
+      return
+    }
     activeNav.value = route.name as string
     userInfo.value = await profile({
       account: route.params.account as string,
     })
+    followUserUsers.value = [userInfo.value]
   },
   { immediate: true },
 )
@@ -93,7 +96,7 @@ const isSelf = computed(() => {
               @click="handleEdit"
               >编辑个人资料
             </el-button>
-            <el-button v-else size="large" round>关注</el-button>
+            <FollowButton v-else :uid="userInfo?.id ?? 0" size="large"></FollowButton>
           </div>
           <div></div>
         </div>
@@ -135,6 +138,7 @@ const isSelf = computed(() => {
             <Component :is="Component" :uid="userInfo?.id"> </Component>
           </keep-alive>
         </router-view>
+        <!--        <router-view :uid="userInfo?.id"></router-view>-->
       </div>
     </div>
     <InkDialog v-model="showEdit" title="编辑个人资料">

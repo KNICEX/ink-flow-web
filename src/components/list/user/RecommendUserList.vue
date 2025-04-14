@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { demoUsers } from '@/mock/demo_data.ts'
 import UserSimpleItem from '@/components/list/user/UserSimpleItem.vue'
-import { useProvideFollowHandler } from '@/hook/follow.ts'
-import { ref } from 'vue'
+import type { User } from '@/types/user.ts'
 
-const users = ref(demoUsers(5))
-
-useProvideFollowHandler(users)
+defineProps({
+  users: {
+    type: Array as () => User[],
+    default: () => [],
+  },
+})
 </script>
 
 <template>

@@ -6,10 +6,11 @@
     </div>
     <div class="flex justify-center pt-[var(--header-height)]">
       <router-view v-slot="{ Component }">
-        <keep-alive :include="['HomeView']">
+        <keep-alive :include="['SearchView', 'HomeView', 'UserView']">
           <Component :is="Component"></Component>
         </keep-alive>
       </router-view>
+      <!--      <router-view></router-view>-->
     </div>
     <div class="border-t-1 border-gray-200 mt-10 flex justify-center">
       <FooterView></FooterView>
