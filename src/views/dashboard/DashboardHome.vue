@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import { type Component, computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import DashboardContent from '@/views/dashboard/DashboardContent.vue'
 import InkCard from '@/components/card/InkCard.vue'
 import { userActionStats } from '@/service/user.ts'
 import type { UserActionStats } from '@/types/stats.ts'
+import { daysFrom } from '@/utils/date.ts'
+import { useUserStore } from '@/stores/user.ts'
 
 const userStats = ref<UserActionStats>()
+const userStore = useUserStore()
 
 onMounted(async () => {
   userStats.value = await userActionStats()
@@ -50,6 +53,10 @@ const cardItemsInfo = computed(() => {
     },
   ]
 })
+
+const joinDays = computed(() => {
+  return daysFrom(userStore.getActiveUser()?.user.createdAt || new Date())
+})
 </script>
 
 <template>
@@ -75,7 +82,7 @@ const cardItemsInfo = computed(() => {
             <div>
               <span>已加入</span>
             </div>
-            <div class="mt-2 text-xl font-semibold">100天</div>
+            <div class="mt-2 text-xl font-semibold">{{ joinDays }}天</div>
           </div>
         </InkCard>
       </div>

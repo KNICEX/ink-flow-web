@@ -96,7 +96,12 @@ const isSelf = computed(() => {
               @click="handleEdit"
               >编辑个人资料
             </el-button>
-            <FollowButton v-else :uid="userInfo?.id ?? 0" size="large"></FollowButton>
+            <FollowButton
+              v-else
+              :uid="userInfo?.id ?? 0"
+              size="large"
+              :followed="userInfo?.followed"
+            ></FollowButton>
           </div>
           <div></div>
         </div>

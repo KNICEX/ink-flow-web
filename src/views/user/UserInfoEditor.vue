@@ -9,6 +9,7 @@ import { defaultBanner } from '@/consts/default.ts'
 import ImageCropper, { type CropperResult } from '@/components/image/ImageCropper.vue'
 import InkDialog from '@/components/InkDialog.vue'
 import { uploadAvatar, uploadImage } from '@/service/file.ts'
+import { PromiseGroup } from '@/utils/promise.ts'
 
 const props = defineProps({
   user: {
@@ -26,17 +27,6 @@ const userInfoForm = ref({
 })
 
 const userInfoFormRef = ref<InstanceType<typeof ElForm>>()
-const handleSave = () => {
-  userInfoFormRef.value?.validate(async (valid) => {
-    if (valid) {
-      await editProfile(userInfoForm.value)
-      notification({
-        message: '保存成功',
-      })
-      location.reload()
-    }
-  })
-}
 
 const rules = reactive<FormRules>({
   username: {
@@ -94,32 +84,68 @@ const base64ToFile = (src: string, name: string) => {
   return new File([u8arr], name, { type: mime })
 }
 
+let bannerName = ''
+let avatarName = ''
 const handleCropConfirm = (result: CropperResult) => {
-  const file = base64ToFile(result.src, result.name)
+  // const file = base64ToFile(result.src, result.name)
 
   if (cropperType.value === 'banner') {
-    uploadImage(file).then((url) => {
-      userInfoForm.value.banner = url
-    })
-    userInfoForm.value.banner = result.src
+    userInfoForm.value.banner = result.canvas.toDataURL()
+    bannerName = result.name
     showCropper.value = false
     return
   }
 
-  uploadAvatar(file).then((url) => {
-    userInfoForm.value.avatar = url
-  })
-  userInfoForm.value.avatar = result.src
+  userInfoForm.value.avatar = result.canvas.toDataURL()
+  avatarName = result.name
   showCropper.value = false
 }
 
 const handleCropCancel = () => {
   showCropper.value = false
 }
+
+const loading = ref(false)
+const handleSave = () => {
+  userInfoFormRef.value
+    ?.validate(async (valid) => {
+      if (valid) {
+        // 比对banner和avatar
+        const pg = new PromiseGroup()
+        loading.value = true
+        if (userInfoForm.value.banner != props.user.banner) {
+          pg.add(
+            uploadImage(base64ToFile(userInfoForm.value.banner, bannerName)).then((url) => {
+              userInfoForm.value.banner = url
+            }),
+          )
+        }
+        if (userInfoForm.value.avatar != props.user.avatar) {
+          pg.add(
+            uploadAvatar(base64ToFile(userInfoForm.value.avatar, avatarName)).then((url) => {
+              userInfoForm.value.avatar = url
+            }),
+          )
+        }
+
+        await pg.wait()
+
+        await editProfile(userInfoForm.value)
+        loading.value = false
+        notification({
+          message: '保存成功',
+        })
+        location.reload()
+      }
+    })
+    .catch(() => {
+      loading.value = false
+    })
+}
 </script>
 
 <template>
-  <div class="relative">
+  <div class="relative" v-loading="loading" element-loading-text="上传图片中...">
     <div class="relative">
       <el-image
         fit="cover"

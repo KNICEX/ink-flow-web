@@ -2,10 +2,9 @@
 import { ref, onMounted } from 'vue'
 import { topTag } from '@/service/stats'
 import type { TagStats } from '@/types/stats'
-import { demoHotTags } from '@/mock/demo_data.ts'
 
 const loading = ref(false)
-const hotTags = ref<TagStats[]>(demoHotTags(4))
+const hotTags = ref<TagStats[]>([])
 onMounted(async () => {
   hotTags.value = await topTag(0, 5)
 })

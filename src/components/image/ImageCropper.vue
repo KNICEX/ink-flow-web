@@ -25,13 +25,15 @@ const cropperRef = useTemplateRef<InstanceType<typeof Cropper>>('cropperRef')
 export interface CropperResult {
   src: string
   name: string
+  canvas: HTMLCanvasElement
 }
 const handleConfirm = () => {
   if (cropperRef.value) {
-    const { image } = cropperRef.value.getResult()
+    const { image, canvas } = cropperRef.value.getResult()
     emit('confirm', {
       src: image.src,
       name: props.imageName,
+      canvas: canvas,
     })
   }
 }

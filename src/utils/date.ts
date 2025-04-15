@@ -24,3 +24,8 @@ export const formatDate = (date: Date, detail?: boolean) => {
   }
   return `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}日`
 }
+
+export const daysFrom = (date: Date) => {
+  const diff = new Date().getTime() - date.getTime()
+  return Math.floor(diff / (1000 * 60 * 60 * 24))
+}

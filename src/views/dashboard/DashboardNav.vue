@@ -5,6 +5,8 @@ import InkNav from '@/components/nav/InkNav.vue'
 import InkNavItem from '@/components/nav/InkNavItem.vue'
 import { useRouter } from 'vue-router'
 import { onMounted, useTemplateRef } from 'vue'
+import { useUnreadNotificationStore } from '@/stores/notification.ts'
+
 const router = useRouter()
 const route = router.currentRoute
 const inkNavRef = useTemplateRef<InstanceType<typeof InkNav>>('inkNavRef')
@@ -14,6 +16,8 @@ const handleNavChange = (nav: string) => {
 onMounted(() => {
   inkNavRef.value?.setActive(route.value.name as string)
 })
+
+const noStore = useUnreadNotificationStore()
 </script>
 
 <template>
@@ -54,18 +58,27 @@ onMounted(() => {
           <span>互动</span>
         </InkNavItem>
         <InkNavItem :sub="true" prop="dashboard-system">
-          <span class="material-symbols-outlined"> notifications </span
-          ><span class="ml-3">系统通知</span>
+          <el-badge type="primary" :value="noStore.unreadMap['system']" :show-zero="false">
+            <span class="material-symbols-outlined"> notifications </span>
+          </el-badge>
+          <span class="ml-3">系统通知</span>
         </InkNavItem>
         <InkNavItem :sub="true" prop="dashboard-reply">
-          <span class="material-symbols-outlined"> chat </span> <span class="ml-3">回复我的</span>
+          <el-badge type="primary" :value="noStore.unreadMap['reply']" :show-zero="false">
+            <span class="material-symbols-outlined"> chat </span>
+          </el-badge>
+          <span class="ml-3">回复我的</span>
         </InkNavItem>
         <InkNavItem :sub="true" prop="dashboard-like">
-          <span class="material-symbols-outlined"> thumb_up </span>
+          <el-badge type="primary" :value="noStore.unreadMap['like']" :show-zero="false">
+            <span class="material-symbols-outlined"> thumb_up </span>
+          </el-badge>
           <span class="ml-3">收到的赞</span>
         </InkNavItem>
         <InkNavItem :sub="true" prop="dashboard-follow">
-          <span class="material-symbols-outlined"> how_to_reg </span>
+          <el-badge type="primary" :value="noStore.unreadMap['follow']" :show-zero="false">
+            <span class="material-symbols-outlined"> how_to_reg </span>
+          </el-badge>
           <span class="ml-3">关注我的</span>
         </InkNavItem>
         <InkNavItem prop="setting">

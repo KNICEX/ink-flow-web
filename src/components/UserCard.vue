@@ -6,6 +6,7 @@ import type { User } from '@/types/user.ts'
 import { computed } from 'vue'
 import clsx from 'clsx'
 import { useUserStore } from '@/stores/user.ts'
+import { daysFrom } from '@/utils/date.ts'
 const userStore = useUserStore()
 const props = defineProps({
   user: {
@@ -28,8 +29,7 @@ const wrapClass = computed(() => {
   })
 })
 const joinDays = computed(() => {
-  const diff = new Date().getTime() - props.user?.createdAt?.getTime()
-  return Math.floor(diff / (1000 * 60 * 60 * 24))
+  return daysFrom(userStore.getActiveUser()?.user.createdAt || new Date())
 })
 const isSelf = computed(() => {
   return userStore.getActiveUser()?.user.id == props.user.id
