@@ -11,6 +11,10 @@ const props = defineProps({
     type: String as () => 'recommend' | 'follow' | 'hot',
     required: true,
   },
+  show: {
+    type: Boolean,
+    default: true,
+  },
 })
 
 let loadMore: () => Promise<boolean | undefined>
@@ -18,7 +22,7 @@ let loadMore: () => Promise<boolean | undefined>
 const inks = ref<Ink[]>([])
 let loading: Ref<boolean>
 useProvideInkInteractiveHandler(inks)
-const limit = 15
+const limit = 25
 switch (props.type) {
   case 'recommend':
     const { loadMore: loadRecommend, loading: recommendLoading } = wrapOffsetPagedFunc(
@@ -74,12 +78,7 @@ switch (props.type) {
   default:
     console.error('unknown type', props.type)
 }
-let activated = false
 onMounted(() => {
-  if (activated) {
-    return
-  }
-  activated = true
   loadMore()
   // inks.value = demoInks()
 })
@@ -89,6 +88,7 @@ onMounted(() => {
   <div>
     <TwitterStyleInkList
       :inks="inks"
+      :show="show"
       :load-more="loadMore"
       :loading="loading"
     ></TwitterStyleInkList>

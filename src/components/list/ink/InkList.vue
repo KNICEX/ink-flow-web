@@ -50,12 +50,17 @@ const active = useActive()
 </script>
 <template>
   <div>
-    <div :class="wrapClass" v-infinite-scroll="loadMore" :infinite-scroll-disabled="!active">
+    <div
+      :class="wrapClass"
+      v-infinite-scroll="loadMore"
+      :infinite-scroll-disabled="!active"
+      :infinite-scroll-distance="400"
+    >
       <div v-for="ink in inks" :key="ink.id">
         <InkItem @on-cover-click="handleItemClick" :ink="ink"></InkItem>
       </div>
     </div>
-    <InkLoading v-show="loading"></InkLoading>
+    <InkLoading class="mt-4" v-show="loading"></InkLoading>
     <NoData v-show="!loading && inks.length == 0" :description="emptyDesc"></NoData>
     <BackTop></BackTop>
   </div>
