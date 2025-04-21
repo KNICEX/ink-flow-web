@@ -5,8 +5,10 @@ import type { Notification } from '@/types/notification.ts'
 import { onMounted, ref } from 'vue'
 import { followNotification } from '@/service/notification.ts'
 import { wrapMaxIdPagedFunc } from '@/utils/pagedLoadWrap.ts'
+import { useUnreadNotificationStore } from '@/stores/notification.ts'
 
 const follows = ref<Notification<never, never>[]>([])
+const noStore = useUnreadNotificationStore()
 const limit = 15
 const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
   const res = await followNotification({
@@ -20,13 +22,20 @@ const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
   return follows.value[follows.value.length - 1].id
 })
 onMounted(() => {
-  loadMore()
+  loadMore().then(() => {
+    noStore.unreadMap['follow'] = 0
+  })
 })
 </script>
 
 <template>
   <DashboardContent title="Follow" class="overflow-hidden">
-    <FollowList class="overflow-y-auto" :follows="follows" :load-more="loadMore"></FollowList>
+    <FollowList
+      class="overflow-y-auto"
+      :follows="follows"
+      :load-more="loadMore"
+      :loading="loading"
+    ></FollowList>
   </DashboardContent>
 </template>
 

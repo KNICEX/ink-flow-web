@@ -14,7 +14,7 @@ defineProps({
 
 <template>
   <div class="flex">
-    <InkCover class="w-40 h-30 rounded-xl" :src="defaultAvatar"></InkCover>
+    <InkCover class="w-40 h-30 rounded-xl" :src="ink.cover" :backoff="ink.title"></InkCover>
     <div class="flex flex-col justify-between ml-6">
       <div class="nav-text">
         {{ ink.title }}

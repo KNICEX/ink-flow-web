@@ -5,8 +5,10 @@ import ReplyList from '@/components/notification/ReplyList.vue'
 import type { Notification, ReplyContent } from '@/types/notification.ts'
 import { replyNotification } from '@/service/notification.ts'
 import { wrapMaxIdPagedFunc } from '@/utils/pagedLoadWrap.ts'
+import { useUnreadNotificationStore } from '@/stores/notification.ts'
 
 const replies = ref<Notification<never, ReplyContent>[]>([])
+const noStore = useUnreadNotificationStore()
 const limit = 15
 const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
   const res = await replyNotification({
@@ -23,7 +25,9 @@ const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
   return replies.value[replies.value.length - 1].id
 })
 onMounted(() => {
-  loadMore()
+  loadMore().then(() => {
+    noStore.unreadMap['reply'] = 0
+  })
 })
 </script>
 

@@ -86,11 +86,11 @@ const ops = [
             </div>
             <div v-else>
               <span>
-                <router-link to="/user/chtholly">
+                <router-link :to="`/user/${users[0].account}`">
                   <span>{{ users[0].username }}</span>
                 </router-link>
                 <span>、</span>
-                <router-link to="/user/chtholly">
+                <router-link :to="`/user/${users[1].account}`">
                   <span>{{ users[1].username }}</span>
                 </router-link>
               </span>

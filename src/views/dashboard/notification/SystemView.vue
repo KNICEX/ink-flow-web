@@ -1,12 +1,14 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import DashboardContent from '@/views/dashboard/DashboardContent.vue'
 import SystemList from '@/components/notification/SystemList.vue'
 import type { Notification } from '@/types/notification.ts'
 import { systemNotification } from '@/service/notification.ts'
 import { wrapMaxIdPagedFunc } from '@/utils/pagedLoadWrap.ts'
+import { useUnreadNotificationStore } from '@/stores/notification.ts'
 
 const nos = ref<Notification<never, string>[]>([])
+const noStore = useUnreadNotificationStore()
 const limit = 15
 
 const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
@@ -22,6 +24,12 @@ const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
     return 0
   }
   return nos.value[nos.value.length - 1].id
+})
+
+onMounted(() => {
+  loadMore().then(() => {
+    noStore.unreadMap['system'] = 0
+  })
 })
 </script>
 

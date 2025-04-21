@@ -26,6 +26,10 @@ export const formatDate = (date: Date, detail?: boolean) => {
 }
 
 export const daysFrom = (date: Date) => {
+  // 某浏览器死活传入的都是字符串
+  if (typeof date === 'string') {
+    date = new Date(date)
+  }
   const diff = new Date().getTime() - date.getTime()
   return Math.floor(diff / (1000 * 60 * 60 * 24))
 }

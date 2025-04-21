@@ -5,8 +5,10 @@ import DashboardContent from '@/views/dashboard/DashboardContent.vue'
 import LikeList from '@/components/notification/LikeList.vue'
 import { mergedLikeNotification } from '@/service/notification.ts'
 import { wrapOffsetPagedFunc } from '@/utils/pagedLoadWrap.ts'
+import { useUnreadNotificationStore } from '@/stores/notification.ts'
 
 const likes = ref<MergedLike<never>[]>([])
+const noStore = useUnreadNotificationStore()
 
 const limit = 15
 
@@ -22,7 +24,9 @@ const { loadMore, loading } = wrapOffsetPagedFunc(async (offset: number) => {
   return res.length
 }, limit)
 onMounted(() => {
-  loadMore()
+  loadMore().then(() => {
+    noStore.unreadMap['like'] = 0
+  })
 })
 </script>
 <template>
