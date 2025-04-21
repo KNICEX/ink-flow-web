@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import FollowUser from '@/components/list/user/FollowUser.vue'
-import type { User } from '@/types/user.ts'
+import type { UserFollow } from '@/types/user.ts'
 import NoData from '@/components/empty/NoData.vue'
 import InkLoading from '@/components/loading/InkLoading.vue'
 import { useActive } from '@/hook/active.ts'
 defineProps({
   users: {
-    type: Array as () => User[],
+    type: Array as () => UserFollow[],
     required: true,
   },
   loadMore: {

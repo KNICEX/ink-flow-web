@@ -31,7 +31,9 @@ const subjectTypeName = computed(() => {
       {{ (mergedLike.subject as Comment).payload.content }}
     </div>
     <div v-else class="mt-2">
-      <InkReference :ink="mergedLike.subject as Ink"></InkReference>
+      <router-link :to="`/ink/${mergedLike.subject.id}`">
+        <InkReference :ink="mergedLike.subject as Ink"></InkReference>
+      </router-link>
     </div>
   </NotificationItem>
 </template>

@@ -64,7 +64,12 @@ const noStore = useUnreadNotificationStore()
           <span class="ml-3">系统通知</span>
         </InkNavItem>
         <InkNavItem :sub="true" prop="dashboard-reply">
-          <el-badge type="primary" :value="noStore.unreadMap['reply']" :show-zero="false">
+          <el-badge
+            type="primary"
+            :value="noStore.unreadMap['reply']"
+            :show-zero="false"
+            class="flex flex-col justify-center"
+          >
             <span class="material-symbols-outlined"> chat </span>
           </el-badge>
           <span class="ml-3">回复我的</span>

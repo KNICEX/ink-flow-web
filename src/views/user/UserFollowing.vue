@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from 'vue'
-import type { User } from '@/types/user.ts'
+import type { UserFollow } from '@/types/user.ts'
 import { wrapMaxIdPagedFunc } from '@/utils/pagedLoadWrap.ts'
 import { following } from '@/service/relation.ts'
 import { useProvideFollowHandler } from '@/hook/follow.ts'
@@ -14,7 +14,7 @@ const props = defineProps({
 })
 
 const limit = 15
-const users = ref<User[]>([])
+const users = ref<UserFollow[]>([])
 
 const { loadMore, reset, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
   if (props.uid == 0) {

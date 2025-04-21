@@ -4,8 +4,10 @@ import UserAvatar from '@/components/UserAvatar.vue'
 import UserCard from '@/components/UserCard.vue'
 import type { User } from '@/types/user.ts'
 import MoreOperation from '@/components/button/MoreOperation.vue'
+import { useProvideFollowHandler } from '@/hook/follow.ts'
+import { ref } from 'vue'
 
-defineProps({
+const props = defineProps({
   users: {
     type: Array as () => User[],
     required: true,
@@ -24,6 +26,8 @@ const ops = [
     action: handleDelNo,
   },
 ]
+
+useProvideFollowHandler(ref(props.users))
 </script>
 
 <template>

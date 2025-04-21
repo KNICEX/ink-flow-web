@@ -1,14 +1,12 @@
 <script setup lang="ts">
 import ImageInk from '@/components/list/ink/ImageInk.vue'
-import { demoInks } from '@/mock/demo_data.ts'
 import UserCard from '@/components/UserCard.vue'
 import { ref } from 'vue'
-import type { User } from '@/types/user.ts'
+import type { UserFollow } from '@/types/user.ts'
 
-const inks = demoInks(4)
 defineProps({
   user: {
-    type: Object as () => User,
+    type: Object as () => UserFollow,
     default: () => ({}),
   },
 })
@@ -72,7 +70,7 @@ const listHover = ref(false)
       @mouseleave="listHover = false"
     >
       <div ref="scrollDiv" class="flex overflow-x-auto h-full items-start pt-4 no-scroll pr-10">
-        <div class="w-50 mr-5 flex-shrink-0" v-for="ink in inks" :key="ink.id">
+        <div class="w-50 mr-5 flex-shrink-0" v-for="ink in user.inks" :key="ink.id">
           <ImageInk :ink="ink" :show-author="false"></ImageInk>
         </div>
       </div>

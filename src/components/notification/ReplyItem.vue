@@ -20,7 +20,7 @@ const replyTo = computed(() => {
 </script>
 
 <template>
-  <NotificationItem :users="demoUsers(1)">
+  <NotificationItem :users="[reply.user!]">
     <template #title> 回复了你的{{ replyTo }} </template>
     <div class="line-clamp-3 my-2">
       {{ reply.content.source.content }}
@@ -32,7 +32,9 @@ const replyTo = computed(() => {
       {{ reply.content?.target?.content }}
     </div>
     <div v-else class="flex border-gray-300 pl-2 border-l-3">
-      <InkReference :ink="reply.subject!"></InkReference>
+      <router-link :to="`/ink/${reply.subject?.id}`">
+        <InkReference :ink="reply.subject!"></InkReference>
+      </router-link>
     </div>
   </NotificationItem>
 </template>

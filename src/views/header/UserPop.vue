@@ -44,6 +44,7 @@ const handleLogout = async () => {
   })
   const userStore = useUserStore()
   userStore.logout()
+  router.push('/')
 }
 
 const handleUserCenter = () => {

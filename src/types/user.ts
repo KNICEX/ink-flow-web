@@ -1,3 +1,5 @@
+import type { Ink } from '@/types/ink.ts'
+
 export interface User {
   id: number
   avatar: string
@@ -15,6 +17,10 @@ export interface User {
 
   createdAt: Date
   updatedAt: Date
+}
+
+export interface UserFollow extends User {
+  inks: Ink[]
 }
 
 export interface StatisticInfo {

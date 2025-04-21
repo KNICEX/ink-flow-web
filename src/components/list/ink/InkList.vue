@@ -57,7 +57,7 @@ const active = useActive()
       :infinite-scroll-distance="400"
     >
       <div v-for="ink in inks" :key="ink.id">
-        <InkItem @on-cover-click="handleItemClick" :ink="ink"></InkItem>
+        <InkItem v-slide-in @on-cover-click="handleItemClick" :ink="ink"></InkItem>
       </div>
     </div>
     <InkLoading class="mt-4" v-show="loading"></InkLoading>

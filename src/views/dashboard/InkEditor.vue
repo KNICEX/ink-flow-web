@@ -126,29 +126,29 @@ const handlePublish = async () => {
         class="flex-1 overflow-y-auto overflow-x-visible"
       ></MilkdownWrapper>
       <div class="w-80 h-full pl-4 hidden xl:inline">
-        <div>
-          <div class="label-text">封面</div>
-          <el-upload
-            class="w-full bg-gray-50 h-50 upload mt-3 overflow-hidden relative"
-            action="#"
-            list-type="picture-card"
-            :show-file-list="false"
-            :on-success="handleCoverUploadSuccess"
-            :before-upload="beforeCoverUpload"
-          >
-            <el-image
-              v-if="coverUrl"
-              fit="cover"
-              :src="coverUrl"
-              class="w-full h-full"
-              alt="cover"
-            />
-            <div class="absolute w-4 h-4 right-2 top-2" v-if="coverUrl">
-              <span class="material-symbols-outlined"> close </span>
-            </div>
-            <div v-else class="h-full flex justify-center items-center nav-text">点击上传封面</div>
-          </el-upload>
-        </div>
+        <!--        <div>-->
+        <!--          <div class="label-text">封面</div>-->
+        <!--          <el-upload-->
+        <!--            class="w-full bg-gray-50 h-50 upload mt-3 overflow-hidden relative"-->
+        <!--            action="#"-->
+        <!--            list-type="picture-card"-->
+        <!--            :show-file-list="false"-->
+        <!--            :on-success="handleCoverUploadSuccess"-->
+        <!--            :before-upload="beforeCoverUpload"-->
+        <!--          >-->
+        <!--            <el-image-->
+        <!--              v-if="coverUrl"-->
+        <!--              fit="cover"-->
+        <!--              :src="coverUrl"-->
+        <!--              class="w-full h-full"-->
+        <!--              alt="cover"-->
+        <!--            />-->
+        <!--            <div class="absolute w-4 h-4 right-2 top-2" v-if="coverUrl">-->
+        <!--              <span class="material-symbols-outlined"> close </span>-->
+        <!--            </div>-->
+        <!--            <div v-else class="h-full flex justify-center items-center nav-text">点击上传封面</div>-->
+        <!--          </el-upload>-->
+        <!--        </div>-->
         <div class="my-6">
           <div class="label-text mb-3">标签</div>
           <el-input-tag size="large" v-model="tags" draggable placeholder="" />

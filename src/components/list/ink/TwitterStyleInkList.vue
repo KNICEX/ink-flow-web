@@ -45,7 +45,7 @@ watchEffect(() => {
       :infinite-scroll-distance="1800"
     >
       <div v-for="ink in inks" :key="ink.id" class="mb-4">
-        <TwitterStyleInk :ink="ink" :previewLength="previewLength"></TwitterStyleInk>
+        <TwitterStyleInk v-slide-in :ink="ink" :previewLength="previewLength"></TwitterStyleInk>
       </div>
       <NoData v-show="!loading && inks.length == 0"></NoData>
       <InkLoading v-show="loading" :loading="loading"></InkLoading>
