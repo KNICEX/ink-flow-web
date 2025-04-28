@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import NotificationItem from '@/components/notification/NotificationItem.vue'
-import { demoUsers } from '@/mock/demo_data.ts'
 import type { Ink } from '@/types/ink.ts'
 import type { ReplyContent, Notification } from '@/types/notification.ts'
 import { computed } from 'vue'
@@ -17,6 +16,8 @@ const replyTo = computed(() => {
   }
   return '文章'
 })
+
+console.log('reply', props.reply)
 </script>
 
 <template>
@@ -32,9 +33,7 @@ const replyTo = computed(() => {
       {{ reply.content?.target?.content }}
     </div>
     <div v-else class="flex border-gray-300 pl-2 border-l-3">
-      <router-link :to="`/ink/${reply.subject?.id}`">
-        <InkReference :ink="reply.subject!"></InkReference>
-      </router-link>
+      <InkReference :ink="reply.subject!"></InkReference>
     </div>
   </NotificationItem>
 </template>

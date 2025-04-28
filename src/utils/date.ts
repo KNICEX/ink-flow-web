@@ -1,4 +1,9 @@
 export const formatDate = (date: Date, detail?: boolean) => {
+  // date为时间戳0
+  if (date.getTime() === 0) {
+    return '-'
+  }
+
   // 1小时内
   if (date.getTime() > Date.now() - 1000 * 60 * 60) {
     // xx分钟前
@@ -26,6 +31,10 @@ export const formatDate = (date: Date, detail?: boolean) => {
 }
 
 export const daysFrom = (date: Date) => {
+  // date为时间戳0
+  if (date.getTime() === 0) {
+    return -1
+  }
   // 某浏览器死活传入的都是字符串
   if (typeof date === 'string') {
     date = new Date(date)

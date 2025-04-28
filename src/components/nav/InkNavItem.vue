@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, inject } from 'vue'
+import { computed, inject, ref } from 'vue'
 import clsx from 'clsx'
+import type { ActiveItemInjection } from '@/components/nav/InkNav.vue'
 
 const props = defineProps({
   prop: {
@@ -17,7 +18,10 @@ const props = defineProps({
     default: true,
   },
 })
-const { activeItem, updateActiveItem } = inject('active-item')
+const { activeItem, updateActiveItem } = inject<ActiveItemInjection>('active-item') ?? {
+  activeItem: ref(''),
+  updateActiveItem: () => {},
+}
 const active = computed(() => {
   return activeItem.value === props.prop
 })

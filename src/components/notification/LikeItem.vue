@@ -28,12 +28,13 @@ const subjectTypeName = computed(() => {
       v-if="mergedLike.subjectType == SubjectType.Comment"
       class="text-gray-600 mt-2 line-clamp-3"
     >
-      {{ (mergedLike.subject as Comment).payload.content }}
+      <div v-if="mergedLike.subject != null">
+        {{ (mergedLike.subject as Comment).payload.content }}
+      </div>
+      <div v-else>评论已删除</div>
     </div>
     <div v-else class="mt-2">
-      <router-link :to="`/ink/${mergedLike.subject.id}`">
-        <InkReference :ink="mergedLike.subject as Ink"></InkReference>
-      </router-link>
+      <InkReference :ink="mergedLike.subject as Ink"></InkReference>
     </div>
   </NotificationItem>
 </template>

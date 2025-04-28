@@ -11,6 +11,7 @@ const props = defineProps({
   },
 })
 
+console.log('user ink list props', props)
 const limit = 15
 const inks = ref<Ink[]>([])
 
@@ -30,7 +31,14 @@ const { loadMore, reset, loading } = wrapOffsetPagedFunc(async (offset: number) 
 watch(
   () => props.uid,
   () => {
-    console.log('ink list uid change', props.uid)
+    console.log('user ink list props uid changed', props.uid)
+    if (!props.uid) {
+      inks.value = []
+      reset()
+      return
+    }
+
+    console.log('user ink list props uid changed, load more')
     inks.value = []
     reset()
     loadMore()
@@ -40,7 +48,7 @@ watch(
 </script>
 
 <template>
-  <div>
+  <div class="w-full">
     <InkList :max-cols="4" :inks="inks" :load-more="loadMore" :loading="loading"></InkList>
   </div>
 </template>

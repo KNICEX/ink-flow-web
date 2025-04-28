@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, watch } from 'vue'
+import { computed, nextTick, ref, watch } from 'vue'
 import { profile } from '@/service/user.ts'
 import type { User } from '@/types/user.ts'
 import UserAvatar from '@/components/UserAvatar.vue'
@@ -26,6 +26,12 @@ const handleEdit = () => {
 watch(
   activeNav,
   () => {
+    if (!activeNav.value) {
+      return
+    }
+    if (route.name == activeNav.value) {
+      return
+    }
     router.push({
       name: activeNav.value,
     })
@@ -43,10 +49,13 @@ watch(
       return
     }
     activeNav.value = route.name as string
-    userInfo.value = await profile({
-      account: route.params.account as string,
+    // TODO 不知道为什么，不使用nextTick会导致网页崩溃
+    nextTick(async () => {
+      userInfo.value = await profile({
+        account: route.params.account as string,
+      })
+      followUserUsers.value = [userInfo.value]
     })
-    followUserUsers.value = [userInfo.value]
   },
   { immediate: true },
 )
@@ -89,11 +98,7 @@ const isSelf = computed(() => {
         </div>
         <div>
           <div>
-            <el-button
-              v-if="userStore.getActiveUser()?.user.id == userInfo?.id"
-              size="large"
-              round
-              @click="handleEdit"
+            <el-button v-if="isSelf" size="large" round @click="handleEdit"
               >编辑个人资料
             </el-button>
             <FollowButton
@@ -139,15 +144,15 @@ const isSelf = computed(() => {
       </div>
       <div class="flex justify-center mt-4">
         <router-view v-slot="{ Component }">
-          <keep-alive>
-            <Component :is="Component" :uid="userInfo?.id"> </Component>
+          <keep-alive :max="5">
+            <Component :is="Component" :uid="userInfo?.id ?? 0"> </Component>
           </keep-alive>
         </router-view>
         <!--        <router-view :uid="userInfo?.id"></router-view>-->
       </div>
     </div>
     <InkDialog v-model="showEdit" title="编辑个人资料">
-      <UserInfoEditor :user="userInfo"></UserInfoEditor>
+      <UserInfoEditor :user="userInfo!"></UserInfoEditor>
     </InkDialog>
   </div>
 </template>

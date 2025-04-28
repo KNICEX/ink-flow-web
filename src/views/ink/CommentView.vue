@@ -28,7 +28,7 @@ const userStore = useUserStore()
 
 const limit = 15
 const comments = ref<Comment[]>([])
-const { loadMore } = wrapMaxIdPagedFunc(async (maxId: number) => {
+const { loadMore, reset, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
   if (props.bizId == 0) {
     return
   }
@@ -48,6 +48,8 @@ const { loadMore } = wrapMaxIdPagedFunc(async (maxId: number) => {
 watch(
   () => props.bizId,
   () => {
+    reset()
+    comments.value = []
     loadMore()
   },
   { immediate: true },
@@ -134,6 +136,7 @@ const handleDelete = async (c: Comment) => {
   <div>
     <CommentList
       class="mt-6"
+      :loading="loading"
       :comments="comments"
       @submit-comment="handleReply"
       @delete-comment="handleDelete"

@@ -52,7 +52,10 @@ export const wrapMaxIdPagedFunc = (loadFunc: maxIdLoadFunc) => {
   return {
     loadMore: async () => {
       if (loading.value) return
-      if (noMore) return
+      if (noMore) {
+        loading.value = false
+        return
+      }
       loading.value = true
       const resMaxId = await loadFunc(maxId)
       if (resMaxId === undefined) {

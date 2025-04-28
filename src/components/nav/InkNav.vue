@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { provide, ref } from 'vue'
+import { provide, type Ref, ref } from 'vue'
 const props = defineProps({
   defaultActive: {
     type: String,
@@ -14,6 +14,12 @@ const updateActiveItem = (key: string) => {
   activeItem.value = key
   emit('on-change', key)
 }
+
+export interface ActiveItemInjection {
+  activeItem: Ref<string>
+  updateActiveItem: (key: string) => void
+}
+
 provide('active-item', { activeItem, updateActiveItem })
 const setActive = (key: string) => {
   updateActiveItem(key)

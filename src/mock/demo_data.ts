@@ -1,6 +1,6 @@
 import type { Ink } from '@/types/ink.ts'
 import { emptyInk, InkStatus } from '@/types/ink.ts'
-import type { TagStats } from '@/types/tag.ts'
+import type { TagStats } from '@/types/stats.ts'
 import type { User } from '@/types/user.ts'
 import { emptyUser } from '@/types/user.ts'
 import { type Comment, emptyComment } from '@/types/comment.ts'
