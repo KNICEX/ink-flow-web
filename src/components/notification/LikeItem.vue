@@ -4,7 +4,6 @@ import { type MergedLike, SubjectType } from '@/types/notification.ts'
 import type { Comment } from '@/types/comment.ts'
 import type { Ink } from '@/types/ink.ts'
 import { computed } from 'vue'
-import { formatDate } from '@/utils/date.ts'
 import InkReference from '@/components/ink/InkReference.vue'
 const props = defineProps({
   mergedLike: {
@@ -19,7 +18,7 @@ const subjectTypeName = computed(() => {
 </script>
 
 <template>
-  <NotificationItem :users="mergedLike.users">
+  <NotificationItem :users="mergedLike.users" :created-at="mergedLike.updatedAt">
     <template #title>
       <span v-if="mergedLike.users.length == 1"> 赞了你的{{ subjectTypeName }} </span>
       <span v-else>等{{ mergedLike.total }}人赞了你的{{ subjectTypeName }}</span>

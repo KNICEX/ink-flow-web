@@ -98,7 +98,7 @@ const handleSave = async () => {
   })
 }
 const handlePublish = async () => {
-  await save()
+  await handleSave()
   await publish(draftId)
   notification({
     message: '发布成功',

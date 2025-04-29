@@ -6,6 +6,7 @@ import type { User } from '@/types/user.ts'
 import MoreOperation from '@/components/button/MoreOperation.vue'
 import { useProvideFollowHandler } from '@/hook/follow.ts'
 import { ref } from 'vue'
+import { formatDate } from '../../utils/date.ts'
 
 const props = defineProps({
   users: {
@@ -15,6 +16,9 @@ const props = defineProps({
   system: {
     type: Boolean,
     default: false,
+  },
+  createdAt: {
+    type: Date,
   },
 })
 
@@ -106,7 +110,7 @@ useProvideFollowHandler(ref(props.users))
           <div v-else>
             <span>系统通知</span>
           </div>
-          <div class="text-sm text-gray-500 mt-1">2025年3月1日 21:33</div>
+          <div class="text-sm text-gray-500 mt-1">{{ formatDate(createdAt) }}</div>
         </div>
         <MoreOperation :horizon="true" :operations="ops"></MoreOperation>
       </div>

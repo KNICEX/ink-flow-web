@@ -3,7 +3,6 @@ import clsx from 'clsx'
 import InkItem from '@/components/list/ink/ImageInk.vue'
 import { computed } from 'vue'
 import type { Ink } from '@/types/ink.ts'
-import { demoInks } from '@/mock/demo_data.ts'
 import NoData from '@/components/empty/NoData.vue'
 import BackTop from '@/components/BackTop.vue'
 import InkLoading from '@/components/loading/InkLoading.vue'
@@ -15,7 +14,7 @@ const props = defineProps({
   },
   inks: {
     type: Array as () => Ink[],
-    default: () => demoInks(),
+    default: () => [],
   },
   loadMore: {
     type: Function,

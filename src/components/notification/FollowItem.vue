@@ -13,7 +13,7 @@ defineProps({
 </script>
 
 <template>
-  <NotificationItem :users="[notification.user!]">
+  <NotificationItem :users="[notification.user!]" :created-at="notification.createdAt">
     <template #title>
       <!--      <span v-if="users.length == 1">关注了你</span>-->
       <!--      <span v-else>等{{ users.length }}人关注了你</span>-->

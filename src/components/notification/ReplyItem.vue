@@ -21,7 +21,7 @@ console.log('reply', props.reply)
 </script>
 
 <template>
-  <NotificationItem :users="[reply.user!]">
+  <NotificationItem :users="[reply.user!]" :created-at="reply.createdAt">
     <template #title> 回复了你的{{ replyTo }} </template>
     <div class="line-clamp-3 my-2">
       {{ reply.content.source.content }}

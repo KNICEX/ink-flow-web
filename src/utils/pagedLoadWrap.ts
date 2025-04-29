@@ -17,8 +17,21 @@ export const wrapOffsetPagedFunc = (loadFunc: offsetLoadFunc, limit: number) => 
   let offset = 0
   const loading = ref(false)
   let noMore = false
+
+  // 限流用
+  let lastLoad = new Date(0)
+  let lastOffset = 0
   return {
     loadMore: async () => {
+      // 限流
+      const now = new Date()
+      if (now.getTime() - lastLoad.getTime() < 100 && lastOffset == offset) {
+        return
+      } else {
+        lastLoad = now
+        lastOffset = offset
+      }
+
       if (loading.value) return
       if (noMore) return
       loading.value = true
@@ -49,8 +62,22 @@ export const wrapMaxIdPagedFunc = (loadFunc: maxIdLoadFunc) => {
   let maxId = 0
   const loading = ref(false)
   let noMore = false
+
+  // 限流用
+  let lastLoad = new Date(0)
+  let lastMaxId = 0
+
   return {
     loadMore: async () => {
+      // 限流
+      const now = new Date()
+      if (now.getTime() - lastLoad.getTime() < 100 && lastMaxId == maxId) {
+        return
+      } else {
+        lastLoad = now
+        lastMaxId = maxId
+      }
+
       if (loading.value) return
       if (noMore) {
         loading.value = false

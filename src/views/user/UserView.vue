@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue'
+import { computed, ref, watch } from 'vue'
 import { profile } from '@/service/user.ts'
 import type { User } from '@/types/user.ts'
 import UserAvatar from '@/components/UserAvatar.vue'
@@ -44,16 +44,17 @@ useProvideFollowHandler(followUserUsers)
 
 watch(
   () => route.params.account,
-  async () => {
+  () => {
     if (route.params.account == undefined) {
       return
     }
     activeNav.value = route.name as string
-    // TODO 不知道为什么，不使用nextTick会导致网页崩溃
-    nextTick(async () => {
-      userInfo.value = await profile({
-        account: route.params.account as string,
-      })
+    const account = route.params.account as string
+    console.log('watch route params account', route.params.account)
+    profile({
+      account,
+    }).then((val) => {
+      userInfo.value = val
       followUserUsers.value = [userInfo.value]
     })
   },

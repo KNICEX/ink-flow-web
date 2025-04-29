@@ -11,7 +11,7 @@ defineProps({
 </script>
 
 <template>
-  <NotificationItem :system="true" :users="[]">
+  <NotificationItem :system="true" :users="[]" :created-at="notification.createdAt">
     <template #title>
       <span>系统通知</span>
     </template>

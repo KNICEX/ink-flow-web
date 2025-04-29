@@ -11,11 +11,11 @@ const props = defineProps({
   },
 })
 
-console.log('user ink list props', props)
 const limit = 15
 const inks = ref<Ink[]>([])
 
 const { loadMore, reset, loading } = wrapOffsetPagedFunc(async (offset: number) => {
+  console.log('user ink list load more', offset)
   if (props.uid == 0) {
     return
   }
