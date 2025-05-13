@@ -1,7 +1,7 @@
 import type { Ink } from '@/types/ink.ts'
 
 export interface User {
-  id: number
+  id: string
   avatar: string
   banner: string
   username: string
@@ -37,7 +37,7 @@ export interface StatisticInfo {
 
 export const emptyUser = (): User => {
   return {
-    id: 0,
+    id: '0',
     avatar: '',
     banner: '',
     username: '',

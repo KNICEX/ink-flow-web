@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import ImageInk from '@/components/list/ink/ImageInk.vue'
 import UserCard from '@/components/UserCard.vue'
-import { ref } from 'vue'
 import type { UserFollow } from '@/types/user.ts'
 
 defineProps({
@@ -10,65 +9,14 @@ defineProps({
     default: () => ({}),
   },
 })
-
-// const scrollDiv = ref<HTMLElement | null>(null)
-// const showRight = ref(true)
-// const showLeft = ref(false)
-// const moveLeft = () => {
-//   console.log('move left')
-//   if (scrollDiv.value) {
-//     scrollDiv.value.scrollBy({
-//       left: -300,
-//       behavior: 'smooth',
-//     })
-//     // 判断left和right
-//     console.log('scrollLeft', scrollDiv.value.scrollLeft)
-//     if (scrollDiv.value.scrollLeft > 200 || scrollDiv.value.scrollLeft < 20) {
-//       showLeft.value = false
-//     }
-//
-//     if (scrollDiv.value.scrollLeft < 600) {
-//       showRight.value = true
-//     }
-//   }
-// }
-//
-// const moveRight = () => {
-//   console.log('move right')
-//   if (scrollDiv.value) {
-//     scrollDiv.value.scrollBy({
-//       left: 300,
-//       behavior: 'smooth',
-//     })
-//     if (
-//       scrollDiv.value.scrollWidth - scrollDiv.value.clientWidth - scrollDiv.value.scrollLeft >
-//       0
-//     ) {
-//       showLeft.value = true
-//     }
-//
-//     if (
-//       scrollDiv.value.scrollWidth - scrollDiv.value.clientWidth - scrollDiv.value.scrollLeft <
-//       300
-//     ) {
-//       showRight.value = false
-//     }
-//   }
-// }
-
-const listHover = ref(false)
 </script>
 
 <template>
   <div class="flex h-74 pt-2 border-gray-200 border-b-1">
-    <div class="sm:w-100 xl:w-100 pt-2">
+    <div class="w-90 pt-2">
       <UserCard :show-follow="false" :user="user"></UserCard>
     </div>
-    <div
-      class="overflow-x-hidden mask"
-      @mouseenter="listHover = true"
-      @mouseleave="listHover = false"
-    >
+    <div class="overflow-x-hidden">
       <div ref="scrollDiv" class="flex overflow-x-auto h-full items-start pt-4 no-scroll pr-10">
         <div class="w-50 mr-5 flex-shrink-0" v-for="ink in user.inks" :key="ink.id">
           <ImageInk :ink="ink" :show-author="false"></ImageInk>

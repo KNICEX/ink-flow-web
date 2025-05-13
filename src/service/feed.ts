@@ -10,7 +10,7 @@ export const recommendInks = async (offset: number, limit: number) => {
   })
 }
 
-export const followInks = async (maxId: number, timestamp: number, limit: number) => {
+export const followInks = async (maxId: string, timestamp: number, limit: number) => {
   return await get<Ink[]>('/feed/ink/follow', {
     params: {
       maxId,

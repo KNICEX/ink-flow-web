@@ -11,17 +11,17 @@ const nos = ref<Notification<never, string>[]>([])
 const noStore = useUnreadNotificationStore()
 const limit = 15
 
-const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
+const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: string) => {
   const res = await systemNotification({
     maxId,
     limit,
   })
   if (res.length == 0) {
-    return 0
+    return '0'
   }
   nos.value = [...nos.value, ...res]
   if (res.length < limit) {
-    return 0
+    return '0'
   }
   return nos.value[nos.value.length - 1].id
 })

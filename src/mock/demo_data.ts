@@ -89,7 +89,7 @@ export const demoInks = (n?: number) => {
   n = n == undefined ? 20 : n
   for (let i = 0; i < n; i++) {
     const ink = emptyInk()
-    ink.id = i
+    ink.id = i.toString()
     ink.cover = randomCover()
     ink.contentHtml = 'Hello this'
     ink.title = randomTitle()
@@ -116,7 +116,7 @@ export const demoUsers = (n?: number) => {
   const idStart = Math.floor(Math.random() * 100000)
   for (let i = 0; i < n; i++) {
     const user = emptyUser()
-    user.id = i + idStart
+    user.id = (i + idStart).toString()
     user.avatar = randomCover()
     user.banner =
       'https://res.cloudinary.com/dw3cnfcb5/image/upload/v1741972579/twitter_snowmint_snowlistenz__20241003-030616_1841676112663114079_photo_rii427.jpg'
@@ -148,9 +148,9 @@ export const demoComments = (n?: number, sub?: boolean) => {
   n = n == undefined ? 20 : n
   for (let i = 0; i < n; i++) {
     const comment = emptyComment()
-    comment.id = i + startId
+    comment.id = (i + startId).toString()
     comment.biz = 'ink'
-    comment.bizId = 0
+    comment.bizId = '0'
     comment.commentator = demoUsers(1)[0]
     comment.isAuthor = Math.random() > 0.7
     comment.payload = demoCommentPayload()
@@ -189,7 +189,7 @@ export const demoNotifications = (type: NotificationType, n?: number) => {
       n = n == undefined ? 20 : n
       for (let i = 0; i < n; i++) {
         const no = emptyNotification(type)
-        no.id = i
+        no.id = i.toString()
         no.subjectType = SubjectType.User
         no.user = demoUsers(1)[0]
         follows.push(no)
@@ -200,7 +200,7 @@ export const demoNotifications = (type: NotificationType, n?: number) => {
       n = n == undefined ? 20 : n
       for (let i = 0; i < n; i++) {
         const no = emptyNotification(type)
-        no.id = i
+        no.id = i.toString()
         no.user = demoUsers(1)[0]
         if (Math.random() > 0.5) {
           // like ink
@@ -218,7 +218,7 @@ export const demoNotifications = (type: NotificationType, n?: number) => {
       n = n == undefined ? 20 : n
       for (let i = 0; i < n; i++) {
         const no = emptyNotification(type)
-        no.id = i
+        no.id = i.toString()
         no.user = demoUsers(1)[0]
         if (Math.random() > 0.5) {
           // reply ink
@@ -247,7 +247,7 @@ export const demoNotifications = (type: NotificationType, n?: number) => {
       n = n == undefined ? 20 : n
       for (let i = 0; i < n; i++) {
         const no = emptyNotification(type)
-        no.id = i
+        no.id = i.toString()
         no.user = null
         no.subjectType = SubjectType.System
         no.subject = null

@@ -15,10 +15,10 @@ const limit = 15
 const inks = ref<Ink[]>([])
 
 const { loadMore, reset, loading } = wrapOffsetPagedFunc(async (offset: number) => {
-  console.log('user ink list load more', offset)
   if (props.uid == 0) {
     return
   }
+  console.log('user ink list load more', offset)
   const res = await list({
     authorId: props.uid,
     offset: offset,
@@ -41,7 +41,7 @@ watch(
     console.log('user ink list props uid changed, load more')
     inks.value = []
     reset()
-    loadMore()
+    loadMore(props.uid.toString())
   },
   { immediate: true },
 )
@@ -49,7 +49,12 @@ watch(
 
 <template>
   <div class="w-full">
-    <InkList :max-cols="4" :inks="inks" :load-more="loadMore" :loading="loading"></InkList>
+    <InkList
+      :max-cols="4"
+      :inks="inks"
+      :load-more="() => loadMore(uid.toString())"
+      :loading="loading"
+    ></InkList>
   </div>
 </template>
 

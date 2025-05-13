@@ -1,13 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref, useTemplateRef } from 'vue'
 import MilkdownWrapper from '@/components/editor/milkdown/MilkdownWrapper.vue'
-import type { UploadRawFile } from 'element-plus'
 import { draftDetail, publish, saveDraft } from '@/service/ink.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { notification } from '@/utils/notification.ts'
-import { parseRouteParamToInt } from '@/utils/parse.ts'
+import { parseRouteParam } from '@/utils/parse.ts'
 import DashboardContent from '@/views/dashboard/DashboardContent.vue'
-import { uploadCover } from '@/service/file.ts'
 import { InkStatus, inkStatusProp } from '@/types/ink.ts'
 
 const route = useRoute()
@@ -15,13 +13,13 @@ const router = useRouter()
 const milkdownRef = useTemplateRef<InstanceType<typeof MilkdownWrapper>>('milkdownRef')
 
 const coverUrl = ref('')
-let draftId = parseRouteParamToInt(route.params.id)
+let draftId = parseRouteParam(route.params.id)
 const tags = ref<string[]>([])
 const title = ref('')
 let lastSave = Date.now()
 let saveClicked = false
 onMounted(async () => {
-  if (draftId != 0) {
+  if (draftId != '') {
     const draft = await draftDetail(draftId)
     milkdownRef.value?.setContent(draft.contentMeta)
     coverUrl.value = draft.cover
@@ -29,18 +27,6 @@ onMounted(async () => {
     title.value = draft.title
   }
 })
-
-const beforeCoverUpload = async (file: UploadRawFile) => {
-  const url = await uploadCover(file)
-  if (url) {
-    coverUrl.value = url
-    return true
-  }
-  return false
-}
-const handleCoverUploadSuccess = () => {
-  console.log('cover upload success')
-}
 
 const save = async () => {
   const markdown = milkdownRef.value?.getMarkdown() ?? ''
@@ -64,7 +50,7 @@ const save = async () => {
   router.replace({
     name: 'editor',
     params: {
-      id: id.toString(),
+      id: id,
     },
   })
   lastSave = Date.now()

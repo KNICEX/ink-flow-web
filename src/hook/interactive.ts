@@ -4,13 +4,13 @@ import { cancelLike, favorite, like } from '@/service/ink.ts'
 import { notification } from '@/utils/notification.ts'
 
 interface InteractiveHandler {
-  handleLike: (id: number) => Promise<void>
-  handleCancelLike: (id: number) => Promise<void>
-  handleFavorite: (id: number) => Promise<void>
-  handleCancelFavorite: (id: number) => Promise<void>
+  handleLike: (id: string) => Promise<void>
+  handleCancelLike: (id: string) => Promise<void>
+  handleFavorite: (id: string) => Promise<void>
+  handleCancelFavorite: (id: string) => Promise<void>
 }
 export const useProvideInkInteractiveHandler = (inks: Ref<Ink[]>) => {
-  const handleLike = async (id: number) => {
+  const handleLike = async (id: string) => {
     await like(id)
     const i = inks.value.find((v) => v.id == id)
     if (i) {
@@ -19,7 +19,7 @@ export const useProvideInkInteractiveHandler = (inks: Ref<Ink[]>) => {
       i.interactive.likeCnt++
     }
   }
-  const handleCancelLike = async (id: number) => {
+  const handleCancelLike = async (id: string) => {
     await cancelLike(id)
     const i = inks.value.find((v) => v.id == id)
     if (i) {
@@ -28,9 +28,9 @@ export const useProvideInkInteractiveHandler = (inks: Ref<Ink[]>) => {
     }
   }
 
-  const handleFavorite = async (id: number) => {
+  const handleFavorite = async (id: string) => {
     //TODO弹出收藏夹选项
-    await favorite(id, 0)
+    await favorite(id, '0')
     const i = inks.value.find((v) => v.id == id)
     if (i) {
       i.interactive.favorited = true
@@ -40,8 +40,8 @@ export const useProvideInkInteractiveHandler = (inks: Ref<Ink[]>) => {
       message: '收藏成功',
     })
   }
-  const handleCancelFavorite = async (id: number) => {
-    await favorite(id, 1)
+  const handleCancelFavorite = async (id: string) => {
+    await favorite(id, '1')
     const i = inks.value.find((v) => v.id == id)
     if (i) {
       i.interactive.favorited = false

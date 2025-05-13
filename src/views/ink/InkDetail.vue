@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router'
 import { computed, h, nextTick, ref, render, useTemplateRef, watch } from 'vue'
-import { parseRouteParamToInt, parseRouteQuery } from '@/utils/parse.ts'
+import { parseRouteParam, parseRouteQuery } from '@/utils/parse.ts'
 import { emptyInk, type Ink, InkStatus, inkStatusFromProp } from '@/types/ink.ts'
 import {
   cancelFavorite,
@@ -17,7 +17,6 @@ import {
 import MilkdownWrapper from '@/components/editor/milkdown/MilkdownWrapper.vue'
 import { notification } from '@/utils/notification.ts'
 import UserCard from '@/components/UserCard.vue'
-import { demoInks } from '@/mock/demo_data.ts'
 import '@milkdown/crepe/theme/common/style.css'
 import '@milkdown/crepe/theme/frame.css'
 import RecommendCard from '@/components/ink/RecommendCard.vue'
@@ -59,7 +58,7 @@ const replaceImage = () => {
 }
 
 const loading = ref(false)
-const loadInk = async (id: number, status: InkStatus) => {
+const loadInk = async (id: string, status: InkStatus) => {
   loading.value = true
   switch (status) {
     case InkStatus.Published:
@@ -103,7 +102,7 @@ const loadInk = async (id: number, status: InkStatus) => {
 watch(
   () => route.params,
   async () => {
-    const inkId = parseRouteParamToInt(route.params.id)
+    const inkId = parseRouteParam(route.params.id)
     const statusStr = parseRouteQuery(route.query.status)
     let inkStatus = InkStatus.Published
     if (statusStr != '') {
@@ -126,7 +125,7 @@ const handleLike = async () => {
 }
 
 const handleFavorite = async () => {
-  await favorite(ink.value.id, 0)
+  await favorite(ink.value.id, '0')
   ink.value.interactive.favoriteCnt = ink.value.interactive.favoriteCnt + 1
   ink.value.interactive.favorited = !ink.value.interactive.favorited
 }

@@ -27,7 +27,7 @@ interface EmailCodeLoginReq {
 }
 
 interface ProfileReq {
-  uid?: number
+  uid?: string
   account?: string
 }
 
@@ -87,11 +87,11 @@ export const refreshToken = async () => {
   return await post<never, RefreshTokenReq>('/user/refresh_token', req)
 }
 
-export const follow = async (uid: number) => {
+export const follow = async (uid: string) => {
   return await post<never, null>(`/user/follow/${uid}`, null)
 }
 
-export const cancelFollow = async (uid: number) => {
+export const cancelFollow = async (uid: string) => {
   return await del<never>(`/user/follow/${uid}`)
 }
 

@@ -14,6 +14,6 @@ export const getFavorites = async (biz: string) => {
   return await get<Favorite[]>(`/interactive/favorite/${biz}`)
 }
 
-export const deleteFavorite = async (id: number) => {
+export const deleteFavorite = async (id: string) => {
   return await del<never>(`/interactive/favorite/${id}`)
 }

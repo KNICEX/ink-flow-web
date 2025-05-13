@@ -11,7 +11,7 @@ const hasLogin = computed(() => {
 
 defineProps({
   uid: {
-    type: Number,
+    type: String,
     required: true,
   },
   size: {
@@ -40,7 +40,7 @@ const handleMouseLeave = () => {
   followedColor.value = ''
 }
 
-const handleFollow = (uid: number) => {
+const handleFollow = (uid: string) => {
   if (!hasLogin.value) {
     showLoginStore.showLogin = true
     return
@@ -49,7 +49,7 @@ const handleFollow = (uid: number) => {
   injectFollow(uid)
 }
 
-const handleCancelFollow = (uid: number) => {
+const handleCancelFollow = (uid: string) => {
   emit('cancelFollow', uid)
   injectCancelFollow(uid)
 }

@@ -8,26 +8,26 @@ import FollowUserList from '@/components/list/user/FollowUserList.vue'
 
 const props = defineProps({
   uid: {
-    type: Number,
-    default: 0,
+    type: String,
+    default: '0',
   },
 })
 
 const limit = 15
 const users = ref<UserFollow[]>([])
 
-const { loadMore, reset, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
-  if (props.uid == 0) {
+const { loadMore, reset, loading } = wrapMaxIdPagedFunc(async (maxId: string) => {
+  if (props.uid == '0') {
     return
   }
 
   const res = await follower(props.uid, { maxId, limit })
   if (res.length == 0) {
-    return 0
+    return '0'
   }
   users.value = [...users.value, ...res]
   if (res.length < limit) {
-    return 0
+    return '0'
   }
   return users.value[users.value.length - 1].id
 })

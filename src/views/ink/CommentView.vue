@@ -19,8 +19,8 @@ const props = defineProps({
     default: 'ink',
   },
   bizId: {
-    type: Number,
-    default: 0,
+    type: String,
+    default: '0',
   },
 })
 
@@ -28,8 +28,8 @@ const userStore = useUserStore()
 
 const limit = 15
 const comments = ref<Comment[]>([])
-const { loadMore, reset, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
-  if (props.bizId == 0) {
+const { loadMore, reset, loading } = wrapMaxIdPagedFunc(async (maxId: string) => {
+  if (props.bizId == '0') {
     return
   }
   const res = await loadComment({
@@ -40,7 +40,7 @@ const { loadMore, reset, loading } = wrapMaxIdPagedFunc(async (maxId: number) =>
   })
 
   if (res.length == 0) {
-    return 0
+    return '0'
   }
   comments.value = [...comments.value, ...res]
   return comments.value[comments.value.length - 1].id
@@ -75,8 +75,8 @@ const handleReply = async (parent: Comment | null, payload: CommentPayload) => {
   const id = await reply({
     biz: props.biz,
     bizId: props.bizId,
-    parentId: parent?.id ?? 0,
-    rootId: parent?.root?.id ?? parent?.id ?? 0,
+    parentId: parent?.id ?? '0',
+    rootId: parent?.root?.id ?? parent?.id ?? '0',
     payload: payload,
   })
   const c: Comment = {

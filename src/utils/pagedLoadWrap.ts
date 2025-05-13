@@ -1,7 +1,7 @@
 import { ref } from 'vue'
 import type { Ref } from 'vue'
 type offsetLoadFunc = (offset: number) => Promise<number | undefined>
-type maxIdLoadFunc = (maxId: number) => Promise<number | undefined>
+type maxIdLoadFunc = (maxId: string) => Promise<string | undefined>
 type maxIdTimestampLoadFunc = (
   maxId: number,
   timestamp: number,
@@ -21,15 +21,21 @@ export const wrapOffsetPagedFunc = (loadFunc: offsetLoadFunc, limit: number) => 
   // 限流用
   let lastLoad = new Date(0)
   let lastOffset = 0
+  let lastReqHash: string | undefined = undefined
   return {
-    loadMore: async () => {
+    loadMore: async (reqHash?: string) => {
       // 限流
       const now = new Date()
-      if (now.getTime() - lastLoad.getTime() < 100 && lastOffset == offset) {
+      if (
+        now.getTime() - lastLoad.getTime() < 100 &&
+        lastOffset == offset &&
+        lastReqHash === reqHash
+      ) {
         return
       } else {
         lastLoad = now
         lastOffset = offset
+        lastReqHash = reqHash
       }
 
       if (loading.value) return
@@ -59,13 +65,13 @@ export const wrapOffsetPagedFunc = (loadFunc: offsetLoadFunc, limit: number) => 
 }
 
 export const wrapMaxIdPagedFunc = (loadFunc: maxIdLoadFunc) => {
-  let maxId = 0
+  let maxId = '0'
   const loading = ref(false)
   let noMore = false
 
   // 限流用
   let lastLoad = new Date(0)
-  let lastMaxId = 0
+  let lastMaxId = '0'
 
   return {
     loadMore: async () => {
@@ -91,7 +97,7 @@ export const wrapMaxIdPagedFunc = (loadFunc: maxIdLoadFunc) => {
         return true
       }
 
-      if (resMaxId == 0) {
+      if (resMaxId == '0') {
         loading.value = false
         noMore = true
         return false // no more data
@@ -101,7 +107,7 @@ export const wrapMaxIdPagedFunc = (loadFunc: maxIdLoadFunc) => {
       return !noMore // false if no more data
     },
     reset: () => {
-      maxId = 0
+      maxId = '0'
       noMore = false
       loading.value = false
     },

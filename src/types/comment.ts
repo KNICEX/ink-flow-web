@@ -1,9 +1,9 @@
 import type { User } from '@/types/user.ts'
 
 export interface Comment {
-  id: number
+  id: string
   biz: string
-  bizId: number
+  bizId: string
   commentator: User
   isAuthor: boolean
   payload: CommentPayload
@@ -38,11 +38,11 @@ export const emptyCommentStats = (): CommentStats => {
 
 export const emptyComment = (): Comment => {
   return {
-    id: 0,
+    id: '0',
     biz: '',
-    bizId: 0,
+    bizId: '0',
     commentator: {
-      id: 0,
+      id: '0',
       avatar: '',
       banner: '',
       username: '',

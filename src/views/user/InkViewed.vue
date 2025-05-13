@@ -8,13 +8,13 @@ import { wrapMaxIdPagedFunc } from '@/utils/pagedLoadWrap.ts'
 const inks = ref<Ink[]>([])
 
 const limit = 15
-const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
+const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: string) => {
   const res = await listViewed({
     maxId,
     limit,
   })
   if (res.length == 0) {
-    return 0
+    return '0'
   }
   inks.value = [...inks.value, ...res]
   return inks.value[inks.value.length - 1].id

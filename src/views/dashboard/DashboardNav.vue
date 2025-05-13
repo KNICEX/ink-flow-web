@@ -86,13 +86,13 @@ const noStore = useUnreadNotificationStore()
           </el-badge>
           <span class="ml-3">关注我的</span>
         </InkNavItem>
-        <InkNavItem prop="setting">
-          <span class="material-symbols-outlined"> manufacturing </span>
-          <span class="ml-3">设置</span>
-        </InkNavItem>
+        <!--        <InkNavItem prop="setting">-->
+        <!--          <span class="material-symbols-outlined"> manufacturing </span>-->
+        <!--          <span class="ml-3">设置</span>-->
+        <!--        </InkNavItem>-->
       </InkNav>
     </div>
-    <div class="w-full h-20 flex items-center justify-center border border-solid bt">Footer</div>
+    <!--    <div class="w-full h-20 flex items-center justify-center border border-solid bt">Footer</div>-->
   </div>
 </template>
 

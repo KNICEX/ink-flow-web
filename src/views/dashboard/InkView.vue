@@ -153,6 +153,7 @@ const handleInkOp = async (ink: Ink, op: 'delete' | 'preview' | 'edit') => {
       })
       break
     case 'edit':
+      console.log('ink', ink)
       await router.push({
         name: 'editor',
         params: {

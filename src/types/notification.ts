@@ -3,8 +3,8 @@ import type { User } from '@/types/user.ts'
 import { emptyInk, type Ink } from '@/types/ink.ts'
 
 export interface Notification<S, C> {
-  id: number
-  recipientId: number
+  id: string
+  recipientId: string
   user: User | null // null if system notification
   subjectType: SubjectType
   subject: S | null // null if system notification
@@ -42,8 +42,8 @@ export interface ReplyContent {
 
 export const emptyNotification = (type: NotificationType) => {
   return {
-    id: 0,
-    recipientId: 0,
+    id: '0',
+    recipientId: '0',
     user: null,
     subjectType: 'ink',
     subject: null,

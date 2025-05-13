@@ -93,7 +93,7 @@ export const emptyInteractive = (): Interactive => {
 }
 
 export interface Ink {
-  id: number
+  id: string
   cover: string
   title: string
   summary: string
@@ -114,7 +114,7 @@ export interface Ink {
 
 export const emptyInk = (): Ink => {
   return {
-    id: 0,
+    id: '0',
     cover: '',
     title: '',
     summary: '',

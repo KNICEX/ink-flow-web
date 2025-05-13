@@ -1,5 +1,5 @@
 export interface Favorite {
-  id: number
+  id: string
   biz: string
   name: string
   private: boolean
@@ -8,7 +8,7 @@ export interface Favorite {
 
 export const emptyFavorite = (): Favorite => {
   return {
-    id: 0,
+    id: '0',
     biz: '',
     name: '',
     private: false,

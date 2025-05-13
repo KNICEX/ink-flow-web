@@ -4,7 +4,7 @@ import { useUserStore } from '@/stores/user.ts'
 import { emptyUser } from '@/types/user.ts'
 
 interface SaveDraftReq {
-  id?: number
+  id?: string
   title?: string
   cover?: string
   summary?: string
@@ -15,10 +15,10 @@ interface SaveDraftReq {
 }
 
 interface SaveDraftResp {
-  id: number
+  id: string
 }
 
-export const detail = async (id: number) => {
+export const detail = async (id: string) => {
   return await get<Ink>(`/ink/detail/${id}`)
 }
 
@@ -30,7 +30,7 @@ interface ListReq {
 }
 
 interface MaxIdPagedReq {
-  maxId: number
+  maxId: string
   limit: number
 }
 
@@ -50,39 +50,39 @@ export const saveDraft = async (req: SaveDraftReq) => {
   return await post<SaveDraftResp, SaveDraftReq>('/ink/draft/save', req)
 }
 
-export const publish = async (id: number) => {
+export const publish = async (id: string) => {
   return await post(`/ink/draft/publish/${id}`, {})
 }
 
-export const detailForEdit = async (id: number) => {
+export const detailForEdit = async (id: string) => {
   const ink = await get<Ink>(`/ink/detail/${id}`)
   const userStore = useUserStore()
   ink.author = userStore.getActiveUser()?.user ?? emptyUser()
   return ink
 }
 
-export const draftDetail = async (id: number) => {
+export const draftDetail = async (id: string) => {
   const draft = await get<Ink>(`/ink/draft/${id}`)
   const userStore = useUserStore()
   draft.author = userStore.getActiveUser()?.user ?? emptyUser()
   return draft
 }
 
-export const pendingDetail = async (id: number) => {
+export const pendingDetail = async (id: string) => {
   const pending = await get<Ink>(`/ink/pending/${id}`)
   const userStore = useUserStore()
   pending.author = userStore.getActiveUser()?.user ?? emptyUser()
   return pending
 }
 
-export const privateDetail = async (id: number) => {
+export const privateDetail = async (id: string) => {
   const priInk = await get<Ink>(`/ink/private/${id}`)
   const userStore = useUserStore()
   priInk.author = userStore.getActiveUser()?.user ?? emptyUser()
   return priInk
 }
 
-export const rejectedDetail = async (id: number) => {
+export const rejectedDetail = async (id: string) => {
   const rejected = await get<Ink>(`/ink/rejected/${id}`)
   const userStore = useUserStore()
   rejected.author = userStore.getActiveUser()?.user ?? emptyUser()
@@ -151,7 +151,7 @@ export const listRejected = async (req: ListSelfReq) => {
 
 interface ListFavoritedReq {
   fid: number
-  maxId?: number
+  maxId?: string
   limit: number
 }
 
@@ -160,31 +160,31 @@ export const listFavorited = async (req: ListFavoritedReq) => {
     params: req,
   })
 }
-export const deleteDraft = async (id: number) => {
+export const deleteDraft = async (id: string) => {
   return await del(`/ink/draft/${id}`, {})
 }
 
-export const deletePrivate = async (id: number) => {
+export const deletePrivate = async (id: string) => {
   return await del(`/ink/private/${id}`, {})
 }
-export const deleteLive = async (id: number) => {
+export const deleteLive = async (id: string) => {
   return await del(`/ink/live/${id}`, {})
 }
 
-export const like = async (id: number) => {
+export const like = async (id: string) => {
   return await post(`/ink/like/${id}`, {})
 }
 
-export const cancelLike = async (id: number) => {
+export const cancelLike = async (id: string) => {
   return await del(`/ink/like/${id}`)
 }
 
-export const favorite = async (id: number, favoriteId?: number) => {
+export const favorite = async (id: string, favoriteId?: string) => {
   return await post(`/ink/favorite/${id}`, {
     favoriteId: favoriteId ?? 0,
   })
 }
 
-export const cancelFavorite = async (id: number) => {
+export const cancelFavorite = async (id: string) => {
   return await del(`/ink/favorite/${id}`)
 }

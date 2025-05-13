@@ -7,7 +7,7 @@ import type {
 } from '@/types/notification.ts'
 
 interface MaxIdPagedReq {
-  maxId?: number
+  maxId?: string
   limit: number
 }
 

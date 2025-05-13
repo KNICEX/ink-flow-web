@@ -17,7 +17,7 @@ watch(
   async () => {
     inks.value = await listFavorited({
       fid: activeIndex.value,
-      maxId: 0,
+      maxId: '0',
       limit: 25,
     })
   },

@@ -104,7 +104,7 @@ const isSelf = computed(() => {
             </el-button>
             <FollowButton
               v-else
-              :uid="userInfo?.id ?? 0"
+              :uid="userInfo?.id ?? '0'"
               size="large"
               :followed="userInfo?.followed"
             ></FollowButton>

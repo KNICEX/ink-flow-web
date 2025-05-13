@@ -10,13 +10,13 @@ import { useUnreadNotificationStore } from '@/stores/notification.ts'
 const follows = ref<Notification<never, never>[]>([])
 const noStore = useUnreadNotificationStore()
 const limit = 15
-const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
+const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: string) => {
   const res = await followNotification({
     maxId,
     limit,
   })
   if (res.length == 0) {
-    return 0
+    return '0'
   }
   follows.value = [...follows.value, ...res]
   return follows.value[follows.value.length - 1].id

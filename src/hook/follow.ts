@@ -10,7 +10,7 @@ interface config {
 }
 
 export const useProvideFollowHandler = (users: Ref<User[]>) => {
-  const handleFollow = async (uid: number) => {
+  const handleFollow = async (uid: string) => {
     console.log('handleFollow', uid)
     await follow(uid)
     const user = users.value.find((u) => u.id === uid)
@@ -22,7 +22,7 @@ export const useProvideFollowHandler = (users: Ref<User[]>) => {
       message: '关注成功',
     })
   }
-  const handleCancelFollow = async (uid: number) => {
+  const handleCancelFollow = async (uid: string) => {
     await cancelFollow(uid)
     const user = users.value.find((u) => u.id === uid)
     if (user) {
@@ -39,8 +39,8 @@ export const useProvideFollowHandler = (users: Ref<User[]>) => {
 
 export const useInjectFollowHandler = () => {
   const doNothing = () => {}
-  const handleFollow = inject<(uid: number) => void>('handleFollow') ?? doNothing
-  const handleCancelFollow = inject<(uid: number) => void>('handleCancelFollow') ?? doNothing
+  const handleFollow = inject<(uid: string) => void>('handleFollow') ?? doNothing
+  const handleCancelFollow = inject<(uid: string) => void>('handleCancelFollow') ?? doNothing
   return {
     handleFollow,
     handleCancelFollow,

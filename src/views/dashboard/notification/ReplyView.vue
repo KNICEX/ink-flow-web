@@ -10,17 +10,17 @@ import { useUnreadNotificationStore } from '@/stores/notification.ts'
 const replies = ref<Notification<never, ReplyContent>[]>([])
 const noStore = useUnreadNotificationStore()
 const limit = 15
-const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: number) => {
+const { loadMore, loading } = wrapMaxIdPagedFunc(async (maxId: string) => {
   const res = await replyNotification({
     maxId,
     limit,
   })
   if (res.length == 0) {
-    return 0
+    return '0'
   }
   replies.value = [...replies.value, ...res]
   if (res.length < limit) {
-    return 0
+    return '0'
   }
   return replies.value[replies.value.length - 1].id
 })

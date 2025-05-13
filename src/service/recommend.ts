@@ -11,7 +11,7 @@ export const recommendAuthor = async (offset: number, limit: number) => {
   })
 }
 
-export const similarInks = async (id: number, offset: number, limit: number) => {
+export const similarInks = async (id: string, offset: number, limit: number) => {
   return await get<Ink[]>(`/recommend/ink/similar/${id}`, {
     params: {
       offset,
@@ -20,7 +20,7 @@ export const similarInks = async (id: number, offset: number, limit: number) => 
   })
 }
 
-export const similarAuthors = async (id: number, offset: number, limit: number) => {
+export const similarAuthors = async (id: string, offset: number, limit: number) => {
   return await get<User[]>(`/recommend/author/similar/${id}`, {
     params: {
       offset,
