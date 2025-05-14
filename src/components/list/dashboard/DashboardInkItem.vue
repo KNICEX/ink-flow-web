@@ -16,7 +16,9 @@ const props = defineProps({
 })
 
 const handleInkOp =
-  inject<(ink: Ink, op: 'edit' | 'delete' | 'preview' | 'share') => void>('handle-ink-op')
+  inject<(ink: Ink, op: 'edit' | 'delete' | 'preview' | 'share' | 'publish') => void>(
+    'handle-ink-op',
+  )
 const handleEdit = () => {
   handleInkOp!(props.ink, 'edit')
 }
@@ -58,6 +60,12 @@ const operations = (ink: Ink) => {
     commonOps.push({
       name: '删除',
       action: () => handleInkOp!(ink, 'delete'),
+    })
+  }
+  if (ink.status == InkStatus.UnPublished) {
+    commonOps.push({
+      name: '发布',
+      action: () => handleInkOp!(ink, 'publish'),
     })
   }
   return commonOps

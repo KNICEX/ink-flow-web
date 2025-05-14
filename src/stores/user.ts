@@ -62,7 +62,7 @@ export const useUserStore = defineStore('user', () => {
   }
 
   // 请勿传入activeUser的id,可能导致错误
-  function removeUser(uid: number): void {
+  function removeUser(uid: string): void {
     const index = userState.value.users.findIndex((user) => user.user.id === uid)
     if (index !== -1) {
       userState.value.users.splice(index, 1)

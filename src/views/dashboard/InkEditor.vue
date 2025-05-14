@@ -39,7 +39,7 @@ const save = async () => {
     return
   }
   const { id } = await saveDraft({
-    id: draftId,
+    id: draftId == '' ? '0' : draftId,
     title: title.value,
     contentMeta: milkdownRef.value?.getMarkdown() || '',
     contentHtml: '',

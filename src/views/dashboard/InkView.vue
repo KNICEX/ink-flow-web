@@ -12,6 +12,7 @@ import {
   deleteLive,
   deleteDraft,
   deletePrivate,
+  publish,
 } from '@/service/ink.ts'
 import { useRoute, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/user.ts'
@@ -120,7 +121,7 @@ const delSuccess = () => {
   })
 }
 
-const handleInkOp = async (ink: Ink, op: 'delete' | 'preview' | 'edit') => {
+const handleInkOp = async (ink: Ink, op: 'delete' | 'preview' | 'edit' | 'publish') => {
   switch (op) {
     case 'delete':
       switch (ink.status) {
@@ -161,6 +162,14 @@ const handleInkOp = async (ink: Ink, op: 'delete' | 'preview' | 'edit') => {
         },
       })
       break
+    case 'publish':
+      await publish(ink.id)
+      await router.push({
+        name: 'dashboard-ink',
+        params: {
+          status: inkStatusProp(InkStatus.Pending),
+        },
+      })
   }
 }
 
