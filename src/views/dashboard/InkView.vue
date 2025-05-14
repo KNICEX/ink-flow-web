@@ -33,7 +33,7 @@ const load = async (offset: number) => {
   switch (activeType.value) {
     case 'published':
       res = await list({
-        authorId: userStore.getActiveUser()?.user.id ?? 0,
+        authorId: userStore.getActiveUser()?.user.id ?? '0',
         offset: offset,
         limit: limit,
       })

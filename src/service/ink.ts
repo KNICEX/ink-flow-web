@@ -23,7 +23,7 @@ export const detail = async (id: string) => {
 }
 
 interface ListReq {
-  authorId: number
+  authorId: string
   category?: number
   offset: number
   limit: number
