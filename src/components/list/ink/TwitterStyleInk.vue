@@ -78,8 +78,8 @@ useProvideFollowHandler(ref<User[]>([props.ink.author]))
     </div>
     <!-- 作者信息 -->
     <div>
-      <div class="flex items-center" v-if="showAuthor" @click.stop="handleToUserHome">
-        <div class="flex">
+      <div class="flex items-center" v-if="showAuthor">
+        <div class="flex" @click.stop="handleToUserHome">
           <span class="font-semibold">{{ ink.author.username }}</span>
           <el-link class="text-gray-500 ml-2">@{{ ink.author.account }}</el-link>
           <span class="text-gray-500 ml-2 flex items-end">{{ formattedDate }}</span>
@@ -95,6 +95,7 @@ useProvideFollowHandler(ref<User[]>([props.ink.author]))
       <!-- 封面图片 -->
       <div v-if="ink.cover" class="mb-3 flex">
         <el-image
+          preview-teleported
           @click.stop="handleCoverClick"
           fit="contain"
           class="ink-image transition duration-300"

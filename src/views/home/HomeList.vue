@@ -46,7 +46,6 @@ switch (props.type) {
         if (res.length == 0) {
           return 0
         }
-        console.log('res len', res.length)
         inks.value = [...inks.value, ...res]
         return res.length
       },
@@ -57,11 +56,11 @@ switch (props.type) {
     break
   case 'follow':
     const { loadMore: loadFollow, loading: followLoading } = wrapMaxIdTimestampPagedFunc(
-      async (maxId: number, timestamp: number) => {
+      async (maxId: string, timestamp: number) => {
         const res = await followInks(maxId, timestamp, limit)
         if (res.length == 0) {
           return {
-            maxId: 0,
+            maxId: '0',
             timestamp: new Date(),
           }
         }
@@ -80,7 +79,6 @@ switch (props.type) {
 }
 onMounted(() => {
   loadMore()
-  // inks.value = demoInks()
 })
 </script>
 

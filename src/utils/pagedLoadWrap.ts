@@ -3,9 +3,9 @@ import type { Ref } from 'vue'
 type offsetLoadFunc = (offset: number) => Promise<number | undefined>
 type maxIdLoadFunc = (maxId: string) => Promise<string | undefined>
 type maxIdTimestampLoadFunc = (
-  maxId: number,
+  maxId: string,
   timestamp: number,
-) => Promise<{ maxId: number; timestamp: Date } | undefined>
+) => Promise<{ maxId: string; timestamp: Date } | undefined>
 
 interface WrappedFunc {
   loadMore: () => void
@@ -116,7 +116,7 @@ export const wrapMaxIdPagedFunc = (loadFunc: maxIdLoadFunc) => {
 }
 
 export const wrapMaxIdTimestampPagedFunc = (loadFunc: maxIdTimestampLoadFunc) => {
-  let maxId = 0
+  let maxId = '0'
   let timestamp = new Date()
   const loading = ref(false)
   let noMore = false
@@ -132,7 +132,7 @@ export const wrapMaxIdTimestampPagedFunc = (loadFunc: maxIdTimestampLoadFunc) =>
         return true
       }
 
-      if (resMaxIdTimestamp.maxId == 0) {
+      if (resMaxIdTimestamp.maxId == '0') {
         loading.value = false
         noMore = true
         return false // no more data
@@ -143,7 +143,7 @@ export const wrapMaxIdTimestampPagedFunc = (loadFunc: maxIdTimestampLoadFunc) =>
       return !noMore // false if no more data
     },
     reset: () => {
-      maxId = 0
+      maxId = '0'
       timestamp = new Date()
       noMore = false
       loading.value = false

@@ -44,7 +44,8 @@ const handleLogout = async () => {
   })
   const userStore = useUserStore()
   userStore.logout()
-  router.push('/')
+  await router.push('/')
+  location.reload()
 }
 
 const handleUserCenter = () => {
